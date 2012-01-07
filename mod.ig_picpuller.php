@@ -38,7 +38,7 @@ class ig_picpuller {
 	public function __construct()
 	{
 		$this->EE =& get_instance();
-		$this->EE->load->library('curl');
+		//$this->EE->load->library('curl');
 		//$this->EE->load->library('template');
 		
 		//$this->EE->TMPL->log_item('InstaShowEE: instantiated');
@@ -547,40 +547,23 @@ class ig_picpuller {
 		return $this->EE->TMPL->parse_variables($tagdata, $variables);
 	}
 	
-	
-	
-	/*
-	public function tagPair() {
-		$tagdata = $this->EE->TMPL->tagdata;
-		$variables = array();
-		
-		$variables[0]['tag1'] = 'tag1Ahere';
-		$variables[0]['tag2'] = 'tag2Ahere';
-		
-		$variables[1]['tag1'] = 'tag1Bhere';
-		$variables[1]['tag2'] = 'tag2Bhere';
-	
-		return $this->EE->TMPL->parse_variables($tagdata, $variables);
-		//return $this->EE->TMPL->tagdata;
-	}
-	*/
-	
 	// The authorization function is access via an ACTION_ID to authenticate a user and generate an oAuth code
 	
 	public function authorization()
 	{
 		parse_str($_SERVER['QUERY_STRING'], $_GET);
 		
-		echo('the code was ' . $_GET["code"]);
 		
-		if ($_GET["code"] != ''){
+		
+		if (isset($_GET["code"]) && $_GET["code"] != ''){
 			$user_data = $this->getOAuthFromCode($_GET["code"]);
+			//echo('the code was ' . $_GET["code"]);
 		}
-		
+		/*
 		echo "<pre>";
 		var_dump($user_data);
 		echo "</pre>";
-		
+		*/
 		if (isset($user_data->{'access_token'})){
 			
 			//var_dump($user_data);
@@ -690,12 +673,12 @@ class ig_picpuller {
 		
 		if ($returndata === FALSE) {  
 
-		    echo "cURL Error: " . curl_error($ch);  
+		    //echo "cURL Error: " . curl_error($ch);  
 
 		}
 		$info = curl_getinfo($ch);  
 
-		echo '<br><br>Took ' . $info['total_time'] . ' seconds for url ' . $info['url'].'<br><br>';
+		//echo '<br><br>Took ' . $info['total_time'] . ' seconds for url ' . $info['url'].'<br><br>';
 		
 		curl_close($ch);
 		

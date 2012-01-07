@@ -2,10 +2,13 @@
 
 $lang = array(	
 	'ig_picpuller_module_name' => 
+	'Pic Puller for Instagram',
+
+	'ig_picpuller_short_module_name' => 
 	'Pic Puller',
 
 	'ig_picpuller_module_description' => 
-	'Pic Puller is a module that allows you to show your Instashow photos from within Expression Engine.',
+	'Pic Puller for Instagram is a module that allows you to show Instashow photos from multiple users from within Expression Engine.',
 
 	'ig_set_up' => 'Pic Puller Set Up',
 

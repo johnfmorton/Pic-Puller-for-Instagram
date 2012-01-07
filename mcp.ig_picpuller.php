@@ -36,7 +36,6 @@ class ig_picpuller_mcp {
 	public function __construct()
 	{
 		$this->EE =& get_instance();
-		//$this->EE->load->library('curl');
 		
 		$this->_the_server = $_SERVER['HTTP_HOST'];
 		// the AMP returns &amp; See the getRedirectURL for where I needed to replace that with a real &

@@ -1,4 +1,4 @@
-<h3>Success</h3>
+<h3>Success!</h3>
 <p>Your Instagram application information has now been saved into Expression Engine.</p>
 <p>Your Client ID:</p>
 <p><pre>
