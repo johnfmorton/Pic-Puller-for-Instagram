@@ -38,27 +38,28 @@ class ig_picpuller_mcp {
 		$this->EE =& get_instance();
 		
 		$this->_the_server = $_SERVER['HTTP_HOST'];
-		// the AMP returns &amp; See the getRedirectURL for where I needed to replace that with a real &
+
 		$this->_base_url = BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=ig_picpuller';
 		
 		$this->EE->load->library('session');
-		$theUserGroup = $this->EE->session->userdata['group_id'];
-		
-		#echo "member info" . $theUser;
-		
-		if ($theUserGroup === '1') {
+				
+		if ( $this->isSuperAdmin() ) {
 		
 		$this->EE->cp->set_right_nav(array(
 			'ig_set_up'	=> $this->_base_url,
 			'ig_info' => $this->_base_url.AMP.'method=ig_info',
 			'ig_users' => $this->_base_url.AMP.'method=ig_users'
-			// Add more right nav items here.
+			// Add more right nav items here in needed
 		));
 		} else {
 			// ==============================================================
 			// = A non-SuperAdmin doesn't get to see the rest of the module =
-			// = so no extra menus in the right hand nav are supplied.      =
+			// = so only the link to the home page of the module is here.   =
 			// ==============================================================
+			$this->EE->cp->set_right_nav(array(
+				'ig_set_up'	=> $this->_base_url
+				// Add more right nav items here in needed
+			));
 		}
 		
 		// set the name of the CP title
@@ -77,9 +78,7 @@ class ig_picpuller_mcp {
 	{
 		
 		$vars['moduleTitle'] = lang('ig_picpuller_module_name');
-		
-		// the base without the Session variable
-		//$thestrippedbase = preg_replace('/S=.+?&amp;/', '', $this->_base_url);
+		$vars['moduleShortTitle'] = lang('ig_picpuller_short_module_name');
 
 		if ($this->appAuthorized()) {
 			$vars['delete_method'] = $string = $this->_base_url.'&method=removeAuthorization';
@@ -103,6 +102,9 @@ class ig_picpuller_mcp {
 		$vars['action_id'] = $action_id;
 		
 		/*
+		FUTURE:
+		Use JS to help user construct EE code for each tag pair.		
+		
 		$this->EE->javascript->output(array(
 				'// add my own jQuery here.'
 				)
@@ -124,19 +126,29 @@ class ig_picpuller_mcp {
 			$vars['action_url'] = $this->getRedirectURL();
 			$vars['clientID'] = $this->getClientID();
 			
-		} else {
+		} 
+		else 
+		{
 			// no app exists in DB so the Action URL is to save setting to the DB
 			
 			$vars['preexisting_app'] = FALSE;
 			$vars['action_url'] = 'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=ig_picpuller'.AMP.'method=save_settings';
 		}
 		
-		
-		return $this->EE->load->view('index', $vars, TRUE);
+		if ( $this->isSuperAdmin() ) {
+			return $this->EE->load->view('index', $vars, TRUE);
+		} 
+		else 
+		{
+			return $this->EE->load->view('index_nonsuperadmin', $vars, TRUE);
+		}
 	}
 
 	public function ig_info() 
 	{
+		$vars['moduleTitle'] = lang('ig_picpuller_module_name');
+		$vars['moduleShortTitle'] = lang('ig_picpuller_short_module_name');
+		
 		$vars['client_id'] = $this->getClientID();
 		$vars['client_secret'] = $this->getSecret();
 		$vars['delete_method'] = $this->_base_url.'&method=delete_app';
@@ -147,6 +159,9 @@ class ig_picpuller_mcp {
 	
 	public function ig_users()
 	{
+		$vars['moduleTitle'] = lang('ig_picpuller_module_name');
+		$vars['moduleShortTitle'] = lang('ig_picpuller_short_module_name');
+		
 		$this->EE->db->select('ig_picpuller_oauths.member_id, screen_name, oauth');
 		$this->EE->db->from('ig_picpuller_oauths');
 		$this->EE->db->join('members', 'ig_picpuller_oauths.member_id = members.member_id');
@@ -156,7 +171,6 @@ class ig_picpuller_mcp {
 		$screen_names= array();
 		$oauths= array();
 		
-		
 		foreach ($query->result() as $row)
 		{
     		array_push($member_ids, $row->member_id);
@@ -164,7 +178,6 @@ class ig_picpuller_mcp {
 			array_push($oauths, $row->oauth);
 		}
 		
-			
 		$vars['member_ids'] = $member_ids;
 		$vars['screen_names'] = $screen_names;
 		$vars['oauths']	= $oauths;
@@ -178,26 +191,20 @@ class ig_picpuller_mcp {
 		$vars['client_secret'] = $this->getSecret();
 		$vars['form_hidden'] = NULL;
 		//$vars['delete_method'] = $this->_base_url.'&method=update_secret';
-	//	$vars['update_secret_url'] = $this->_base_url. '&method=update_secret';
+		//	$vars['update_secret_url'] = $this->_base_url. '&method=update_secret';
 		$vars['update_secret_url'] = 'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=ig_picpuller'.AMP.'method=update_secret';
 		$vars['cancel_url'] = $this->_base_url.'&method=ig_info';
 		
-		
 		return $this->EE->load->view('ig_secret_update', $vars, TRUE); 
-		
 	}
 	
 	public function update_secret()
 	{
+		$vars['moduleTitle'] = lang('ig_picpuller_module_name');
+		$vars['moduleShortTitle'] = lang('ig_picpuller_short_module_name');
 		$this->EE->cp->set_variable('cp_page_title', lang('ig_picpuller_module_name'));
-		//var_dump($this->EE->input->post('ig_client_secret', TRUE));
 		$ig_client_id = $this->getClientID();
 		$ig_client_secret = $this->EE->input->post('ig_client_secret', TRUE);
-		/*
-			TODO 
-			
-			FINISH This function --- link to it from the app info screen
-		*/
 		$data = array(
 			'ig_client_secret' => $ig_client_secret
 		);
@@ -222,6 +229,9 @@ class ig_picpuller_mcp {
 		// fields:
 		//  ig_client_id
 		//  ig_client_secret
+		$vars['moduleTitle'] = lang('ig_picpuller_module_name');
+		$vars['moduleShortTitle'] = lang('ig_picpuller_short_module_name');
+		
 		$this->EE->cp->set_variable('cp_page_title', lang('ig_picpuller_module_name'));
 		$ig_client_id = $this->EE->input->post('ig_client_id', TRUE);
 		$ig_client_secret = $this->EE->input->post('ig_client_secret', TRUE);
@@ -243,16 +253,19 @@ class ig_picpuller_mcp {
 	
 	public function delete_app()
 	{
-		/// need to check for proper USER level before deleting app
-		
-		$this->EE->db->empty_table('ig_picpuller_credentials'); 
-		$this->EE->db->empty_table('ig_picpuller_oauths');
-		return $this->index();
+		/// only SuperAdmins can delete the app
+		if ( $this->isSuperAdmin() ) {
+			$this->EE->db->empty_table('ig_picpuller_credentials'); 
+			$this->EE->db->empty_table('ig_picpuller_oauths');
+			return $this->index();
+		}
 	}
 	
 	public function removeAuthorization()
 	{
 		$vars['moduleTitle'] = lang('ig_picpuller_module_name');
+		$vars['moduleShortTitle'] = lang('ig_picpuller_short_module_name');
+		
 		$this->EE->db->select('*');
 		$this->EE->db->limit('1');
 		$this->EE->db->where('member_id', $this->getLoggedInUserId() );
@@ -260,6 +273,10 @@ class ig_picpuller_mcp {
 		//$this->EE->db->delete('ig_picpuller_oauths', array('member_id', $this->getLoggedInUserId() ));
 		return $this->EE->load->view('authorized_removed', $vars, TRUE);
 	}
+	
+	/*
+	
+	This function is no longer used due to the ActionID method that is used to authrorize the app with Instagram.
 	
 	private function getProtocol()
 	{
@@ -270,6 +287,8 @@ class ig_picpuller_mcp {
 			return "http://";
 		}
 	}
+	
+	*/
 	
 	private function getClientID()
 	{
@@ -351,6 +370,20 @@ class ig_picpuller_mcp {
 		//return $all_userdata['member_id'];
 		
 		return $this->EE->session->userdata('member_id');
+		
+	}
+	
+	private function isSuperAdmin()
+	{
+		if ($this->EE->session->userdata['group_id'] === '1' ) 
+		{
+			return TRUE;
+		} 
+		else 
+		{
+			return FALSE;
+		}
+		
 		
 	}
 	
