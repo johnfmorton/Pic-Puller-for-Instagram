@@ -41,7 +41,7 @@ class Ig_picpuller {
 		//$this->EE->load->library('curl');
 		//$this->EE->load->library('template');
 		
-		//$this->EE->TMPL->log_item('InstaShowEE: instantiated');
+		//$this->EE->TMPL->log_item('PicPuller: instantiated');
 	}
 	
 	// ----------------------------------------------------------------
@@ -58,8 +58,7 @@ class Ig_picpuller {
 
 	 public function beep() 
 	 {
-		
-		$this->EE->TMPL->log_item('InstaShowEE: testing');
+		$this->EE->TMPL->log_item('PicPuller for Instagram: testing');
 		return "Beep. Beep beep.";
 	 }
 	
@@ -76,7 +75,7 @@ class Ig_picpuller {
 		
 	public function user()
 	{
-		$this->EE->TMPL->log_item('InstaShowEE: user');
+		$this->EE->TMPL->log_item('PicPuller: user');
 		$this->use_stale = $this->EE->TMPL->fetch_param('use_stale_cache', 'yes');
 		$tagdata = $this->EE->TMPL->tagdata;
 		$variables = array();
@@ -610,7 +609,7 @@ class Ig_picpuller {
 	/**
 	 * Get Authorization from Code
 	 *
-	 * Get the authorization credentials from the Instashowee API based on code in second part of oAuth validation process
+	 * Get the authorization credentials from the PicPuller API based on code in second part of oAuth validation process
 	 *
 	 * @access	private
 	 * @param	string - code, which is provided by Instagram in first step of a user authorizing with Instagram for an application
