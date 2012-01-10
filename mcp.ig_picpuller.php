@@ -24,7 +24,7 @@
  * @link		http://picpuller.com
  */
 
-class ig_picpuller_mcp {
+class Ig_picpuller_mcp {
 	
 	public $return_data;
 	
