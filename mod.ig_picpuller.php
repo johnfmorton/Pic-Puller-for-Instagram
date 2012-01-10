@@ -21,7 +21,7 @@
  * @subpackage	Addons
  * @category	Module
  * @author		John Morton
- * @link		http://instashowee.com
+ * @link		http://picpuller.com
  */
 
 class ig_picpuller {
