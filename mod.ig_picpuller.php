@@ -338,6 +338,7 @@ class Ig_picpuller {
 			//return "ERROR: No user ID set for this function";
 			$variables[] = array(
 				'error' => 'ERROR: User has not authorized PicPuller for access to Instagram.',
+				'status' => 'false'
 			);
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
