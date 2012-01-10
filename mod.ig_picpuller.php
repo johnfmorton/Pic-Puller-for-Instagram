@@ -604,8 +604,6 @@ class Ig_picpuller {
 	{
 		parse_str($_SERVER['QUERY_STRING'], $_GET);
 		
-		
-		
 		if (isset($_GET["code"]) && $_GET["code"] != ''){
 			$user_data = $this->getOAuthFromCode($_GET["code"]);
 			//echo('the code was ' . $_GET["code"]);
@@ -672,33 +670,6 @@ class Ig_picpuller {
 	{
 		$urltopost = "https://api.instagram.com/oauth/access_token";
 		
-		//$redirectURLDynamic = $this->EE->functions->fetch_site_index(0, 0).QUERY_MARKER.'ACT='.$this->get_auth_url();
-		//echo ('the redirect URL was: '.$redirectURLDynamic);
-		
-		/*
-		
-		USING CURL Library
-		
-		$datatopost = array(
-			'client_id'=>$this->getClientID(), 
-			'client_secret'=>$this->getSecret(), 
-			'grant_type'=>'authorization_code', 
-			'redirect_uri'=> $this->get_auth_url(), 
-			'code'=>$code
-			);
-		
-		$ch = curl_init ($urltopost);
-		curl_setopt ($ch, CURLOPT_POST, true);
-		curl_setopt ($ch, CURLOPT_POSTFIELDS, $datatopost);
-		curl_setopt ($ch, CURLOPT_RETURNTRANSFER, true);
-		$returndata = curl_exec ($ch);
-		echo '<br><br> cURL result - not json decoded: ';
-		echo "<pre>";
-		var_dump($returndata);
-		echo "</pre>";
-		
-		*/
-		
 		$datatopost = array(
 			'client_id'=>$this->getClientID(), 
 			'client_secret'=>$this->getSecret(), 
@@ -733,19 +704,6 @@ class Ig_picpuller {
 		
 		curl_close($ch);
 		
-		/*
-		
-		curl \
-		    -F 'client_id=CLIENT-ID' \
-		    -F 'client_secret=CLIENT-SECRET' \
-		    -F 'grant_type=authorization_code' \
-		    -F 'redirect_uri=YOUR-REDIRECT-URI' \
-		    -F 'code=CODE' \
-		    https://api.instagram.com/oauth/access_token
-		
-		*/
-		
-		
 		$json = json_decode($returndata);
 
 		return $json;
@@ -754,7 +712,7 @@ class Ig_picpuller {
 	/**
 	 * Get Authorization Credentials for an EE user
 	 *
-	 * Get the authorization credentials from the Instashowee oAuths table for a specified Expression Engine user Instashowee application
+	 * Get the authorization credentials from the PicPuller oAuths table for a specified Expression Engine user PicPuller application
 	 *
 	 * @access	private
 	 * @param	string - User ID number for an EE member
@@ -782,7 +740,7 @@ class Ig_picpuller {
 	/**
 	 * Get Client ID
 	 *
-	 * Get the client ID from the Instashowee Credentials table for the existing Instashowee application
+	 * Get the client ID from the PicPuller Credentials table for the existing PicPuller application
 	 *
 	 * @access	private
 	 * @return	mixed - returns Instagram client ID if available in DB, or FALSE if unavailable
@@ -809,7 +767,7 @@ class Ig_picpuller {
 	/**
 	 * Get Secret
 	 *
-	 * Get the secret (aka password) from the Instashowee Credentials table for the existing Instashowee application
+	 * Get the secret (aka password) from the PicPuller Credentials table for the existing PicPuller application
 	 *
 	 * @access	private
 	 * @return	mixed - returns Instagram Secret (aka redirect) if available in DB, or FALSE if unavailable
@@ -835,7 +793,7 @@ class Ig_picpuller {
 	/**
 	 * Get Authorization URL
 	 *
-	 * Get the authorization URL from the Instashowee Credentials table for the existing Instashowee application
+	 * Get the authorization URL from the PicPuller Credentials table for the existing PicPuller application
 	 *
 	 * @access	private
 	 * @return	mixed - returns Instagram Authorization (aka redirect) URL if available in DB, or FALSE if unavailable
@@ -985,7 +943,7 @@ class Ig_picpuller {
 			if ($meta['code'] == 200)
 			{
 				// There is an outlying chance that IG says 200, but the data array is empty.
-				// InstaShowEE considers that an error so we return a custom error message
+				// PicPuller considers that an error so we return a custom error message
 				if(count($data['data']) == 0) {
 					$error_array = array(
 						'status' => FALSE,
@@ -1178,7 +1136,7 @@ class Ig_picpuller {
 	{
 		// Check for cache directory
 		
-		$this->EE->TMPL->log_item('InstaShowEE: _write_cache $data '. gettype($data));
+		$this->EE->TMPL->log_item('PicPuller: _write_cache $data '. gettype($data));
 		
 		$data = json_encode($data);
 		
@@ -1216,9 +1174,6 @@ class Ig_picpuller {
 	
 	
 	// ---------- /CACHE CONTROL ------------- //
-	
-	
-	
 }
 /* End of file mod.ig_picpuller.php */
 /* Location: /system/expressionengine/third_party/ig_picpuller/mod.ig_picpuller.php */
