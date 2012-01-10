@@ -24,7 +24,7 @@
  * @link		http://picpuller.com
  */
 
-class ig_picpuller {
+class Ig_picpuller {
 	
 	public $return_data;
 	public $cache_name = 'ig_picpuller';
