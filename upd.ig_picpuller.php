@@ -24,7 +24,7 @@
  * @link		http://picpuller.com
  */
 
-class ig_picpuller_upd {
+class Ig_picpuller_upd {
 	
 	public $version = '1.0';
 	
@@ -48,7 +48,7 @@ class ig_picpuller_upd {
 	public function install()
 	{
 		$mod_data = array(
-			'module_name'			=> 'ig_picpuller',
+			'module_name'			=> 'Ig_picpuller',
 			'module_version'		=> $this->version,
 			'has_cp_backend'		=> "y",
 			'has_publish_fields'	=> 'n'
@@ -57,7 +57,7 @@ class ig_picpuller_upd {
 		$this->EE->db->insert('modules', $mod_data);
 		
 		$data = array(
-			'class' => "ig_picpuller",
+			'class' => "Ig_picpuller",
 			'method' => 'authorization'
 		);
 
@@ -101,7 +101,7 @@ class ig_picpuller_upd {
 		$this->EE->load->dbforge();
 		$this->EE->db->select('module_id');
 		$query = $this->EE->db->get_where('modules', array(
-			'module_name'	=> 'ig_picpuller'
+			'module_name'	=> 'Ig_picpuller'
 		));
 		
 		/*$mod_id = $this->EE->db->select('module_id')
@@ -115,10 +115,10 @@ class ig_picpuller_upd {
 		$this->EE->db->where('module_id', $query->row('module_id'));
 		$this->EE->db->delete('module_member_groups');
 		
-		$this->EE->db->where('module_name', 'ig_picpuller');
+		$this->EE->db->where('module_name', 'Ig_picpuller');
 		$this->EE->db->delete('modules');
 		
-		$this->EE->db->where('class', 'ig_picpuller');
+		$this->EE->db->where('class', 'Ig_picpuller');
 		$this->EE->db->delete('actions');
 
 		$this->EE->dbforge->drop_table('ig_picpuller_credentials');
