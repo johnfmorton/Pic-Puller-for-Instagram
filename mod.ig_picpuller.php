@@ -219,17 +219,42 @@ class Ig_picpuller {
 		
 		if($user_id == '') 
 		{
-			return "ERROR: No user ID set for this function";
+			//return "ERROR: No user ID set for this function";
+			$variables[] = array(
+				'error' => 'ERROR: No user ID set for this function',
+				'status' => 'false'
+			);
+			
+			return $this->EE->TMPL->parse_variables($tagdata, $variables);
 		}
 		
 		$ig_user_id = $this->getInstagramId($user_id);
 		$oauth = $this->getAuthCredsForUser($user_id);
+		
+		if(!$ig_user_id) 
+		{
+			//return "ERROR: No user ID set for this function";
+			$variables[] = array(
+				'error' => 'ERROR: User has not authorized PicPuller for access to Instagram.',
+				'status' => 'false'
+			);
+			
+			return $this->EE->TMPL->parse_variables($tagdata, $variables);
+		}	
+		
+		
+		
 		$query_string = "https://api.instagram.com/v1/users/{$ig_user_id}/media/recent/?access_token={$oauth}". $limit.$max_id.$min_id;
 		
 		$data = $this->_fetch_data($query_string);
 		
 		if($data['status'] === FALSE) {
-			return 'There was an error in retrieving data. Error type: '.$data['error_type'] . ' Details:  '.$data['error_message'];
+			$variables[] = array(
+				'error' => 'There was an error in retrieving data. Error type: <em>'.$data['error_type'] . '</em> Details:  <em>'.$data['error_message'].'</em>',
+				'status' => 'false'
+			);
+			
+			return $this->EE->TMPL->parse_variables($tagdata, $variables);
 		}
 
 		$node = $data['data'];
@@ -307,12 +332,28 @@ class Ig_picpuller {
 		
 		$ig_user_id = $this->getInstagramId($user_id);
 		$oauth = $this->getAuthCredsForUser($user_id);
+		
+		if(!$ig_user_id) 
+		{
+			//return "ERROR: No user ID set for this function";
+			$variables[] = array(
+				'error' => 'ERROR: User has not authorized PicPuller for access to Instagram.',
+			);
+			
+			return $this->EE->TMPL->parse_variables($tagdata, $variables);
+		}
+		
 		$query_string = "https://api.instagram.com/v1/users/self/feed?access_token={$oauth}". $limit.$max_id.$min_id;
 		
 		$data = $this->_fetch_data($query_string);
 		
 		if($data['status'] === FALSE) {
-			return 'There was an error in retrieving data. Error type: '.$data['error_type'] . ' Details:  '.$data['error_message'];
+			$variables[] = array(
+				'error' => 'There was an error in retrieving data. Error type: <em>'.$data['error_type'] . '</em> Details:  <em>'.$data['error_message'].'</em>',
+				'status' => 'false'
+			);
+			
+			return $this->EE->TMPL->parse_variables($tagdata, $variables);
 		}
 
 		$node = $data['data'];
@@ -401,7 +442,12 @@ class Ig_picpuller {
 		$data = $this->_fetch_data($query_string);
 		
 		if($data['status'] === FALSE) {
-			return 'There was an error in retrieving data. Error type: '.$data['error_type'] . ' Details:  '.$data['error_message'];
+			$variables[] = array(
+				'error' => 'There was an error in retrieving data. Error type: <em>'.$data['error_type'] . '</em> Details:  <em>'.$data['error_message'].'</em>',
+				'status' => 'false'
+			);
+			
+			return $this->EE->TMPL->parse_variables($tagdata, $variables);
 		}
 
 		$node = $data['data'];
@@ -503,7 +549,12 @@ class Ig_picpuller {
 		$data = $this->_fetch_data($query_string);
 		
 		if($data['status'] === FALSE) {
-			return 'There was an error in retrieving data. Error type: '.$data['error_type'] . ' Details:  '.$data['error_message'];
+			$variables[] = array(
+				'error' => 'There was an error in retrieving data. Error type: <em>'.$data['error_type'] . '</em> Details:  <em>'.$data['error_message'].'</em>',
+				'status' => 'false'
+			);
+			
+			return $this->EE->TMPL->parse_variables($tagdata, $variables);
 		}
 
 		$node = $data['data'];
