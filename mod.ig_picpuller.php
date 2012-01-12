@@ -259,7 +259,8 @@ class Ig_picpuller {
 		{
 			//return "ERROR: No user ID set for this function";
 			$variables[] = array(
-				'error' => 'ERROR: No user ID set for this function',
+				'error_type' => 'MissingReqParameter',
+				'error_message' => 'No user ID set for this function',
 				'status' => 'false'
 			);
 			
@@ -271,9 +272,9 @@ class Ig_picpuller {
 		
 		if(!$ig_user_id) 
 		{
-			//return "ERROR: No user ID set for this function";
 			$variables[] = array(
-				'error' => 'ERROR: User has not authorized PicPuller for access to Instagram.',
+				'error_type' => 'UnauthorizedUser',
+				'error_message' => 'User has not authorized PicPuller for access to Instagram.',
 				'status' => 'false'
 			);
 			
@@ -288,7 +289,8 @@ class Ig_picpuller {
 		
 		if($data['status'] === FALSE) {
 			$variables[] = array(
-				'error' => 'There was an error in retrieving data. Error type: <em>'.$data['error_type'] . '</em> Details:  <em>'.$data['error_message'].'</em>',
+				'error_type' => $data['error_type'],
+				'error_message' => $data['error_message'],
 				'status' => 'false'
 			);
 			
@@ -382,7 +384,8 @@ class Ig_picpuller {
 		{
 			//return "ERROR: No user ID set for this function";
 			$variables[] = array(
-				'error' => 'ERROR: User has not authorized PicPuller for access to Instagram.',
+				'error_type' => 'UnauthorizedUser',
+				'error_message' => 'User has not authorized PicPuller for access to Instagram.',
 				'status' => 'false'
 			);
 			
