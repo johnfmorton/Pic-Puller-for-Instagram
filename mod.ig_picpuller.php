@@ -137,8 +137,14 @@ class Ig_picpuller {
 		
 		$data = $this->_fetch_data($query_string);
 		
-		if($data['status'] === FALSE) {
-			return 'There was an error in retrieving data. Error type: '.$data['error_type'] . ' Details:  '.$data['error_message'];
+		if ($data['status'] === FALSE && $this->use_stale != 'yes') {
+			$variables[] = array(
+				'error_type' => $data['error_type'],
+				'error_message' => $data['error_message'],
+				'status' => 'false'
+			);
+			
+			return $this->EE->TMPL->parse_variables($tagdata, $variables);
 		}
 		//$next_url = isset($data['pagination']['next_url']) ? $data['pagination']['next_url'] : 'no';
 		/*
@@ -324,7 +330,14 @@ class Ig_picpuller {
 		
 		if($user_id == '') 
 		{
-			return "ERROR: No user ID set for this function";
+			//return "ERROR: No user ID set for this function";
+			$variables[] = array(
+				'error_type' => 'MissingReqParameter',
+				'error_message' => 'No user ID set for this function',
+				'status' => 'false'
+			);
+			
+			return $this->EE->TMPL->parse_variables($tagdata, $variables);
 		}
 		
 		$ig_user_id = $this->getInstagramId($user_id);
@@ -345,9 +358,10 @@ class Ig_picpuller {
 		
 		$data = $this->_fetch_data($query_string);
 		
-		if($data['status'] === FALSE) {
+		if ($data['status'] === FALSE && $this->use_stale != 'yes') {
 			$variables[] = array(
-				'error' => 'There was an error in retrieving data. Error type: <em>'.$data['error_type'] . '</em> Details:  <em>'.$data['error_message'].'</em>',
+				'error_type' => $data['error_type'],
+				'error_message' => $data['error_message'],
 				'status' => 'false'
 			);
 			
@@ -430,7 +444,14 @@ class Ig_picpuller {
 		
 		if($user_id == '') 
 		{
-			return "ERROR: No user ID set for this function";
+			//return "ERROR: No user ID set for this function";
+			$variables[] = array(
+				'error_type' => 'MissingReqParameter',
+				'error_message' => 'No user ID set for this function',
+				'status' => 'false'
+			);
+			
+			return $this->EE->TMPL->parse_variables($tagdata, $variables);
 		}
 		
 		$ig_user_id = $this->getInstagramId($user_id);
@@ -439,9 +460,10 @@ class Ig_picpuller {
 		
 		$data = $this->_fetch_data($query_string);
 		
-		if($data['status'] === FALSE) {
+		if ($data['status'] === FALSE && $this->use_stale != 'yes') {
 			$variables[] = array(
-				'error' => 'There was an error in retrieving data. Error type: <em>'.$data['error_type'] . '</em> Details:  <em>'.$data['error_message'].'</em>',
+				'error_type' => $data['error_type'],
+				'error_message' => $data['error_message'],
 				'status' => 'false'
 			);
 			
@@ -532,7 +554,14 @@ class Ig_picpuller {
 		
 		if($user_id == '') 
 		{
-			return "ERROR: No user ID set for this function";
+			//return "ERROR: No user ID set for this function";
+			$variables[] = array(
+				'error_type' => 'MissingReqParameter',
+				'error_message' => 'No user ID set for this function',
+				'status' => 'false'
+			);
+			
+			return $this->EE->TMPL->parse_variables($tagdata, $variables);
 		}
 		
 		if($tag == '')
@@ -546,9 +575,10 @@ class Ig_picpuller {
 		
 		$data = $this->_fetch_data($query_string);
 		
-		if($data['status'] === FALSE) {
+		if ($data['status'] === FALSE && $this->use_stale != 'yes') {
 			$variables[] = array(
-				'error' => 'There was an error in retrieving data. Error type: <em>'.$data['error_type'] . '</em> Details:  <em>'.$data['error_message'].'</em>',
+				'error_type' => $data['error_type'],
+				'error_message' => $data['error_message'],
 				'status' => 'false'
 			);
 			
@@ -944,7 +974,7 @@ class Ig_picpuller {
 				if(count($data['data']) == 0) {
 					$error_array = array(
 						'status' => FALSE,
-						'error_message' => "There were no photos to return for that user",
+						'error_message' => "There were no photos to return for that user.",
 						'error_type' => 'NoData'
 					);
 				} 
@@ -969,16 +999,16 @@ class Ig_picpuller {
 					$data = $this->_check_cache($url, $this->use_stale);
 					$error_array = array(
 						'status' => TRUE,
-						'error_message' => $meta['error_message']. ' Using STALE data as back up if available.',
-						'error_type' =>  $meta['error_type']
+						'error_message' => (isset($meta['error_message']) ? $meta['error_message'] : 'No error message provided by Instagram.' ), //. ' Using stale data as back up if available.',
+						'error_type' =>  (isset($meta['error_type']) ? $meta['error_type'] : 'NoCodeReturned')
 					);
 				} 
 				else 
 				{
 					$error_array = array(
 						'status' => FALSE,
-						'error_message' => $meta['error_message'],
-						'error_type' =>  $meta['error_type']
+						'error_message' => (isset($meta['error_message']) ? $meta['error_message'] : 'No error message provided by Instagram.' ),
+						'error_type' =>  (isset($meta['error_type']) ? $meta['error_type'] : 'NoCodeReturned')
 					);
 				}
 			}
