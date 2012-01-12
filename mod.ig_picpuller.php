@@ -183,6 +183,7 @@ class Ig_picpuller {
 	 * @access	public
 	 * @param	tag param: 'user_id', the EE member ID of a user that has authorized the Instagram application
 	 * @param 	tag param: 'limit', an integer that determines how many images to return
+	 * @param 	use_stale_cache:
 	 * @return	tag data: caption, media_id, next_max_id, low_resolution, thumbnail, standard_resolution, latitude, longitude, link, created_time
 	 */
 
