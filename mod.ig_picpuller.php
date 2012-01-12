@@ -59,51 +59,6 @@ class Ig_picpuller {
 	 }
 	
 	/**
-	 * User
-	 *
-	 * Get the user information from a specified EE user that has authorized the Instagram application 
-	 * http://instagram.com/developer/endpoints/users/#get_users
-	 *
-	 * @access	private
-	 * @param	tag param, 'user_id', the EE member ID of a user that has authorized the Instagram application
-	 * @return	tag data, username, bio, profile_picture, website, full_name, counts_media, counts_followed_by, counts_follows, id, status
-	 */
-		
-	public function user()
-	{
-		$this->EE->TMPL->log_item('PicPuller: user');
-		$this->use_stale = $this->EE->TMPL->fetch_param('use_stale_cache', 'yes');
-		$tagdata = $this->EE->TMPL->tagdata;
-		$variables = array();
-	
-		$user_id = $this->EE->TMPL->fetch_param('user_id');
-		$oauth = $this->getAuthCredsForUser($user_id);
-		$query_string = "https://api.instagram.com/v1/users/self?access_token={$oauth}";
-		
-		$data = $this->_fetch_data($query_string);
-		
-		if($data['status'] === FALSE) {
-			return 'There was an error in retrieving data. Error type: '.$data['error_type'] . ' Details:  '.$data['error_message'];
-		}
-		
-		$node = $data['data'];
-		$variables[] = array(
-			'username' => $node['username'],
-			'bio' => $node['bio'],
-			'profile_picture' => $node['profile_picture'],
-			'website' => $node['website'],
-			'full_name' => $node['full_name'],
-			'counts_media' => strval($node['counts']['media']),
-			'counts_followed_by' => strval($node['counts']['followed_by']),
-			'counts_follows' => strval($node['counts']['follows']),
-			'id' => $node['id'],
-			'status' => 'true'
-		);
-		return $this->EE->TMPL->parse_variables($tagdata, $variables);
-
-	}
-	
-	/**
 	 * Popular
 	 *
 	 * Get a list of what media is most popular at the moment on Instagram. 32 image max.
@@ -176,6 +131,86 @@ class Ig_picpuller {
 		return $this->EE->TMPL->parse_variables($tagdata, $variables);
 		
 	}
+	
+	/**
+	 * User
+	 *
+	 * Get the user information from a specified EE user that has authorized the Instagram application 
+	 * http://instagram.com/developer/endpoints/users/#get_users
+	 *
+	 * @access	private
+	 * @param	tag param, 'user_id', the EE member ID of a user that has authorized the Instagram application
+	 * @return	tag data, username, bio, profile_picture, website, full_name, counts_media, counts_followed_by, counts_follows, id, status
+	 */
+		
+	public function user()
+	{
+		$this->EE->TMPL->log_item('PicPuller: user');
+		$this->use_stale = $this->EE->TMPL->fetch_param('use_stale_cache', 'yes');
+		$tagdata = $this->EE->TMPL->tagdata;
+		$variables = array();
+	
+		$user_id = $this->EE->TMPL->fetch_param('user_id');
+		
+		if($user_id == '') 
+		{
+			//return "ERROR: No user ID set for this function";
+			$variables[] = array(
+				'error_type' => 'MissingReqParameter',
+				'error_message' => 'No user ID set for this function',
+				'status' => 'false'
+			);
+			
+			return $this->EE->TMPL->parse_variables($tagdata, $variables);
+		}
+		
+		$oauth = $this->getAuthCredsForUser($user_id);
+		
+		if(!$oauth) 
+		{
+			//return "ERROR: No user ID set for this function";
+			$variables[] = array(
+				'error_type' => 'UnauthorizedUser',
+				'error_message' => 'User has not authorized PicPuller for access to Instagram.',
+				'status' => 'false'
+			);
+			
+			return $this->EE->TMPL->parse_variables($tagdata, $variables);
+		}
+		
+		
+		
+		$query_string = "https://api.instagram.com/v1/users/self?access_token={$oauth}";
+		
+		$data = $this->_fetch_data($query_string);
+		
+		if ($data['status'] === FALSE && $this->use_stale != 'yes') {
+			$variables[] = array(
+				'error_type' => $data['error_type'],
+				'error_message' => $data['error_message'],
+				'status' => 'false'
+			);
+			
+			return $this->EE->TMPL->parse_variables($tagdata, $variables);
+		}
+		
+		$node = $data['data'];
+		$variables[] = array(
+			'username' => $node['username'],
+			'bio' => $node['bio'],
+			'profile_picture' => $node['profile_picture'],
+			'website' => $node['website'],
+			'full_name' => $node['full_name'],
+			'counts_media' => strval($node['counts']['media']),
+			'counts_followed_by' => strval($node['counts']['followed_by']),
+			'counts_follows' => strval($node['counts']['follows']),
+			'id' => $node['id'],
+			'status' => 'true'
+		);
+		return $this->EE->TMPL->parse_variables($tagdata, $variables);
+
+	}
+
 
 	/**
 	 * Media Recent
