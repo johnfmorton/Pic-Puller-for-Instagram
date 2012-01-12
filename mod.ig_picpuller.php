@@ -38,9 +38,6 @@ class Ig_picpuller {
 	public function __construct()
 	{
 		$this->EE =& get_instance();
-		//$this->EE->load->library('template');
-		
-		//$this->EE->TMPL->log_item('PicPuller: instantiated');
 	}
 	
 	// ----------------------------------------------------------------
