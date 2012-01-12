@@ -57,7 +57,7 @@ class Ig_picpuller {
 
 	 public function beep() 
 	 {
-		$this->EE->TMPL->log_item('PicPuller for Instagram: testing');
+		$this->EE->TMPL->log_item('PicPuller for Instagram: is installed an returning data. Beep.');
 		return "Beep. Beep beep.";
 	 }
 	
