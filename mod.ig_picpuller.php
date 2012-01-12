@@ -101,14 +101,7 @@ class Ig_picpuller {
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
 		}
-		//$next_url = isset($data['pagination']['next_url']) ? $data['pagination']['next_url'] : 'no';
 		/*
-		$next_max_id = '';
-		if (isset($data['pagination']['next_url'])){
-			parse_str(parse_url($data['pagination']['next_url'], PHP_URL_QUERY), $array);
-			$next_max_id = $array['max_like_id'];
-		}
-		
 		echo "<pre>";
 		var_dump($data);
 		echo "</pre>";
@@ -287,7 +280,13 @@ class Ig_picpuller {
 		
 		$data = $this->_fetch_data($query_string);
 		
-		if($data['status'] === FALSE) {
+		/*
+		echo "<pre>";
+		var_dump($data);
+		echo "</pre>";
+		*/
+		
+		if ($data['status'] === FALSE && $this->use_stale != 'yes') {
 			$variables[] = array(
 				'error_type' => $data['error_type'],
 				'error_message' => $data['error_message'],
@@ -408,6 +407,11 @@ class Ig_picpuller {
 
 		$node = $data['data'];
 		//$next_url = isset($data['pagination']['next_url']) ? $data['pagination']['next_url'] : 'no';
+		/*
+		echo "<pre>";
+		var_dump($data);
+		echo "</pre>";
+		*/
 		
 		$next_max_id = '';
 		if (isset($data['pagination']['next_max_id'])){
@@ -523,6 +527,8 @@ class Ig_picpuller {
 		var_dump($data['pagination']);
 		echo '</pre>';
 		*/
+		
+		
 		foreach($data['data'] as $node)
 		{
 			$variables[] = array(
@@ -624,11 +630,7 @@ class Ig_picpuller {
 		}
 
 		$node = $data['data'];
-		/*$next_url = isset($data['pagination']['next_url']) ? $data['pagination']['next_url'] : 'no';
-		if ($next_url)		
-		parse_str(parse_url($next_url, PHP_URL_QUERY), $array);
-		$next_max_id = $array['max_like_id'];
-		*/
+		
 		$next_max_id = '';
 		if (isset($data['pagination']['next_max_tag_id'])){
 			$next_max_id = $data['pagination']['next_max_tag_id'];
@@ -981,9 +983,6 @@ class Ig_picpuller {
 		echo '</pre>';
 		*/
 		
-		//$this->EE->curl->create($url);
-		//$this->EE->curl->option('FAILONERROR', FALSE);
-		//$data = json_decode($this->EE->curl->execute(), true);
 		$valid_data = $this->_validate_data($data, $url);		
 		return $valid_data;
 	}
@@ -1000,6 +999,9 @@ class Ig_picpuller {
 	 */
 	
 	private function _validate_data($data, $url){
+		
+		// to FAKE a non-responsive error from Instagram, change the initial conditional statement below
+		
 		if ($data != '')
 		{
 			$error_array;
@@ -1054,10 +1056,14 @@ class Ig_picpuller {
 		} 
 		else // The was no response at all from Instagram, so make a custom error message.
 		{
+			
+			
 			if ($this->use_stale == 'yes') 
 			{
 				$data = $this->_check_cache($url, $this->use_stale);
 			}
+			
+			
 			
 			$error_array = array (
 				'error_message' => 'No data returned from Instagram API. Check http://api-status.com/6404/174981/Instagram-API.',
@@ -1065,6 +1071,14 @@ class Ig_picpuller {
 				'status' => FALSE
 				);
 		}
+		
+		/*
+		$mergeddata = array_merge($data, $error_array);
+		echo 'validating...';
+		echo '<pre>';
+		var_dump($mergeddata);
+		echo '</pre>';
+		*/
 		
 		// merge the original data or cached data (if stale allowed) with the error array
 		return array_merge($data, $error_array);
@@ -1134,7 +1148,7 @@ class Ig_picpuller {
 		
 		if ( ! @is_dir($dir))
 		{
-			$this->EE->TMPL->log_item('CHECK CASHE: directory wasnt there');
+			$this->EE->TMPL->log_item('CHECK CASHE: directory wasn\'t there');
 			return FALSE;
 		}
 		
