@@ -38,6 +38,7 @@ class Ig_picpuller {
 	public function __construct()
 	{
 		$this->EE =& get_instance();
+		
 	}
 	
 	// ----------------------------------------------------------------
@@ -54,6 +55,18 @@ class Ig_picpuller {
 
 	 public function beep() 
 	 {
+		$tagdata = $this->EE->TMPL->tagdata;
+
+		if (!$this->applicationExists() ) {
+			$variables[] = array(
+				'error_type' => 'NoInstagramApp',
+				'error_message' => 'There is no application stored in the Expression Engine data base. It appear set up is not complete.',
+				'status' => 'false'
+			);
+
+			return $this->EE->TMPL->parse_variables($tagdata, $variables);
+		};
+		
 		$this->EE->TMPL->log_item('PicPuller for Instagram: is installed an returning data. Beep.');
 		return "Beep. Beep beep.";
 	 }
@@ -66,14 +79,41 @@ class Ig_picpuller {
 	 *
 	 * @access	public
 	 * @param 	tag param: 'limit', an integer that determines how many images to return (32 is the max number the API will return)
+	 * @param 	use_stale_cache:
 	 * @return	tag data: username, full_name, profile_picture, created_time, link, caption, low_resolution, thumbnail, standard_resolution, status
 	 */
 	
 	public function popular()
 	{
+		$tagdata = $this->EE->TMPL->tagdata;
+		
+		if (!$this->applicationExists() ) {
+			$variables[] = array(
+				'error_type' => 'NoInstagramApp',
+				'error_message' => 'There is no application stored in the Expression Engine data base. It appear set up is not complete.',
+				'status' => 'false'
+			);
+			
+			return $this->EE->TMPL->parse_variables($tagdata, $variables);
+		};
+		
 		$this->use_stale = $this->EE->TMPL->fetch_param('use_stale_cache', 'yes');
 		
-		$tagdata = $this->EE->TMPL->tagdata;
+		/*
+		$clientID = $this->getClientID();
+		echo $clientID;
+		if ($clientID == ''){
+			$variables[] = array(
+				'error_type' => 'NoInstagramApp',
+				'error_message' => 'There is no application stored in the Expression Engine data base. It appear set up is not complete.',
+				'status' => 'false'
+			);
+			
+			return $this->EE->TMPL->parse_variables($tagdata, $variables);
+			
+		}
+		*/
+		
 		$variables = array();
 				
 		$client_id = $this->getClientID();
@@ -86,8 +126,6 @@ class Ig_picpuller {
 			$limit = "&count=$limit";
 		}
 		
-		
-	
 		$query_string ="https://api.instagram.com/v1/media/popular?client_id=$client_id". $limit;
 		
 		$data = $this->_fetch_data($query_string);
@@ -118,6 +156,9 @@ class Ig_picpuller {
 				'low_resolution' => $node['images']['low_resolution']['url'],
 				'thumbnail' => $node['images']['thumbnail']['url'],
 				'standard_resolution' => $node['images']['standard_resolution']['url'],
+				'latitude' => $node['location']['latitude'],
+				'longitude' => $node['location']['longitude'],
+				'media_id' => $node['id'],
 				'status' => 'true'
 			);
 		}
@@ -133,14 +174,25 @@ class Ig_picpuller {
 	 *
 	 * @access	private
 	 * @param	tag param, 'user_id', the EE member ID of a user that has authorized the Instagram application
+	 * @param 	use_stale_cache:
 	 * @return	tag data, username, bio, profile_picture, website, full_name, counts_media, counts_followed_by, counts_follows, id, status
 	 */
 		
 	public function user()
 	{
+		$tagdata = $this->EE->TMPL->tagdata;
+		
+		if (!$this->applicationExists() ) {
+			$variables[] = array(
+				'error_type' => 'NoInstagramApp',
+				'error_message' => 'There is no application stored in the Expression Engine data base. It appear set up is not complete.',
+				'status' => 'false'
+			);
+			
+			return $this->EE->TMPL->parse_variables($tagdata, $variables);
+		};
 		$this->EE->TMPL->log_item('PicPuller: user');
 		$this->use_stale = $this->EE->TMPL->fetch_param('use_stale_cache', 'yes');
-		$tagdata = $this->EE->TMPL->tagdata;
 		$variables = array();
 	
 		$user_id = $this->EE->TMPL->fetch_param('user_id');
@@ -220,9 +272,20 @@ class Ig_picpuller {
 
 	public function media_recent()
 	{
+		$tagdata = $this->EE->TMPL->tagdata;
+		
+		if (!$this->applicationExists() ) {
+			$variables[] = array(
+				'error_type' => 'NoInstagramApp',
+				'error_message' => 'There is no application stored in the Expression Engine data base. It appear set up is not complete.',
+				'status' => 'false'
+			);
+			
+			return $this->EE->TMPL->parse_variables($tagdata, $variables);
+		};
+		
 		$this->use_stale = $this->EE->TMPL->fetch_param('use_stale_cache', 'yes');
 		
-		$tagdata = $this->EE->TMPL->tagdata;
 		$variables = array();
 		$user_id = $this->EE->TMPL->fetch_param('user_id');
 		$limit = $this->EE->TMPL->fetch_param('limit');
@@ -274,8 +337,6 @@ class Ig_picpuller {
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
 		}	
 		
-		
-		
 		$query_string = "https://api.instagram.com/v1/users/{$ig_user_id}/media/recent/?access_token={$oauth}". $limit.$max_id.$min_id;
 		
 		$data = $this->_fetch_data($query_string);
@@ -316,7 +377,6 @@ class Ig_picpuller {
 				'longitude' => $node['location']['longitude'],
 				'media_id' => $node['id'],
 				'next_max_id' => $next_max_id, 
-				//'profile_picture' => $node['user']['profile_picture']['url'],
 				'status' => 'true'
 			);
 		}
@@ -332,14 +392,26 @@ class Ig_picpuller {
 	 * @access	public
 	 * @param	tag param: 'user_id', the EE member ID of a user that has authorized the Instagram application
 	 * @param 	tag param: 'limit', an integer that determines how many images to return
+	 * @param 	use_stale_cache:
 	 * @return	tag data: caption, media_id, next_max_id, low_resolution, thumbnail, standard_resolution, latitude, longitude, link, created_time, profile_picture, username, website, full_name, user_id
 	 */
 	
 	public function user_feed()
 	{
+		$tagdata = $this->EE->TMPL->tagdata;
+		
+		if (!$this->applicationExists() ) {
+			$variables[] = array(
+				'error_type' => 'NoInstagramApp',
+				'error_message' => 'There is no application stored in the Expression Engine data base. It appear set up is not complete.',
+				'status' => 'false'
+			);
+			
+			return $this->EE->TMPL->parse_variables($tagdata, $variables);
+		};
+		
 		$this->use_stale = $this->EE->TMPL->fetch_param('use_stale_cache', 'yes');
 		
-		$tagdata = $this->EE->TMPL->tagdata;
 		$variables = array();
 		$user_id = $this->EE->TMPL->fetch_param('user_id');
 		$limit = $this->EE->TMPL->fetch_param('limit');
@@ -451,14 +523,26 @@ class Ig_picpuller {
 	 * @access	public
 	 * @param	tag param: 'user_id', the EE member ID of a user that has authorized the Instagram application
 	 * @param 	tag param: 'limit', an integer that determines how many images to return
+	 * @param 	use_stale_cache:
 	 * @return	tag data: caption, media_id, next_max_id, low_resolution, thumbnail, standard_resolution, latitude, longitude, link, created_time, profile_picture, username, website, full_name, user_id
 	 */
 	
 	public function user_liked()
 	{
+		$tagdata = $this->EE->TMPL->tagdata;
+		
+		if (!$this->applicationExists() ) {
+			$variables[] = array(
+				'error_type' => 'NoInstagramApp',
+				'error_message' => 'There is no application stored in the Expression Engine data base. It appear set up is not complete.',
+				'status' => 'false'
+			);
+			
+			return $this->EE->TMPL->parse_variables($tagdata, $variables);
+		};
+		
 		$this->use_stale = $this->EE->TMPL->fetch_param('use_stale_cache', 'yes');
 		
-		$tagdata = $this->EE->TMPL->tagdata;
 		$variables = array();
 		$user_id = $this->EE->TMPL->fetch_param('user_id');
 		$limit = $this->EE->TMPL->fetch_param('limit');
@@ -513,11 +597,6 @@ class Ig_picpuller {
 		}
 
 		$node = $data['data'];
-		/*$next_url = isset($data['pagination']['next_url']) ? $data['pagination']['next_url'] : 'no';
-		if ($next_url)		
-		parse_str(parse_url($next_url, PHP_URL_QUERY), $array);
-		$next_max_id = $array['max_like_id'];
-		*/
 		$next_max_id = '';
 		if (isset($data['pagination']['next_max_like_id'])){
 			$next_max_id = $data['pagination']['next_max_like_id'];
@@ -541,7 +620,6 @@ class Ig_picpuller {
 				'latitude' => $node['location']['latitude'],
 				'longitude' => $node['location']['longitude'],
 				'media_id' => $node['id'],
-				//'next_url' => $next_url,
 				'next_max_id' => $next_max_id,
 				'profile_picture' => $node['user']['profile_picture'],
 				'username' => $node['user']['username'],
@@ -563,14 +641,26 @@ class Ig_picpuller {
 	 * @access	public
 	 * @param	tag param: 'user_id', the EE member ID of a user that has authorized the Instagram application
 	 * @param 	tag param: 'limit', an integer that determines how many images to return
+	 * @param 	use_stale_cache:
 	 * @return	tag data: caption, media_id, next_max_id, low_resolution, thumbnail, standard_resolution, latitude, longitude, link, created_time, profile_picture, username, website, full_name, user_id
 	 */
 	
 	public function tagged_media()
 	{
+		$tagdata = $this->EE->TMPL->tagdata;
+		
+		if (!$this->applicationExists() ) {
+			$variables[] = array(
+				'error_type' => 'NoInstagramApp',
+				'error_message' => 'There is no application stored in the Expression Engine data base. It appear set up is not complete.',
+				'status' => 'false'
+			);
+			
+			return $this->EE->TMPL->parse_variables($tagdata, $variables);
+		};
+		
 		$this->use_stale = $this->EE->TMPL->fetch_param('use_stale_cache', 'yes');
 		
-		$tagdata = $this->EE->TMPL->tagdata;
 		$variables = array();
 		$user_id = $this->EE->TMPL->fetch_param('user_id');
 		$limit = $this->EE->TMPL->fetch_param('limit');
@@ -652,7 +742,6 @@ class Ig_picpuller {
 				'latitude' => $node['location']['latitude'],
 				'longitude' => $node['location']['longitude'],
 				'media_id' => $node['id'],
-				//'next_url' => $next_url,
 				'next_max_id' => $next_max_id,
 				'profile_picture' => $node['user']['profile_picture'],
 				'username' => $node['user']['username'],
@@ -1249,6 +1338,15 @@ class Ig_picpuller {
 		fclose($fp);
         
 		@chmod($file, 0777);		
+	}
+	
+	private function applicationExists() {
+		$clientID = $this->getClientID();
+	
+		if ($clientID == ''){
+			return FALSE;
+		}		
+		return TRUE;
 	}
 	
 	
