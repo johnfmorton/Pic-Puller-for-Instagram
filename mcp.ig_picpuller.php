@@ -151,7 +151,7 @@ class Ig_picpuller_mcp {
 		
 		$vars['client_id'] = $this->getClientID();
 		$vars['client_secret'] = $this->getSecret();
-		$vars['delete_method'] = $this->_base_url.'&method=delete_app';
+		$vars['delete_method'] = $this->_base_url.'&method=preview_delete_app';
 		$vars['edit_secret'] = $this->_base_url.'&method=edit_secret';
 		
 		return $this->EE->load->view('ig_about', $vars, TRUE);	
@@ -249,6 +249,18 @@ class Ig_picpuller_mcp {
 		// TO DO : add proper protocl here with getProtocol()
 		$vars['homeurl'] = $this->_base_url;
 		return $this->EE->load->view('save_settings', $vars, TRUE);	
+	}
+	
+	public function preview_delete_app() 
+	{
+		$vars['moduleTitle'] = lang('ig_picpuller_lite_module_name');
+		$vars['moduleShortTitle'] = lang('ig_picpuller_lite_short_module_name');
+		
+		$vars['client_id'] = $this->getClientID();
+		$vars['client_secret'] = $this->getSecret();
+		$vars['delete_method'] = $this->_base_url.'&method=preview_delete_app';
+		$vars['edit_secret'] = $this->_base_url.'&method=edit_secret';
+		return $this->EE->load->view('ig_about_delete_confirmation', $vars, TRUE);	
 	}
 	
 	public function delete_app()
