@@ -67,7 +67,7 @@ class Ig_picpuller {
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
 		};
 		
-		$this->EE->TMPL->log_item('PicPuller for Instagram: is installed an returning data. Beep.');
+		$this->EE->TMPL->log_item('Pic Puller for Instagram: is installed an returning data. Beep.');
 		return "Beep. Beep beep.";
 	 }
 	
@@ -168,6 +168,9 @@ class Ig_picpuller {
 		
 	}
 	
+
+
+
 	/**
 	 * User
 	 *
@@ -193,7 +196,7 @@ class Ig_picpuller {
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
 		};
-		$this->EE->TMPL->log_item('PicPuller: user');
+		$this->EE->TMPL->log_item('Pic Puller: user');
 		$this->use_stale = $this->EE->TMPL->fetch_param('use_stale_cache', 'yes');
 		$variables = array();
 	
@@ -218,7 +221,7 @@ class Ig_picpuller {
 			//return "ERROR: No user ID set for this function";
 			$variables[] = array(
 				'error_type' => 'UnauthorizedUser',
-				'error_message' => 'User has not authorized PicPuller for access to Instagram.',
+				'error_message' => 'User has not authorized Pic Puller for access to Instagram.',
 				'status' => 'false'
 			);
 			
@@ -332,7 +335,7 @@ class Ig_picpuller {
 		{
 			$variables[] = array(
 				'error_type' => 'UnauthorizedUser',
-				'error_message' => 'User has not authorized PicPuller for access to Instagram.',
+				'error_message' => 'User has not authorized Pic Puller for access to Instagram.',
 				'status' => 'false'
 			);
 			
@@ -458,7 +461,7 @@ class Ig_picpuller {
 			//return "ERROR: No user ID set for this function";
 			$variables[] = array(
 				'error_type' => 'UnauthorizedUser',
-				'error_message' => 'User has not authorized PicPuller for access to Instagram.',
+				'error_message' => 'User has not authorized Pic Puller for access to Instagram.',
 				'status' => 'false'
 			);
 			
@@ -817,7 +820,7 @@ class Ig_picpuller {
 	/**
 	 * Get Authorization from Code
 	 *
-	 * Get the authorization credentials from the PicPuller API based on code in second part of oAuth validation process
+	 * Get the authorization credentials from the Pic Puller API based on code in second part of oAuth validation process
 	 *
 	 * @access	private
 	 * @param	string - code, which is provided by Instagram in first step of a user authorizing with Instagram for an application
@@ -870,7 +873,7 @@ class Ig_picpuller {
 	/**
 	 * Get Authorization Credentials for an EE user
 	 *
-	 * Get the authorization credentials from the PicPuller oAuths table for a specified Expression Engine user PicPuller application
+	 * Get the authorization credentials from the Pic Puller oAuths table for a specified Expression Engine user Pic Puller application
 	 *
 	 * @access	private
 	 * @param	string - User ID number for an EE member
@@ -898,7 +901,7 @@ class Ig_picpuller {
 	/**
 	 * Get Client ID
 	 *
-	 * Get the client ID from the PicPuller Credentials table for the existing PicPuller application
+	 * Get the client ID from the Pic Puller Credentials table for the existing Pic Puller application
 	 *
 	 * @access	private
 	 * @return	mixed - returns Instagram client ID if available in DB, or FALSE if unavailable
@@ -925,7 +928,7 @@ class Ig_picpuller {
 	/**
 	 * Get Secret
 	 *
-	 * Get the secret (aka password) from the PicPuller Credentials table for the existing PicPuller application
+	 * Get the secret (aka password) from the Pic Puller Credentials table for the existing Pic Puller application
 	 *
 	 * @access	private
 	 * @return	mixed - returns Instagram Secret (aka redirect) if available in DB, or FALSE if unavailable
@@ -951,7 +954,7 @@ class Ig_picpuller {
 	/**
 	 * Get Authorization URL
 	 *
-	 * Get the authorization URL from the PicPuller Credentials table for the existing PicPuller application
+	 * Get the authorization URL from the Pic Puller Credentials table for the existing Pic Puller application
 	 *
 	 * @access	private
 	 * @return	mixed - returns Instagram Authorization (aka redirect) URL if available in DB, or FALSE if unavailable
@@ -1101,7 +1104,7 @@ class Ig_picpuller {
 			if ($meta['code'] == 200)
 			{
 				// There is an outlying chance that IG says 200, but the data array is empty.
-				// PicPuller considers that an error so we return a custom error message
+				// Pic Puller considers that an error so we return a custom error message
 				if(count($data['data']) == 0) {
 					$error_array = array(
 						'status' => FALSE,
@@ -1306,7 +1309,7 @@ class Ig_picpuller {
 	{
 		// Check for cache directory
 		
-		$this->EE->TMPL->log_item('PicPuller: _write_cache $data '. gettype($data));
+		$this->EE->TMPL->log_item('Pic Puller: _write_cache $data '. gettype($data));
 		
 		$data = json_encode($data);
 		
