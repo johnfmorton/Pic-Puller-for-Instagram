@@ -156,8 +156,10 @@ class Ig_picpuller {
 				'low_resolution' => $node['images']['low_resolution']['url'],
 				'thumbnail' => $node['images']['thumbnail']['url'],
 				'standard_resolution' => $node['images']['standard_resolution']['url'],
-				'latitude' => $node['location']['latitude'],
-				'longitude' => $node['location']['longitude'],
+				//'latitude' => $node['location']['latitude'],
+				//'longitude' => $node['location']['longitude'],
+				'latitude' => isset($node['location']['latitude']) ? $node['location']['latitude'] : '',
+				'longitude' => isset($node['location']['location']) ? $node['location']['latitude'] : '',
 				'media_id' => $node['id'],
 				'status' => 'true'
 			);
