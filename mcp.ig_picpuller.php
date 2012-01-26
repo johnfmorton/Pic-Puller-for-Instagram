@@ -253,8 +253,8 @@ class Ig_picpuller_mcp {
 	
 	public function preview_delete_app() 
 	{
-		$vars['moduleTitle'] = lang('ig_picpuller_lite_module_name');
-		$vars['moduleShortTitle'] = lang('ig_picpuller_lite_short_module_name');
+		$vars['moduleTitle'] = lang('ig_picpuller_module_name');
+		$vars['moduleShortTitle'] = lang('ig_picpuller_short_module_name');
 		
 		$vars['client_id'] = $this->getClientID();
 
