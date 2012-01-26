@@ -257,9 +257,9 @@ class Ig_picpuller_mcp {
 		$vars['moduleShortTitle'] = lang('ig_picpuller_lite_short_module_name');
 		
 		$vars['client_id'] = $this->getClientID();
-		$vars['client_secret'] = $this->getSecret();
+
 		$vars['delete_method'] = $this->_base_url.'&method=preview_delete_app';
-		$vars['edit_secret'] = $this->_base_url.'&method=edit_secret';
+		$vars['cancel_url'] = $this->_base_url.'&method=ig_info';
 		return $this->EE->load->view('ig_about_delete_confirmation', $vars, TRUE);	
 	}
 	
