@@ -1,4 +1,4 @@
 <?php
 $config['name']='Pic Puller for Instagram';
-$config['version']='0.9.0';
+$config['version']='0.9.1';
 $config['nsm_addon_updater']['versions_xml']='http://static.supergeekery.com/nsm_addon_updater/changelog_ig_picpuller.xml';

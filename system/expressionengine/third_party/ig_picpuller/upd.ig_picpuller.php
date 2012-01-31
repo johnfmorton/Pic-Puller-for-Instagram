@@ -26,7 +26,7 @@
 
 class Ig_picpuller_upd {
 	
-	public $version = '0.9.0';
+	public $version = '0.9.1';
 	
 	private $EE;
 	

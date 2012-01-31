@@ -262,6 +262,103 @@ class Ig_picpuller {
 	}
 
 
+
+	/**
+	 * Media 
+	 *
+	 * Get information about a single media object. 
+	 * http://instagram.com/developer/endpoints/media/#get_media
+	 *
+	 * @access	public
+	 * @param	tag param: 'user_id', the EE member ID of a user that has authorized the Instagram application
+	 * @param 	tag param: 'media_id', the Instagram media ID of the image to be returned
+	 * @param 	use_stale_cache:
+	 * @return	tag data: status, username, user_id, full_name, profile_picture, website, created_time, link, caption, low_resolution, thumbnail, standard_resolution, latitude, longitude, likes
+	 */
+	 public function media()
+	 {
+	 	$tagdata = $this->EE->TMPL->tagdata;
+		
+		if (!$this->applicationExists() ) {
+			$variables[] = array(
+				'error_type' => 'NoInstagramApp',
+				'error_message' => 'There is no application stored in the Expression Engine data base. It appear set up is not complete.',
+				'status' => 'false'
+			);
+			
+			return $this->EE->TMPL->parse_variables($tagdata, $variables);
+		};
+		
+		$this->use_stale = $this->EE->TMPL->fetch_param('use_stale_cache', 'yes');
+		
+		$variables = array();
+		$user_id = $this->EE->TMPL->fetch_param('user_id');
+		$media_id = $this->EE->TMPL->fetch_param('media_id');
+		
+		if($user_id == '') 
+		{
+			//return "ERROR: No user ID set for this function";
+			$variables[] = array(
+				'error_type' => 'MissingReqParameter',
+				'error_message' => 'No user ID set for this function',
+				'status' => 'false'
+			);
+			
+			return $this->EE->TMPL->parse_variables($tagdata, $variables);
+		}
+
+		if($media_id == '') 
+		{
+			//return "ERROR: No user ID set for this function";
+			$variables[] = array(
+				'error_type' => 'MissingReqParameter',
+				'error_message' => 'No media_id set for this function',
+				'status' => 'false'
+			);
+			
+			return $this->EE->TMPL->parse_variables($tagdata, $variables);
+		}
+
+		$oauth = $this->getAuthCredsForUser($user_id);
+
+		$query_string = "https://api.instagram.com/v1/media/{$media_id}?access_token={$oauth}";
+		
+		$data = $this->_fetch_data($query_string);
+
+		if ($data['status'] === FALSE && $this->use_stale != 'yes') {
+			$variables[] = array(
+				'error_type' => $data['error_type'],
+				'error_message' => $data['error_message'],
+				'status' => 'false'
+			);
+			
+			return $this->EE->TMPL->parse_variables($tagdata, $variables);
+		}
+
+		$node = $data['data'];
+
+		$variables[] = array(
+			'username' => $node['user']['username'],
+			'user_id' => $node['user']['id'],
+			'full_name' => $node['user']['full_name'],
+			'profile_picture' => $node['user']['profile_picture'],
+			'website' => $node['user']['website'],
+			'created_time' => $node['created_time'],
+			'link' => $node['link'],
+			'caption' => $node['caption']['text'],
+			'low_resolution' => $node['images']['low_resolution']['url'],
+			'thumbnail' => $node['images']['thumbnail']['url'],
+			'standard_resolution' => $node['images']['standard_resolution']['url'],
+			'latitude' => isset($node['location']['latitude']) ? $node['location']['latitude'] : '',
+			'longitude' => isset($node['location']['location']) ? $node['location']['latitude'] : '',
+			'likes' => $node['likes']['count'],
+			'status' => 'true'
+		);
+		
+		return $this->EE->TMPL->parse_variables($tagdata, $variables);
+	 }
+
+
 	/**
 	 * Media Recent
 	 *
@@ -378,8 +475,8 @@ class Ig_picpuller {
 				'low_resolution' => $node['images']['low_resolution']['url'],
 				'thumbnail' => $node['images']['thumbnail']['url'],
 				'standard_resolution' => $node['images']['standard_resolution']['url'],
-				'latitude' => $node['location']['latitude'],
-				'longitude' => $node['location']['longitude'],
+				'latitude' => isset($node['location']['latitude']) ? $node['location']['latitude'] : '',
+				'longitude' => isset($node['location']['location']) ? $node['location']['latitude'] : '',
 				'media_id' => $node['id'],
 				'next_max_id' => $next_max_id, 
 				'status' => 'true'
@@ -504,8 +601,8 @@ class Ig_picpuller {
 				'low_resolution' => $node['images']['low_resolution']['url'],
 				'thumbnail' => $node['images']['thumbnail']['url'],
 				'standard_resolution' => $node['images']['standard_resolution']['url'],
-				'latitude' => $node['location']['latitude'],
-				'longitude' => $node['location']['longitude'],
+				'latitude' => isset($node['location']['latitude']) ? $node['location']['latitude'] : '',
+				'longitude' => isset($node['location']['location']) ? $node['location']['latitude'] : '',
 				'media_id' => $node['id'],
 				'next_max_id' => $next_max_id, 
 				'profile_picture' => $node['user']['profile_picture'],
@@ -622,8 +719,8 @@ class Ig_picpuller {
 				'low_resolution' => $node['images']['low_resolution']['url'],
 				'thumbnail' => $node['images']['thumbnail']['url'],
 				'standard_resolution' => $node['images']['standard_resolution']['url'],
-				'latitude' => $node['location']['latitude'],
-				'longitude' => $node['location']['longitude'],
+				'latitude' => isset($node['location']['latitude']) ? $node['location']['latitude'] : '',
+				'longitude' => isset($node['location']['location']) ? $node['location']['latitude'] : '',
 				'media_id' => $node['id'],
 				'next_max_id' => $next_max_id,
 				'profile_picture' => $node['user']['profile_picture'],
@@ -744,8 +841,8 @@ class Ig_picpuller {
 				'low_resolution' => $node['images']['low_resolution']['url'],
 				'thumbnail' => $node['images']['thumbnail']['url'],
 				'standard_resolution' => $node['images']['standard_resolution']['url'],
-				'latitude' => $node['location']['latitude'],
-				'longitude' => $node['location']['longitude'],
+				'latitude' => isset($node['location']['latitude']) ? $node['location']['latitude'] : '',
+				'longitude' => isset($node['location']['location']) ? $node['location']['latitude'] : '',
 				'media_id' => $node['id'],
 				'next_max_id' => $next_max_id,
 				'profile_picture' => $node['user']['profile_picture'],
