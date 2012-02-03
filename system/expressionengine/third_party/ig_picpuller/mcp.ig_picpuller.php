@@ -285,23 +285,7 @@ class Ig_picpuller_mcp {
 		//$this->EE->db->delete('ig_picpuller_oauths', array('member_id', $this->getLoggedInUserId() ));
 		return $this->EE->load->view('authorized_removed', $vars, TRUE);
 	}
-	
-	/*
-	
-	This function is no longer used due to the ActionID method that is used to authrorize the app with Instagram.
-	
-	private function getProtocol()
-	{
-		if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) {
-			// this is a secure_connection so return https
-			return "https://";
-		} else {
-			return "http://";
-		}
-	}
-	
-	*/
-	
+		
 	private function getClientID()
 	{
 		$this->EE->db->select('ig_client_id');
@@ -376,13 +360,8 @@ class Ig_picpuller_mcp {
 	
 	private function getLoggedInUserId()
 	{
-		$this->EE->load->library('session');
-		//$all_userdata = $this->EE->session->all_userdata();
-		//print_r ($memberid);
-		//return $all_userdata['member_id'];
-		
-		return $this->EE->session->userdata('member_id');
-		
+		$this->EE->load->library('session');	
+		return $this->EE->session->userdata('member_id');	
 	}
 	
 	private function isSuperAdmin()

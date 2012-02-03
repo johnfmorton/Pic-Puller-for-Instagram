@@ -72,6 +72,103 @@ class Ig_picpuller {
 	 }
 	
 	/**
+	 * Front End Authorization
+	 *
+	 * This function permits users who do not have access to the control panel to authorize Pic Puller
+	 *
+	 * @access	private
+	 * @param	none
+	 * @return	string - beeps
+	 */
+
+	 public function authorization_link() 
+	 {
+	 	if (!$this->applicationExists() ) {
+			return 'ERROR: There is no Instagram application in the system to authorize.';
+		};
+
+	 	if (! $this->EE->session->userdata('member_id')){
+	 		return 'ERROR: Only logged in users can authorize this application.';
+	 	}
+	 	
+	 	$loggedInUser = $this->getInstagramId ($this->get_logged_in_user_id());
+		
+		$fullhtml = $this->EE->TMPL->fetch_param('fullhtml');
+		
+		if (!$loggedInUser) 
+		{
+			$this->EE->TMPL->log_item('Pic Puller for Instagram: Generating authorization for front end.');
+			
+			$redirect_uri = $this->get_auth_url();
+			$clientID = $this->getClientID();
+
+			$authorization_link = "https://instagram.com/oauth/authorize/?client_id=$clientID&redirect_uri=$redirect_uri&display=touch&response_type=code";
+	
+			if ($fullhtml == 'yes')
+			{
+				$authtext = $this->EE->TMPL->fetch_param('authtext');
+				$authclass = $this->EE->TMPL->fetch_param('authclass');
+				// if linktext is set in the EE tags, use that instead of the default text
+				$authtext  = $authtext ? $authtext : 'Authorize with Instagram';
+				$authorization_link = '<a href="'.$authorization_link.'" id="ig_picpuller_authorize" class="'.$authclass.'">'.$authtext.'</a>'.'
+				<script>
+				$(document).ready(function()
+					{
+						$("#ig_picpuller_authorize").bind("click", processAuthorization);
+						function processAuthorization(e)
+						{
+							e.preventDefault();
+							var theURL = $(this).attr("href");
+							window.open(theURL,"ingram_auth","width=400,height=300,left=0,top=100,screenX=0,screenY=100");
+							$(window).focus(function() {
+							   // user closed the popup window... refresh this page to see if their info was successfully saved
+								window.location.reload();
+							});
+						}
+				});
+				</script>';
+			}
+			return $authorization_link;
+		}
+		else 
+		{
+			$deauthorization_link= $this->deauthorization_url();
+
+			if ($fullhtml == 'yes')
+			{
+				$deauthtext = $this->EE->TMPL->fetch_param('deauthtext');
+				$deauthclass = $this->EE->TMPL->fetch_param('deauthclass');
+				// if linktext is set in the EE tags, use that instead of the default text
+				$deauthtext  = $deauthtext ? $deauthtext : 'De-authorize with Instagram';
+				$deauthorization_link = '<a href="'.$deauthorization_link.'" id="ig_picpuller_deauthorize" class="'.$deauthclass.'">'.$deauthtext.'</a>'.'
+				<script>
+				$(document).ready(function()
+					{
+						$("#ig_picpuller_deauthorize").bind("click", processDeauthorization);
+						function processDeauthorization(e)
+						{
+							e.preventDefault();
+							var theURL = $(this).attr("href");
+							window.open(theURL,"ingram_auth","width=400,height=300,left=0,top=100,screenX=0,screenY=100");
+							$(window).focus(function() {
+							   // user closed the popup window... refresh this page to see if their info was successfully saved
+								window.location.reload();
+							});
+						}
+				});
+				</script>';
+			}
+
+			return $deauthorization_link;
+		}
+/*
+		$tagdata = $this->EE->TMPL->tagdata;
+		return $this->EE->TMPL->parse_variables($tagdata, $variables);
+*/
+	 }
+
+
+	/**
 	 * Popular
 	 *
 	 * Get a list of what media is most popular at the moment on Instagram. 32 image max.
@@ -98,22 +195,7 @@ class Ig_picpuller {
 		};
 		
 		$this->use_stale = $this->EE->TMPL->fetch_param('use_stale_cache', 'yes');
-		
-		/*
-		$clientID = $this->getClientID();
-		echo $clientID;
-		if ($clientID == ''){
-			$variables[] = array(
-				'error_type' => 'NoInstagramApp',
-				'error_message' => 'There is no application stored in the Expression Engine data base. It appear set up is not complete.',
-				'status' => 'false'
-			);
-			
-			return $this->EE->TMPL->parse_variables($tagdata, $variables);
-			
-		}
-		*/
-		
+	
 		$variables = array();
 				
 		$client_id = $this->getClientID();
@@ -139,11 +221,7 @@ class Ig_picpuller {
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
 		}
-		/*
-		echo "<pre>";
-		var_dump($data);
-		echo "</pre>";
-		*/
+
 		foreach($data['data'] as $node)
 		{
 			$variables[] = array(
@@ -156,8 +234,6 @@ class Ig_picpuller {
 				'low_resolution' => $node['images']['low_resolution']['url'],
 				'thumbnail' => $node['images']['thumbnail']['url'],
 				'standard_resolution' => $node['images']['standard_resolution']['url'],
-				//'latitude' => $node['location']['latitude'],
-				//'longitude' => $node['location']['longitude'],
 				'latitude' => isset($node['location']['latitude']) ? $node['location']['latitude'] : '',
 				'longitude' => isset($node['location']['location']) ? $node['location']['latitude'] : '',
 				'media_id' => $node['id'],
@@ -228,8 +304,6 @@ class Ig_picpuller {
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
 		}
 		
-		
-		
 		$query_string = "https://api.instagram.com/v1/users/self?access_token={$oauth}";
 		
 		$data = $this->_fetch_data($query_string);
@@ -260,8 +334,6 @@ class Ig_picpuller {
 		return $this->EE->TMPL->parse_variables($tagdata, $variables);
 
 	}
-
-
 
 	/**
 	 * Media 
@@ -443,12 +515,6 @@ class Ig_picpuller {
 		
 		$data = $this->_fetch_data($query_string);
 		
-		/*
-		echo "<pre>";
-		var_dump($data);
-		echo "</pre>";
-		*/
-		
 		if ($data['status'] === FALSE && $this->use_stale != 'yes') {
 			$variables[] = array(
 				'error_type' => $data['error_type'],
@@ -581,11 +647,6 @@ class Ig_picpuller {
 
 		$node = $data['data'];
 		//$next_url = isset($data['pagination']['next_url']) ? $data['pagination']['next_url'] : 'no';
-		/*
-		echo "<pre>";
-		var_dump($data);
-		echo "</pre>";
-		*/
 		
 		$next_max_id = '';
 		if (isset($data['pagination']['next_max_id'])){
@@ -703,12 +764,6 @@ class Ig_picpuller {
 		if (isset($data['pagination']['next_max_like_id'])){
 			$next_max_id = $data['pagination']['next_max_like_id'];
 		}
-		/*
-		echo '<pre>';
-		var_dump($data['pagination']);
-		echo '</pre>';
-		*/
-		
 		
 		foreach($data['data'] as $node)
 		{
@@ -866,11 +921,7 @@ class Ig_picpuller {
 			$user_data = $this->getOAuthFromCode($_GET["code"]);
 			//echo('the code was ' . $_GET["code"]);
 		}
-		/*
-		echo "<pre>";
-		var_dump($user_data);
-		echo "</pre>";
-		*/
+
 		if (isset($user_data->{'access_token'})){
 			
 			//var_dump($user_data);
@@ -909,6 +960,14 @@ class Ig_picpuller {
 				$this->showResult("Error: No IG 'code' found.", "An error occurred in the authorization process with Instagram. <br><br>Is the API up currently? You can check at, <a href=\"http://api-status.com/6404/174981/Instagram-API\" target='_blank'>API Status</a>");
 			break;
 		}
+	}
+
+	// The authorization function is access via an ACTION_ID to authenticate a user and generate an oAuth code. Below is the deauthorization Action ID. This is only used by the 'exp:authorization_link' EE tab when a logged in user is already authorized with Instagram. The authorization button becomes a deauthorization button.
+	
+	public function deauthorization()
+	{
+		$this->remove_auth_logged_in_user();
+		$this->showResult("Authorization Removed", "You have removed authorization to access your Instagram photos. You may reauthorize again later. The application will still appear in your Instagram applications on Instagram.com but may be removed.");
 	}
 	
 	// Below are all "helper" functions
@@ -1087,13 +1146,6 @@ class Ig_picpuller {
 	{
 		$this->EE->load->library('session');
 		
-		//$all_user_data = $this->EE->session->all_user_data();
-		//return $all_user_data['member_id'];
-		/*
-		echo "<pre>";
-		var_dump($this->EE->session->userdata['member_id']);
-		echo "/<pre>";
-		*/
 		return $this->EE->session->userdata['member_id'];
 	}
 	
@@ -1248,7 +1300,6 @@ class Ig_picpuller {
 		else // The was no response at all from Instagram, so make a custom error message.
 		{
 			
-			
 			if ($this->use_stale == 'yes') 
 			{
 				$data = $this->_check_cache($url, $this->use_stale);
@@ -1262,14 +1313,6 @@ class Ig_picpuller {
 				'status' => FALSE
 				);
 		}
-		
-		/*
-		$mergeddata = array_merge($data, $error_array);
-		echo 'validating...';
-		echo '<pre>';
-		var_dump($mergeddata);
-		echo '</pre>';
-		*/
 		
 		// merge the original data or cached data (if stale allowed) with the error array
 		return array_merge($data, $error_array);
@@ -1316,7 +1359,21 @@ class Ig_picpuller {
 		</body>
 		</html>";
 	}
-	
+		
+	// ---------- FRONT END AUTHORIZATION/ ------------- //
+
+
+	private function deauthorization_url($urlEncoded = false) 
+	{
+		return $this->EE->functions->fetch_site_index(0, 0).QUERY_MARKER.'ACT='.$this->EE->functions->fetch_action_id('ig_picpuller', 'deauthorization');
+		
+	}
+
+	//
+	// ---------- /FRONT END AUTHORIZATION ------------- // 
+
+
+
 	// ---------- CACHE CONTROL/ ------------- //
 	
 	/**
@@ -1383,14 +1440,6 @@ class Ig_picpuller {
 		return $cache;
 	}
 	
-	/*
-	private function _array_push_assoc($array, $key, $value)
-	{
-		$array[$key] = $value;
-		return $array;
-	}
-	*/
-
 	// --------------------------------------------------------------------
 	
 	/**

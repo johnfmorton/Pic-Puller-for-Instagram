@@ -26,7 +26,7 @@
 
 class Ig_picpuller_upd {
 	
-	public $version = '0.9.1';
+	public $version = '0.9.2';
 	
 	private $EE;
 	
@@ -63,6 +63,13 @@ class Ig_picpuller_upd {
 
 		$this->EE->db->insert('actions', $data);
 
+		$data = array(
+			'class' => "Ig_picpuller",
+			'method' => 'deauthorization'
+		);
+
+		$this->EE->db->insert('actions', $data);
+
 		$this->EE->load->dbforge();
 
 		$fields = array(
@@ -73,7 +80,6 @@ class Ig_picpuller_upd {
 		);
 
 		$this->EE->dbforge->add_field($fields);
-		//$this->EE->dbforge->add_key('ig_client_id', TRUE);
 		$this->EE->dbforge->create_table('ig_picpuller_credentials');
 		
 		unset($fields);
@@ -104,14 +110,6 @@ class Ig_picpuller_upd {
 			'module_name'	=> 'Ig_picpuller'
 		));
 		
-		/*$mod_id = $this->EE->db->select('module_id')
-								->get_where('modules', array(
-									'module_name'	=> 'ig_picpuller'
-								))->row('module_id');
-		*/
-		
-		// $mod_id is now an array, but it shouldn't be... that's causing the uninstall error, i think
-		
 		$this->EE->db->where('module_id', $query->row('module_id'));
 		$this->EE->db->delete('module_member_groups');
 		
@@ -141,7 +139,25 @@ class Ig_picpuller_upd {
 	 */	
 	public function update($current = '')
 	{
-		// If you have updates, drop 'em in here.
+		
+	if (version_compare($current, '0.9.2', '='))
+	{
+		return FALSE;
+	}
+
+
+    if (version_compare($current, '0.9.2', '<'))
+    {
+        // Update code here
+    	$this->EE->load->dbforge();
+    	$data = array(
+			'class' => "Ig_picpuller",
+			'method' => 'deauthorization'
+		);
+
+		$this->EE->db->insert('actions', $data);
+
+    }
 		return TRUE;
 	}
 	
