@@ -1,0 +1,3 @@
+<div class="thumbnail"><img src="http://instashowee.com/themes/third_party/ig_picpuller/views/pizza.jpg" alt="pic" width="100" height="100" border="0" /><div class="headline">More 1</div><a href="#" class='selectbtn'>SELECT</a></div>
+<div class="thumbnail"><img src="http://instashowee.com/themes/third_party/ig_picpuller/views/pizza.jpg" alt="pic" width="100" height="100" border="0" /><div class="headline">More 2</div><a href="#" class='selectbtn'>SELECT</a></div>
+<div class="thumbnail"><img src="http://instashowee.com/themes/third_party/ig_picpuller/views/pizza.jpg" alt="pic" width="100" height="100" border="0" /><div class="headline">More 3</div><a href="#" class='selectbtn'>SELECT</a></div>
