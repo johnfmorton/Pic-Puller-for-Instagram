@@ -42,7 +42,7 @@ class Ig_picpuller_mcp {
 		$this->_base_url = BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=ig_picpuller';
 		
 		$this->EE->load->library('session');
-				
+		
 		if ( $this->isSuperAdmin() ) {
 		
 		$this->EE->cp->set_right_nav(array(
@@ -89,8 +89,7 @@ class Ig_picpuller_mcp {
 		$this->EE->load->library('javascript');
 		$this->EE->load->library('table');	
 		$this->EE->load->helper('form');
-		
-		
+			
 		// Help the user figure out the oAuth redirect URL
 		
 		$vars['full_auth_url'] = $this->getRedirectURL();
@@ -258,7 +257,7 @@ class Ig_picpuller_mcp {
 		
 		$vars['client_id'] = $this->getClientID();
 
-		$vars['delete_method'] = $this->_base_url.'&method=preview_delete_app';
+		$vars['delete_method'] = $this->_base_url.'&method=delete_app';
 		$vars['cancel_url'] = $this->_base_url.'&method=ig_info';
 		return $this->EE->load->view('ig_about_delete_confirmation', $vars, TRUE);	
 	}

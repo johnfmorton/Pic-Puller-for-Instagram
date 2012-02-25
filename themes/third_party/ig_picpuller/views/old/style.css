@@ -14,7 +14,8 @@
 		width: 815px;
 		height: 470px;
 		padding: 5px;
-}
+		border: 1px solid #999;
+	}
 
 .scroll-content {
 	position: absolute;
@@ -28,20 +29,19 @@
 	padding: 5px;
 	margin: 2px;
 	float: left;
-	background: -moz-linear-gradient(90deg, white 0%, #f6f6f6 100%) white;
-	background: -webkit-gradient(linear, left bottom, left top, from(white), to(#f6f6f6)) white;
+	Xbackground: -moz-linear-gradient(90deg, white 0%, #f6f6f6 100%) white;
+	Xbackground: -webkit-gradient(linear, left bottom, left top, from(white), to(#f6f6f6)) #FFFFFF;
+	
 	border-radius: 3px;
+	background-color: #f2f2f2;
 }
 
 .thumbnail img {
+	float: left;
 	margin-right: 5px;
 }
 
 .thumbnail img{
-	float: left;
-}
-
-a.selectbtn {
 	
 }
 
@@ -56,8 +56,10 @@ div.headline {
 	right: 5px;
 	height: 93%;
 }
+/*
 #readout {
 	position: absolute;
 	top:  0px;
 	left: 8px;
 }
+*/

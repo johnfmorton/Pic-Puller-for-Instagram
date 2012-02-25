@@ -42,8 +42,6 @@ class VirtualDirectory
     }
 }
 
-
-
 $virdir = new VirtualDirectory();
 //echo $virdir->thisurl;
 /*echo "<pre>";

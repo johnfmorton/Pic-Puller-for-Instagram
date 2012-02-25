@@ -26,7 +26,7 @@
 
 class Ig_picpuller_upd {
 	
-	public $version = '0.9.2';
+	public $version = '1.0.0';
 	
 	private $EE;
 	
@@ -140,7 +140,7 @@ class Ig_picpuller_upd {
 	public function update($current = '')
 	{
 		
-	if (version_compare($current, '0.9.2', '='))
+	if (version_compare($current, '1.0.0', '='))
 	{
 		return FALSE;
 	}

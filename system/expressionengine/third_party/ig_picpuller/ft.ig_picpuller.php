@@ -3,8 +3,8 @@
 class Ig_picpuller_ft extends EE_Fieldtype {
 	
 	var $info = array(
-		'name'		=> 'Pic Puller',
-		'version'	=> '0.9.3'
+		'name'		=> 'Pic Puller for Instagram Browser',
+		'version'	=> '1.0.0'
 	);
 	
 	// --------------------------------------------------------------------
@@ -23,53 +23,48 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 		$this->EE->cp->load_package_js('jquery.colorbox-min');
 		$this->EE->cp->load_package_js('jquery-ui-1.8.17.custom.min');
 		$this->EE->cp->load_package_js('scripts');
-		//$this->EE->cp->add_to_head("testing...");
+
+		$pp_theme_views = URL_THIRD_THEMES.'ig_picpuller/views/';
+
+		$this->EE->cp->add_to_head('<style>#cboxLoadingGraphic{background:url('.$pp_theme_views.'images/loading.gif) no-repeat center center;};</style>');
 
 		////////////////
 		// Get oAuth  //
 		////////////////
+
 		$user_id = $this->EE->session->userdata('member_id');
 		$oauth = $this->getAuthCredsForUser($user_id);
 		
 		//$this->EE->javascript->output(PATH_THIRD."ig_picpuller/js/scripts.js");
+		if ($oauth != '') {
+			$pp_select = $pp_theme_views.'pp_select.php?access_token='.$oauth.'&target_field='.$this->field_name;
 
-		//$vars['test'] = 'Just testing.';
+			$input = "Enter an Instagram media_id number or use the <em>Instagram Browser</em> to select one from your Instagram account." . 
+				form_input(array(
+				'name'  => $this->field_name,
+				//'id'    => $this->field_id,
+				'id'    => $this->field_name,
+				'value' => $data
+			))."<br><br><a class='igbrowserbt' href='$pp_select' style='display:none;'>Launch Instagram Browser</a>";
 
-		//$loaded_view = $this->EE->load->view('field_type_view', $vars, TRUE);
-		/* 
-		a loaded view from within the system folder pre-renders all the HTML code, so 
-		it does seem to be able to be dynamic.
+			return $input;
+		} 
+		else 
+		{
+			////////////////////////////////////////////////////////////////
+			// no oauth means the user has not authorized with Instagram. //
+			////////////////////////////////////////////////////////////////
 
-		That's why I think i need to rely on the themes/third_party folder, since I know those will be web accessible
-		views.
-
-		*/
-
-		$picviewer = URL_THIRD_THEMES.'ig_picpuller/views/picviewer.php?oauth='.$oauth;
-		$test_url = URL_THIRD_THEMES.'ig_picpuller/views/test.php?oauth='.$oauth;
-		//$loaded_theme_view = PATH_THIRD_THEMES.'ig_picpuller/views/picviewer.php';
-
-		$input = "Enter an Instagram media_id number manually or use the media browser to select the photostream associated with your user account." . form_input(array(
-            'name'  => $this->field_name,
-            'id'    => $this->field_id,
-            'value' => $data
-        ))."<br><br><a class='igbrowserbt' href='$test_url' style=''>Launch Instagram Browser</a>";
-
-        /*."<p>".$loaded_theme_view."</p>
-        <p><a href='".$oauth."'>$oauth</a></p>
-
-       ";
-       */
-        return $input;
-
+			return "You must authorize this user account with Instagram before you can browse for an image.";
+		}	
 
 		/*
 		return form_input(array(
-            'name'  => $this->field_name,
-            'id'    => $this->field_id,
-            'value' => $data
-        ));
-        */
+			'name'  => $this->field_name,
+			'id'    => $this->field_id,
+			'value' => $data
+		));
+		*/
 	}
 	
 	// --------------------------------------------------------------------
@@ -84,18 +79,18 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 	 */
 	function replace_tag($data, $params = array(), $tagdata = FALSE)
 	{
-    static $script_on_page = FALSE;
-    $ret = '';
+	static $script_on_page = FALSE;
+	$ret = '';
 
-    //list($latitude, $longitude, $zoom) = explode('|', $data);
+	//list($latitude, $longitude, $zoom) = explode('|', $data);
 
-    // google maps javascript ...
+	// google maps javascript ...
 
-    //return $ret.'<div style="height: 500px;"><div id="map_canvas_'.$this->field_id.'" style="width: 100%; height: 100%"></div></div>';
-    //
-    //return "This is new";
-    
-    return "Your Instagram Photo: " .$data;
+	//return $ret.'<div style="height: 500px;"><div id="map_canvas_'.$this->field_id.'" style="width: 100%; height: 100%"></div></div>';
+	//
+	//return "This is new";
+	
+	return "Your Instagram Photo: " .$data;
 
 	}
 	
@@ -153,7 +148,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 
 		foreach ($query->result() as $row)
 		{
-    		$oauth = $row->oauth;
+			$oauth = $row->oauth;
 		}
 		if (isset($oauth)){
 			return $oauth;
@@ -172,19 +167,21 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 	 * @return	void
 	 *
 	 */
+	/*
 	function _cp_js()
 	{
 		// This js is used on the global and regular settings
 		// pages, but on the global screen the map takes up almost
 		// the entire screen. So scroll wheel zooming becomes a hindrance.
 		
-		/*
+		
 		$this->EE->javascript->set_global('gmaps.scroll', ($_GET['C'] == 'content_admin'));
 		
 		$this->EE->cp->add_to_head('<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>');
 		$this->EE->cp->load_package_js('cp');
-		*/
+		
 	}
+	*/
 }
 
 /* End of file ft.google_maps.php */

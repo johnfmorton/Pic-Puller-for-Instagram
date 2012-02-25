@@ -243,9 +243,6 @@ class Ig_picpuller {
 		return $this->EE->TMPL->parse_variables($tagdata, $variables);
 		
 	}
-	
-
-
 
 	/**
 	 * User
