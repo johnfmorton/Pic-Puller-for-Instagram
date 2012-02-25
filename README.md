@@ -1,13 +1,34 @@
 # How to install
 
-Place the folder "ig_picpuller" in "system > expressionengine > third_party" folder.
+To install Pic Puller you will need to place 2 folders containing Pic Puller files into your ExpressionEngine installation. 
 
-Log in as an Super Admin to your ExpressionEngine control panel and install the Module. Follow the instructions within the module to set up your Instragram application.
+Alongside this README file, you will find 2 directories: "system" and "themes".
+
+## Let's address the "system" folder first.
+
+Navigate to the folder "ig_picpuller" in the "system" folder, system > expressionengine > third_party > ig_picpuller.
+
+Place this "ig_picpuller" folder in your EE site in its "system > expressionengine > third_party" folder.
+
+## Now for the themes folder.
+
+Navigate to the folder "ig_picpuller" in the "themes" folder, themes > third_party > ig_picpuller.
+
+Place this "ig_picpuller" folder in your EE site in its "themes > third_party" folder.
+
+## First time installation
+
+Log in as an Super Admin to your ExpressionEngine control panel and install the module and the fieldtype. (The use of the fieldtype requires the installation of the module, but the module is not dependent on the fieldtype, so you may choose to only install the module.)
+
+Follow the instructions within the module to set up your Instragram application.
 
 # How to update from a previous version
 
-Replace the "ig_picpuller" folder in your system > expressionengine > third_party folder with the most recent version. 
-Visit the Pic Puller module page in your control panel which will trigger the update of the software.
+Replace the "ig_picpuller" folder in your system > expressionengine > third_party folder with the most recent version. Do the same for the "theme" folder as well.
+
+Visit the Pic Puller module page in your control panel which will trigger the update of the software. If you do not see the version number update, you may need to press the "Run Module Updates" button on the upper left corner of the Modules screen within the EE control panel.
+
+If you are updating PicPuller from version 0.9.2 or lower, you will need to install the field type if you choose to use it.
 
 --
 

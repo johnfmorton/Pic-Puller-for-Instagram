@@ -233,7 +233,7 @@ error: a string describing the error
 Description:
 Get information about a media object.
 
-Possible use in ExpressionEngine would be to add a custom field to an entry where you could place a Instagram media id.
+Can be used in ExpressionEngine with a custom field containing an Instagram media id but designed to work together with the 'Pic Puller for Instagram Browser' fieldtype included with Pic Puller. See fieldtype documentation at the end of this document.
 
 Instragram docs page for this function:
 http://instagram.com/developer/endpoints/media/#get_media
@@ -301,3 +301,16 @@ If the user being served this tag is not logged in, this tag will report the err
 ERROR: Only logged in users can authorize this application.
 
 It is recommended that you use this tag within a conditional loop that displays it only to logged in members of your site.
+
+
+-----
+
+# 'Pic Puller for Instagram Browser' Fieldtype
+
+As of version 1.0.0, the 'Pic Puller for Instagram Browser' fieldtype is part of Pic Puller.
+
+It's intended use is to be used in conjunction with the Pic Puller 'media' tag pair. The fieldtype will store a media_id from Instagram. The field type assists getting the desired media_id by using a photo browser interface that displays the logged in user's photos.
+
+Since only users who have authorized Pic Puller can show the media browser, users who have not authorized are shown a message indicating they need to authorize before using the media browser. 
+
+The field type requires javascript. 
