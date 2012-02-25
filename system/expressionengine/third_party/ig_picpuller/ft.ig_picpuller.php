@@ -79,18 +79,11 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 	 */
 	function replace_tag($data, $params = array(), $tagdata = FALSE)
 	{
+		
 	static $script_on_page = FALSE;
 	$ret = '';
-
-	//list($latitude, $longitude, $zoom) = explode('|', $data);
-
-	// google maps javascript ...
-
-	//return $ret.'<div style="height: 500px;"><div id="map_canvas_'.$this->field_id.'" style="width: 100%; height: 100%"></div></div>';
-	//
-	//return "This is new";
 	
-	return "Your Instagram Photo: " .$data;
+	return $data;
 
 	}
 	

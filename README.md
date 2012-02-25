@@ -28,7 +28,9 @@ Replace the "ig_picpuller" folder in your system > expressionengine > third_part
 
 Visit the Pic Puller module page in your control panel which will trigger the update of the software. If you do not see the version number update, you may need to press the "Run Module Updates" button on the upper left corner of the Modules screen within the EE control panel.
 
-If you are updating PicPuller from version 0.9.2 or lower, you will need to install the field type if you choose to use it.
+If you are updating PicPuller from version 0.9.2 or lower, you will need to install the field type if you choose to use it. 
+
+WARNING: ExpressionEngine's installation screen can be confusing if you have the module installed already and are trying to add the field type. Both radio buttons should be set to "install" in the status are. Do not accidentally uninstall the module. If you do, you will need to go through the Instagram app set up again. This will most likely mean you need to update your authorization URL at Instagram, but not create an entirely new application. Your users will also need to reauthorize with Pic Puller.
 
 --
 
