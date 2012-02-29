@@ -1450,6 +1450,7 @@ class Ig_picpuller {
 	 */
 	private function _write_cache($data, $url)
 	{
+		
 		// Check for cache directory
 		
 		$this->EE->TMPL->log_item('Pic Puller: _write_cache $data '. gettype($data));
@@ -1485,9 +1486,47 @@ class Ig_picpuller {
 		flock($fp, LOCK_UN);
 		fclose($fp);
         
-		@chmod($file, 0777);		
+		@chmod($file, 0777);
+
+		// now clean up the cache
+		$this->_clear_cache();
+	}
+
+	private function _clear_cache()
+	{
+		$file = '*';
+		$dir = APPPATH.'cache/'.$this->cache_name.'/';
+
+		$sorted_array = $this->listdir_by_date($dir.$file);
+
+		/*
+		echo "<pre>";
+		print_r($sorted_array);
+		echo "</pre>";
+		*/
+
+		$count = count($sorted_array);
+		foreach ($sorted_array as $value) {
+			if($count > 25 ){
+			// unlinking, as in deleting, cache files that are oldest, but keeping 25 most recent
+			unlink($dir.$value);
+			}
+			$count--;
+		}
+	}
+
+	private function listdir_by_date($pathtosearch)
+	{
+		foreach (glob($pathtosearch) as $filename)
+		{
+			$file_array[filectime($filename)]=basename($filename); // or just $filename
+		}
+		ksort($file_array);
+		
+		return $file_array;
 	}
 	
+
 	private function applicationExists() {
 		$clientID = $this->getClientID();
 	
