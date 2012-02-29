@@ -1,3 +1,20 @@
+# Change log
+
+1.0.0 - 29FEB2012
+- New fieldtype, Pic Puller for Instagram Browser, added to browse a user's Instagram feed. 
+- Fieldtype compatible with Matrix.
+- Module update to help manage cache files created. Pic Puller will now only keep the 25 most recently created cache files.
+- CSS updates in module for visual consistency
+
+0.9.2 - 04FEB2012
+- Added support for authorizing logged in members from the front end of ExpressionEngine site.
+
+0.9.1 - 28JAN2012
+- Added 'media' tag to retrieve individual media by Instagram ID
+
+0.9.0 - 24JAN2012
+- Initial release
+
 # Popular Photos on Instagram
 
 ## exp:ig_picpuller:popular
