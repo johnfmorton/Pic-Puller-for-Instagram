@@ -313,4 +313,8 @@ It's intended use is to be used in conjunction with the Pic Puller 'media' tag p
 
 Since only users who have authorized Pic Puller can show the media browser, users who have not authorized are shown a message indicating they need to authorize before using the media browser. 
 
-The field type requires javascript. 
+The fieldtype requires javascript. 
+
+The fieldtype compatible with Matrix.
+
+There is a single option for the fieldtype. You can use the default instructional language that the fieldtype will automatically include or you may turn it off. 
