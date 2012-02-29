@@ -159,7 +159,6 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 
 		$this->EE->table->add_row(
 			lang('display_instructions_option_text', 'display_instructions_option_text'),
-			 'Yes: '.form_radio($radio1).NBS.' No: '.form_radio($radio2)
 			 'Yes: '.form_radio($radio1).NBS.NBS.' No: '.form_radio($radio2)
 		);
 
@@ -272,7 +271,6 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 	{
 		return array(
 			'ig_media_id' => '',
-			'display_pp_instructions'  => $this->EE->input->post('display_pp_instructions')
 			'display_pp_instructions'  => $this->EE->input->post('display_pp_instructions'),
 			'the_function' => 'media_recent'
 		);
@@ -291,7 +289,6 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 	{	
 		return array(
 			'ig_media_id'	=> '',
-			'display_pp_instructions' => 'yes'
 			'display_pp_instructions' => 'yes',
 			'the_function' => 'media_recent'
 		);
