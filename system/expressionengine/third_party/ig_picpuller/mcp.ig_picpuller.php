@@ -143,6 +143,10 @@ class Ig_picpuller_mcp {
 		}
 	}
 
+	/**
+	 * Display info within the control panel about the current Instagram app in Pic Puller
+	 * @return a view "ig_about"
+	 */
 	public function ig_info() 
 	{
 		$vars['moduleTitle'] = lang('ig_picpuller_module_name');
@@ -156,6 +160,10 @@ class Ig_picpuller_mcp {
 		return $this->EE->load->view('ig_about', $vars, TRUE);	
 	}
 	
+	/**
+	 * Display users within the control panel of users who have authorized Pic Puller to talk to their Instagram account
+	 * @return a view "ig_users"
+	 */
 	public function ig_users()
 	{
 		$vars['moduleTitle'] = lang('ig_picpuller_module_name');
@@ -184,19 +192,25 @@ class Ig_picpuller_mcp {
 		return $this->EE->load->view('ig_users', $vars, TRUE);
 	}
 	
+	/**
+	 * Display a view that will let user update the secret (aka password) of their Instram App
+	 * @return a view "ig_secret_update"
+	 */
 	public function edit_secret()
 	{
 		$vars['client_id'] = $this->getClientID();
 		$vars['client_secret'] = $this->getSecret();
 		$vars['form_hidden'] = NULL;
-		//$vars['delete_method'] = $this->_base_url.'&method=update_secret';
-		//	$vars['update_secret_url'] = $this->_base_url. '&method=update_secret';
 		$vars['update_secret_url'] = 'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=ig_picpuller'.AMP.'method=update_secret';
 		$vars['cancel_url'] = $this->_base_url.'&method=ig_info';
 		
 		return $this->EE->load->view('ig_secret_update', $vars, TRUE); 
 	}
 	
+	/**
+	 * Update the secret (aka password) in the database
+	 * @return a view "save_settings"
+	 */
 	public function update_secret()
 	{
 		$vars['moduleTitle'] = lang('ig_picpuller_module_name');
@@ -215,16 +229,22 @@ class Ig_picpuller_mcp {
 		$vars['client_id'] = $ig_client_id;
 		$vars['client_secret'] = $ig_client_secret;
 		
-		// TO DO : add proper protocl here with getProtocol()
 		$vars['homeurl'] = $this->_base_url;
 		return $this->EE->load->view('save_settings', $vars, TRUE);
 	}
 
+	/**
+	 * Save a user's Instagram Client ID and Client Secret into the EE database
+	 * @return a view "save_settings"
+	 */
 	public function save_settings()
 	{
 		// in this function save the client ID and the client secret for the user created application
 		
+		// NOTE: 
+		// 
 		// table: ig_picpuller_credentials
+		// 
 		// fields:
 		//  ig_client_id
 		//  ig_client_secret
@@ -245,11 +265,14 @@ class Ig_picpuller_mcp {
 		$vars['client_id'] = $ig_client_id;
 		$vars['client_secret'] = $ig_client_secret;
 		
-		// TO DO : add proper protocl here with getProtocol()
 		$vars['homeurl'] = $this->_base_url;
 		return $this->EE->load->view('save_settings', $vars, TRUE);	
 	}
 	
+	/**
+	 * First step, a warning, when a user attempts to delete their Instagram App
+	 * @return a view "ig_about_delete_confirmation"
+	 */
 	public function preview_delete_app() 
 	{
 		$vars['moduleTitle'] = lang('ig_picpuller_module_name');
@@ -262,6 +285,10 @@ class Ig_picpuller_mcp {
 		return $this->EE->load->view('ig_about_delete_confirmation', $vars, TRUE);	
 	}
 	
+	/**
+	 * Second step when a user attempts to delete their Instagram App. This DOES the actual deletion
+	 * @return a view - the index , aka, the home set up page for Pic Puller
+	 */
 	public function delete_app()
 	{
 		/// only SuperAdmins can delete the app
@@ -272,6 +299,10 @@ class Ig_picpuller_mcp {
 		}
 	}
 	
+	/**
+	 * Remove a single user's authorization from the EE database for the Instagram App
+	 * @return a view "authorized_removed"
+	 */
 	public function removeAuthorization()
 	{
 		$vars['moduleTitle'] = lang('ig_picpuller_module_name');
@@ -281,7 +312,6 @@ class Ig_picpuller_mcp {
 		$this->EE->db->limit('1');
 		$this->EE->db->where('member_id', $this->getLoggedInUserId() );
 		$this->EE->db->delete('ig_picpuller_oauths'); 
-		//$this->EE->db->delete('ig_picpuller_oauths', array('member_id', $this->getLoggedInUserId() ));
 		return $this->EE->load->view('authorized_removed', $vars, TRUE);
 	}
 		

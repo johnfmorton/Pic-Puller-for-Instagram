@@ -161,7 +161,7 @@ $target_field = $_GET["target_field"];
 		});
 
 		$( ".scroll-bar" ).bind( "slide", function(event, ui) {
-			// Why is there an extra +5 and +10 ? It's for padding top and botton on the scroll area
+			// Why is there an extra +10 ? It's for padding top and botton on the scroll area
 			var maxDepth = $('.scroll-content').height() - $('.scroll-area').height() + 10 ;
 			var newTop = -((.01 * Math.abs(ui.value-100)) * maxDepth);
 			newTop +=10;
@@ -175,10 +175,7 @@ $target_field = $_GET["target_field"];
 		});
 
 		$('.scroll-content').delegate('.selectbtn', 'click', function(event) {
-			//getPics( $(this).attr('href') );
-			console.log( $(this).attr('data-id') );
-			$("#<?=$target_field;?>").val($(this).attr('data-id'));
-			//$.colorbox.remove();
+			$('#activePPtarget').val($(this).attr('data-id'));
 			$.colorbox.close();
 			return false;
 		});
@@ -195,7 +192,6 @@ $target_field = $_GET["target_field"];
 					$('.scroll-content').append(data).each(function() {
 						var newTotal = $('.scroll-content .thumbnail').length;
 						var sliderValue = Math.floor(Math.abs((prevTotal/newTotal * 100) -100 ) );
-						//console.log('there were ' + prevTotal + ' and now there are ' + newTotal + ' items. So the % into the pics is ' +  sliderValue);
 
 						// using 'each' to allow a callback to reset slider value
 						$( ".scroll-bar" ).slider({ value: sliderValue });
