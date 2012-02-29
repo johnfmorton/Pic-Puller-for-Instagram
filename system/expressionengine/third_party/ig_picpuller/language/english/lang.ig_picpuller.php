@@ -14,7 +14,17 @@ $lang = array(
 
 	'ig_info' => 'Current App Info',
 	
-	'ig_users' => 'Authorized Users'
+	'ig_users' => 'Authorized Users',
+
+	'display_instructions_option_text' => 'Display default Pic Puller field instructions?',
+
+	'default_instructions' => '<strong>Instructions:</strong> Browse for an image on Instagram or enter its media_id manually.',
+
+	'unauthorized_field_type_access'=> 'You must authorize this user account with Instagram before you can browse for an image.',
+
+	'launch_browser' => 'Launch Instagram Browser',
+
+	'preference' => 'Pic Puller for Instagram Browser preferences'
 		
 );
 
