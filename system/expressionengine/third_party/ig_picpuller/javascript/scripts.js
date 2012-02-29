@@ -14,22 +14,23 @@ $(function() {
  						$('#activePPtarget').removeAttr('id');
  					} });
 
-
- 	Matrix.bind('ig_picpuller', 'display', function(cell){
-		// Upon the display of each new PP browser row within a Matrix field, this JS is fired
-		$('.igbrowserbtmatrix').show();
- 		$('.igbrowserbtmatrix').colorbox({
- 				width:"830px", 
- 				height:"515px", 
- 				title: 'Choose a photo from your Instagram feed', 
- 				onOpen: function() {
- 						//$(this).prev().attr('id', 'activePPtarget');
- 						$(this).parent().find('input').attr('id', 'activePPtarget');
- 					},
- 				onCleanup: function() {
- 						$('#activePPtarget').removeAttr('id');
- 					} 
- 				});
-	});
+ 	if (typeof Matrix == 'function'){
+	 	Matrix.bind('ig_picpuller', 'display', function(cell){
+			// Upon the display of each new PP browser row within a Matrix field, this JS is fired
+			$('.igbrowserbtmatrix').show();
+	 		$('.igbrowserbtmatrix').colorbox({
+	 				width:"830px", 
+	 				height:"515px", 
+	 				title: 'Choose a photo from your Instagram feed', 
+	 				onOpen: function() {
+	 						//$(this).prev().attr('id', 'activePPtarget');
+	 						$(this).parent().find('input').attr('id', 'activePPtarget');
+	 					},
+	 				onCleanup: function() {
+	 						$('#activePPtarget').removeAttr('id');
+	 					} 
+	 				});
+		});
+	}
 });
 
