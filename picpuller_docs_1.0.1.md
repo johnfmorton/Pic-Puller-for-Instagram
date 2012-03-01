@@ -1,5 +1,9 @@
 # Change log
 
+
+1.0.1 - 01MAR2012
+- Fixed incorrect longitude reporting in some functions.
+
 1.0.0 - 29FEB2012
 - New fieldtype, Pic Puller for Instagram Browser, added to browse a user's Instagram feed. 
 - Fieldtype compatible with Matrix.
