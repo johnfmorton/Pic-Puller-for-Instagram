@@ -235,7 +235,7 @@ class Ig_picpuller {
 				'thumbnail' => $node['images']['thumbnail']['url'],
 				'standard_resolution' => $node['images']['standard_resolution']['url'],
 				'latitude' => isset($node['location']['latitude']) ? $node['location']['latitude'] : '',
-				'longitude' => isset($node['location']['location']) ? $node['location']['latitude'] : '',
+				'longitude' => isset($node['location']['longitude']) ? $node['location']['longitude'] : '',
 				'media_id' => $node['id'],
 				'status' => 'true'
 			);
@@ -419,7 +419,7 @@ class Ig_picpuller {
 			'thumbnail' => $node['images']['thumbnail']['url'],
 			'standard_resolution' => $node['images']['standard_resolution']['url'],
 			'latitude' => isset($node['location']['latitude']) ? $node['location']['latitude'] : '',
-			'longitude' => isset($node['location']['location']) ? $node['location']['latitude'] : '',
+			'longitude' => isset($node['location']['longitude']) ? $node['location']['longitude'] : '',
 			'likes' => $node['likes']['count'],
 			'status' => 'true'
 		);
@@ -539,7 +539,7 @@ class Ig_picpuller {
 				'thumbnail' => $node['images']['thumbnail']['url'],
 				'standard_resolution' => $node['images']['standard_resolution']['url'],
 				'latitude' => isset($node['location']['latitude']) ? $node['location']['latitude'] : '',
-				'longitude' => isset($node['location']['location']) ? $node['location']['latitude'] : '',
+				'longitude' => isset($node['location']['longitude']) ? $node['location']['longitude'] : '',
 				'media_id' => $node['id'],
 				'next_max_id' => $next_max_id, 
 				'status' => 'true'
@@ -660,7 +660,7 @@ class Ig_picpuller {
 				'thumbnail' => $node['images']['thumbnail']['url'],
 				'standard_resolution' => $node['images']['standard_resolution']['url'],
 				'latitude' => isset($node['location']['latitude']) ? $node['location']['latitude'] : '',
-				'longitude' => isset($node['location']['location']) ? $node['location']['latitude'] : '',
+				'longitude' => isset($node['location']['longitude']) ? $node['location']['longitude'] : '',
 				'media_id' => $node['id'],
 				'next_max_id' => $next_max_id, 
 				'profile_picture' => $node['user']['profile_picture'],
@@ -772,7 +772,7 @@ class Ig_picpuller {
 				'thumbnail' => $node['images']['thumbnail']['url'],
 				'standard_resolution' => $node['images']['standard_resolution']['url'],
 				'latitude' => isset($node['location']['latitude']) ? $node['location']['latitude'] : '',
-				'longitude' => isset($node['location']['location']) ? $node['location']['latitude'] : '',
+				'longitude' => isset($node['location']['longitude']) ? $node['location']['longitude'] : '',
 				'media_id' => $node['id'],
 				'next_max_id' => $next_max_id,
 				'profile_picture' => $node['user']['profile_picture'],
@@ -894,7 +894,7 @@ class Ig_picpuller {
 				'thumbnail' => $node['images']['thumbnail']['url'],
 				'standard_resolution' => $node['images']['standard_resolution']['url'],
 				'latitude' => isset($node['location']['latitude']) ? $node['location']['latitude'] : '',
-				'longitude' => isset($node['location']['location']) ? $node['location']['latitude'] : '',
+				'longitude' => isset($node['location']['longitude']) ? $node['location']['longitude'] : '',
 				'media_id' => $node['id'],
 				'next_max_id' => $next_max_id,
 				'profile_picture' => $node['user']['profile_picture'],
