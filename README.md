@@ -32,6 +32,10 @@ If you are updating PicPuller from version 0.9.2 or lower, you will need to inst
 
 WARNING: ExpressionEngine's installation screen can be confusing if you have the module installed already and are trying to add the field type. Both radio buttons should be set to "install" in the status are. Do not accidentally uninstall the module. If you do, you will need to go through the Instagram app set up again. This will most likely mean you need to update your authorization URL at Instagram, but not create an entirely new application. Your users will also need to reauthorize with Pic Puller.
 
+Notes on MSM compatibility:
+
+TO DO
+
 --
 
 If you have any questions, please drop me a line at john@johnfmorton.com.

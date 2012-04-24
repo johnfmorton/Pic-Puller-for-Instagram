@@ -1,5 +1,7 @@
 # Change log
 
+1.1.0 - ??APR2012
+- Updated PP to be compatible with MSM
 
 1.0.1 - 01MAR2012
 - Fixed incorrect longitude reporting in some functions.
