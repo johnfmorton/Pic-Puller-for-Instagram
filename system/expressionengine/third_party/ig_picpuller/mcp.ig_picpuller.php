@@ -29,9 +29,6 @@ class Ig_picpuller_mcp {
 	public $return_data;
 	
 	private $_base_url;
-
-	// $_currentSite will identify whatever is the current site in the control panel for use in cases where MSM is being used.
-	private $_currentSite;
 	
 	/**
 	 * Constructor
@@ -40,8 +37,6 @@ class Ig_picpuller_mcp {
 	{
 		$this->EE =& get_instance();
 		
-		$this->_currentSite = $this->EE->config->config['site_id'];
-
 		$this->_the_server = $_SERVER['HTTP_HOST'];
 
 		$this->_base_url = BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=ig_picpuller';
@@ -57,12 +52,10 @@ class Ig_picpuller_mcp {
 			// Add more right nav items here in needed
 		));
 		} else {
-			
 			// ==============================================================
 			// = A non-SuperAdmin doesn't get to see the rest of the module =
 			// = so only the link to the home page of the module is here.   =
 			// ==============================================================
-			
 			$this->EE->cp->set_right_nav(array(
 				'ig_set_up'	=> $this->_base_url
 				// Add more right nav items here in needed
@@ -84,9 +77,6 @@ class Ig_picpuller_mcp {
 	public function index()
 	{
 		
-		// REPORTING CORRECTLY HERE
-		//echo ($this->_currentSite );
-
 		$vars['moduleTitle'] = lang('ig_picpuller_module_name');
 		$vars['moduleShortTitle'] = lang('ig_picpuller_short_module_name');
 
@@ -333,7 +323,7 @@ class Ig_picpuller_mcp {
 
 		foreach ($query->result() as $row)
 		{
-			$ig_client_id = $row->ig_client_id;
+    		$ig_client_id = $row->ig_client_id;
 		}
 		if (isset($ig_client_id)){
 			return $ig_client_id;
@@ -383,10 +373,8 @@ class Ig_picpuller_mcp {
 	
 	private function appExistsInDb()
 	{
-		echo ($this->_currentSite );
 		// is there an application already defined in the database?
 		$this->EE->db->select('*');
-		$this->EE->db->where('ig_site_id', $this->_currentSite );
 		$this->EE->db->limit('1');
 		$this->EE->db->from('ig_picpuller_credentials');
 		$query = $this->EE->db->get();
