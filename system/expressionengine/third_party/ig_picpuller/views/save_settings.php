@@ -8,7 +8,8 @@
 <p><pre>
 	<?=$client_secret;?>
 </pre></p>
-<p>You can review this information anytime in by using the 'Current App Info' button in the upper right corner. You can also delete this application information from Expression Engine via the same link.</p>
+
+<p>You can review this information anytime in by using the <a href="<?=$app_info_link;?>"><em><?=$edit_tab_name;?></em></a> button in the navigation area. You can also delete this application information from Expression Engine via the same link.</p>
 <br>
 <h4>Next steps</h4><br>
 <p>Next you will need to have a registered Instagram user authorize this application to access their Instagram account. This is probably the account of the person whose photos you want to display.</p>

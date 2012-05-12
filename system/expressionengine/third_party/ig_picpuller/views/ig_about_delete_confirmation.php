@@ -1,10 +1,10 @@
-<h3>Delete this Application</h3>
+<h3>Delete Instagram Application for <em><?=$site_label;?></em></h3>
 
 <?php 
 if (isset($client_id) ) {
 ?>
 
-<p>Are you sure? Deleting the Instagram application from your ExpressionEngine system will remove all the users and their authorization.</p>
+<p>Are you sure? Deleting the Instagram application from your ExpressionEngine system will remove all the users and their authorization for <em><?=$site_label;?></em>.</p>
 
 <p>This does not uninstall <em><?=$moduleShortTitle?></em> from ExpressionEngine.</p>
 

@@ -12,9 +12,11 @@ $lang = array(
 
 	'ig_set_up' => 'Pic Puller Set Up',
 
-	'ig_info' => 'Current App Info',
+	'ig_info' => 'Active Site App Info',
 	
 	'ig_users' => 'Authorized Users',
+
+	'ig_all_app_info' => 'Review All Apps',
 
 	'display_instructions_option_text' => 'Display default Pic Puller field instructions?',
 

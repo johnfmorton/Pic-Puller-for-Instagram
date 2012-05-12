@@ -9,7 +9,7 @@ It now checks to see if the 'ig_site_id' column exists in the 'ig_picpuller_cred
 
 Next: 
 
-When Pic Puller is displaying the current app info, compare it against the current site_id and only show that app.
+X. When Pic Puller is displaying the current app info, compare it against the current site_id and only show that app.
 
 
 
@@ -20,3 +20,9 @@ X Eliminate "old" folder in themes folder.
 Add better instructions on Field Type options screen. What does default instructions mean?
 
 Make an interface for changing the default app's site. ????? this is problematic. How do I let a person update that if they did it wrong?
+
+Have the module tags query the current site and use that as the site id
+
+have an override valud for siteid in case you want to use one site app in another site
+
+Make sure the app delete screen TELLS a user which site's app is being deleted.

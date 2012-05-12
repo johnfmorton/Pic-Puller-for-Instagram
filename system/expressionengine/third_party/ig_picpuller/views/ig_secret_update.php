@@ -3,7 +3,7 @@
 <p>Enter in the new Client Secret for your application below.</p>
 
 <table border="1" cellspacing="2" cellpadding="5" width='75%'>
-	<tr ><th colspan="2">Enter the <span style='color: red;'>new</span> client secret your Instagram application page.</th></tr>
+	<tr ><th colspan="2">Enter the <em>new</em> client secret from your <a href="http://instagram.com/developer/clients/manage/" target="instagram">Instagram Application Management screen</a>.</th></tr>
 	<!-- <tr><td>Data</td><td>Data</td></tr> -->
 
 <?=form_open($update_secret_url, '', $form_hidden);?>

@@ -31,14 +31,21 @@ class Ig_picpuller {
 	public $cache_expired = FALSE;
 	public $refresh_time = 15; // in minutes
 	public $use_stale;
-	
+
+	// $_currentSite will identify whatever is the current site for use in cases where MSM is being used.
+	private $_currentSite;
+	private $_appID;
+
+
 	/**
 	 * Constructor
 	 */
 	public function __construct()
 	{
 		$this->EE =& get_instance();
-		
+		$this->_currentSite = $this->EE->config->config['site_id'];
+		$this->_appID = $this->getAppID();
+		$this->_memberID = $this->get_logged_in_user_id();
 	}
 	
 	// ----------------------------------------------------------------
@@ -119,7 +126,7 @@ class Ig_picpuller {
 						{
 							e.preventDefault();
 							var theURL = $(this).attr("href");
-							window.open(theURL,"ingram_auth","width=400,height=300,left=0,top=100,screenX=0,screenY=100");
+							window.open(theURL,"ingram_auth","width=400,height=450,left=0,top=100,screenX=0,screenY=100");
 							$(window).focus(function() {
 							   // user closed the popup window... refresh this page to see if their info was successfully saved
 								window.location.reload();
@@ -212,7 +219,7 @@ class Ig_picpuller {
 		
 		$data = $this->_fetch_data($query_string);
 		
-		if ($data['status'] === FALSE && $this->use_stale != 'yes') {
+		if ($data['status'] === FALSE ) { // && $this->use_stale != 'yes') {
 			$variables[] = array(
 				'error_type' => $data['error_type'],
 				'error_message' => $data['error_message'],
@@ -305,7 +312,7 @@ class Ig_picpuller {
 		
 		$data = $this->_fetch_data($query_string);
 		
-		if ($data['status'] === FALSE && $this->use_stale != 'yes') {
+		if ($data['status'] === FALSE ) { // && $this->use_stale != 'yes') {
 			$variables[] = array(
 				'error_type' => $data['error_type'],
 				'error_message' => $data['error_message'],
@@ -394,7 +401,13 @@ class Ig_picpuller {
 		
 		$data = $this->_fetch_data($query_string);
 
-		if ($data['status'] === FALSE && $this->use_stale != 'yes') {
+		// echo '404 : 
+		// <pre>';
+		// var_dump($data);
+		// echo '</pre>';
+
+
+		if ($data['status'] === FALSE) {
 			$variables[] = array(
 				'error_type' => $data['error_type'],
 				'error_message' => $data['error_message'],
@@ -403,6 +416,16 @@ class Ig_picpuller {
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
 		}
+
+		// if ($data['status'] === FALSE ) { // && $this->use_stale != 'yes') {
+		// 	$variables[] = array(
+		// 		'error_type' => $data['error_type'],
+		// 		'error_message' => $data['error_message'],
+		// 		'status' => 'false'
+		// 	);
+		// 	
+		// 	return $this->EE->TMPL->parse_variables($tagdata, $variables);
+		// }
 
 		$node = $data['data'];
 
@@ -512,7 +535,7 @@ class Ig_picpuller {
 		
 		$data = $this->_fetch_data($query_string);
 		
-		if ($data['status'] === FALSE && $this->use_stale != 'yes') {
+		if ($data['status'] === FALSE ) { // && $this->use_stale != 'yes') {
 			$variables[] = array(
 				'error_type' => $data['error_type'],
 				'error_message' => $data['error_message'],
@@ -632,7 +655,7 @@ class Ig_picpuller {
 		
 		$data = $this->_fetch_data($query_string);
 		
-		if ($data['status'] === FALSE && $this->use_stale != 'yes') {
+		if ($data['status'] === FALSE ) { // && $this->use_stale != 'yes') {
 			$variables[] = array(
 				'error_type' => $data['error_type'],
 				'error_message' => $data['error_message'],
@@ -746,7 +769,7 @@ class Ig_picpuller {
 		
 		$data = $this->_fetch_data($query_string);
 		
-		if ($data['status'] === FALSE && $this->use_stale != 'yes') {
+		if ($data['status'] === FALSE ) { // && $this->use_stale != 'yes') {
 			$variables[] = array(
 				'error_type' => $data['error_type'],
 				'error_message' => $data['error_message'],
@@ -863,7 +886,7 @@ class Ig_picpuller {
 		
 		$data = $this->_fetch_data($query_string);
 		
-		if ($data['status'] === FALSE && $this->use_stale != 'yes') {
+		if ($data['status'] === FALSE ) { // && $this->use_stale != 'yes') {
 			$variables[] = array(
 				'error_type' => $data['error_type'],
 				'error_message' => $data['error_message'],
@@ -914,22 +937,27 @@ class Ig_picpuller {
 	{
 		parse_str($_SERVER['QUERY_STRING'], $_GET);
 		
+		// TO DO … Are we in the 2nd stage of the oAuth process, noticed seeing if IG has responded with a code value
 		if (isset($_GET["code"]) && $_GET["code"] != ''){
 			$user_data = $this->getOAuthFromCode($_GET["code"]);
-			//echo('the code was ' . $_GET["code"]);
 		}
 
+		
+
 		if (isset($user_data->{'access_token'})){
-			
-			//var_dump($user_data);
-			
+			//echo "<pre>";
+			//var_dump($this->_memberID);
+			//echo "</pre>";
+
 			$this->remove_auth_logged_in_user();
 			$this->EE->db->set('oauth', $user_data->{'access_token'});
 			// originally, I saved the member id from Instagram, but I switched that to saving
-			// the member_id of the EE user this authorization is associated with			
+			// the member_id of the EE user this authorization is associated with the app		
 			$this->EE->db->set('instagram_id', $user_data->{'user'}->id);
 			
 			$this->EE->db->set('member_id', $this->get_logged_in_user_id());
+
+			$this->EE->db->set('app_id', $this->_appID);
 			
 			$this->EE->db->insert('ig_picpuller_oauths');
 			
@@ -937,20 +965,28 @@ class Ig_picpuller {
 			//$vars['result'] = 'success';
 			//return $this->EE->load->view('authorization', $vars, TRUE);
 			$response = "success";	
+		} elseif (isset($_GET['error_description'])) {
+			$response =  "definedError";
+			$message = $_GET['error_description'];
 		} else {
 			$response =  "error";
 			$message = '';
 		}
-		//$resp['the_result'] = $response;
-		//$this->EE->output->send_ajax_response($resp);
 				
 		switch ($response)
 		{
 			case 'success':
 				$this->showResult("Success", "You have authorized this site to access your Instagram photos.");
 			break;
+			case 'definedError':
+			$this->showResult("Error", $message);
+			break;
+
 			case 'error':
-			$this->showResult("Error", "An error occurred in the authorization process with Instagram. No oAuth code was returned.<br><br>Is the API up currently? You can check at, <a href=\"http://api-status.com/6404/174981/Instagram-API\" target='_blank'>API Status</a>");
+			//echo "<pre>";
+			//print_r($_GET);
+			//echo "</pre>";
+			$this->showResult("Error", "An error occurred in the authorization process with Instagram. No oAuth code was returned.<br><br>One cause of this type of error is the password not being identical in ExpressionEngine to the Instagram secret.<br><br>Another cause can be the Instagram API not responding as expected. Is the API operating normally? You can check at, <a href=\"http://api-status.com/6404/174981/Instagram-API\" target='_blank'>API Status</a>");
 			break;
 			
 			default:
@@ -1037,6 +1073,7 @@ class Ig_picpuller {
 	{
 		$this->EE->db->select('oauth');
 		$this->EE->db->where("member_id = " . $user_id );
+		$this->EE->db->where('app_id', $this->_appID);
 		$this->EE->db->limit(1);
 		$query = $this->EE->db->get('ig_picpuller_oauths');
 
@@ -1063,6 +1100,7 @@ class Ig_picpuller {
 	private function getClientID()
 	{
 		$this->EE->db->select('ig_client_id');
+		$this->EE->db->where('ig_site_id', $this->_currentSite);
 		$this->EE->db->limit(1);
 		$query = $this->EE->db->get('ig_picpuller_credentials');
 
@@ -1079,6 +1117,35 @@ class Ig_picpuller {
 	}
 	
 	/**
+	 * Get Instagram App ID
+	 *
+	 * Get the app ID from the Pic Puller Credentials table for the existing Pic Puller application for the active site
+	 *
+	 * @access	private
+	 * @return	mixed - returns Instagram app ID if available in DB, or FALSE if unavailable
+	 */
+	
+	private function getAppID()
+	{
+		$this->EE->db->select('app_id');
+		$this->EE->db->where('ig_site_id', $this->_currentSite);
+		$this->EE->db->limit(1);
+		$query = $this->EE->db->get('ig_picpuller_credentials');
+
+		foreach ($query->result() as $row)
+		{
+    		$app_id = $row->app_id;
+		}
+		if (isset($app_id))
+		{
+			return $app_id;
+		} else {
+			return FALSE;
+		}
+	}
+
+
+	/**
 	 * Get Secret
 	 *
 	 * Get the secret (aka password) from the Pic Puller Credentials table for the existing Pic Puller application
@@ -1090,6 +1157,7 @@ class Ig_picpuller {
 	private function getSecret()
 	{
 		$this->EE->db->select('ig_client_secret');
+		$this->EE->db->where('ig_site_id', $this->_currentSite);
 		$this->EE->db->limit(1);
 		$query = $this->EE->db->get('ig_picpuller_credentials');
 
@@ -1116,6 +1184,7 @@ class Ig_picpuller {
 	private function get_auth_url()
 	{
 		$this->EE->db->select('auth_url');
+		$this->EE->db->where('ig_site_id', $this->_currentSite);
 		$this->EE->db->limit(1);
 		$query = $this->EE->db->get('ig_picpuller_credentials');
 
@@ -1142,8 +1211,8 @@ class Ig_picpuller {
 	public function get_logged_in_user_id()
 	{
 		$this->EE->load->library('session');
-		
 		return $this->EE->session->userdata['member_id'];
+		//return $this->EE->session;
 	}
 	
 	/**
@@ -1160,6 +1229,7 @@ class Ig_picpuller {
 	{
 		$this->EE->db->select('instagram_id');
 		$this->EE->db->where("member_id = " . $user_id );
+		$this->EE->db->where('app_id', $this->_appID);
 		$this->EE->db->limit(1);
 		$query = $this->EE->db->get('ig_picpuller_oauths');
 
@@ -1185,9 +1255,12 @@ class Ig_picpuller {
 	
 	private function remove_auth_logged_in_user()
 	{
+		// TO DO : remove the select * - not needed, but want to test first
+
 		$this->EE->db->select('*');
 		$this->EE->db->limit('1');
 		$this->EE->db->where('member_id', $this->get_logged_in_user_id() );
+		$this->EE->db->where('app_id', $this->_appID);
 		$this->EE->db->delete('ig_picpuller_oauths'); 
 	}
 	
@@ -1216,15 +1289,20 @@ class Ig_picpuller {
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 		
 		$data = json_decode(curl_exec($ch), true);
+		curl_close($ch);
 		
 		/*
+
+		Digging around? Uncomment this out to see all the goodies returned by Instagram.
+
 		echo '<pre>';
-		var_dump(curl_exec($ch));
+		var_dump($data);
 		echo '</pre>';
 		*/
-		
+
 		$valid_data = $this->_validate_data($data, $url);		
 		return $valid_data;
+
 	}
 	
 	/**
@@ -1277,19 +1355,26 @@ class Ig_picpuller {
 				if ($this->use_stale == 'yes') 
 				{
 					$data = $this->_check_cache($url, $this->use_stale);
-					$error_array = array(
-						'status' => TRUE,
-						'error_message' => (isset($meta['error_message']) ? $meta['error_message'] : 'No error message provided by Instagram.' ), //. ' Using stale data as back up if available.',
-						'error_type' =>  (isset($meta['error_type']) ? $meta['error_type'] : 'NoCodeReturned')
-					);
-				} 
-				else 
-				{
-					$error_array = array(
-						'status' => FALSE,
-						'error_message' => (isset($meta['error_message']) ? $meta['error_message'] : 'No error message provided by Instagram.' ),
-						'error_type' =>  (isset($meta['error_type']) ? $meta['error_type'] : 'NoCodeReturned')
-					);
+
+					if ($data) {
+
+						$error_array = array(
+							'status' => TRUE,
+							'error_message' => (isset($meta['error_message']) ? $meta['error_message'] : 'Using cached data.' ), //. ' Using stale data as back up if available.',
+							'error_type' =>  (isset($meta['error_type']) ? $meta['error_type'] : 'NoCodeReturned')
+						);
+					} 
+					else 
+					{
+
+						$error_array = array(
+							'status' => FALSE,
+							'error_message' => (isset($meta['error_message']) ? $meta['error_message'] : 'No error message provided by Instagram.' ),
+							'error_type' =>  (isset($meta['error_type']) ? $meta['error_type'] : 'NoCodeReturned')
+						);
+
+						return $error_array;
+					}
 				}
 			}
 			
@@ -1309,10 +1394,10 @@ class Ig_picpuller {
 				'error_type' => 'NoResponse',
 				'status' => FALSE
 				);
+
 		}
-		
-		// merge the original data or cached data (if stale allowed) with the error array
 		return array_merge($data, $error_array);
+		// merge the original data or cached data (if stale allowed) with the error array		
 	}
 	
 	private function showResult($headline, $message) {
@@ -1429,11 +1514,7 @@ class Ig_picpuller {
 		$this->EE->TMPL->log_item("Instagram data retrieved from cache");
 		
 		$cache = json_decode($cache, true);
-		/*
-		echo('<pre>');
-		var_dump($cache);
-		echo('</pre>');
-        */
+
 		return $cache;
 	}
 	

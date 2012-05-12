@@ -26,7 +26,7 @@
 
 class Ig_picpuller_upd {
 	
-	public $version = '1.0.1';
+	public $version = '1.1.0';
 	
 	private $EE;
 	
@@ -73,22 +73,28 @@ class Ig_picpuller_upd {
 		$this->EE->load->dbforge();
 
 		$fields = array(
-			'ig_client_id' => array('type' => 'varchar', 'constraint' => '64', 'null' => TRUE, 'default' => NULL),
-			'ig_client_secret' => array('type' => 'varchar', 'constraint'=> '64', 'null' => TRUE, 'default' => NULL)
+			'app_id'			=> array('type' => 'INT',  'constraint' => '10', 'unsigned' => TRUE, 'null' => FALSE, 'auto_increment' => TRUE), 
+			'ig_site_id'		=> array('type' => 'INT', 'length' => '11', 'null' => TRUE),
+			'ig_client_id'		=> array('type' => 'varchar', 'constraint' => '64', 'null' => TRUE, 'default' => NULL),
+			'ig_client_secret' 	=> array('type' => 'varchar', 'constraint'=> '64', 'null' => TRUE, 'default' => NULL)
 			,
-			'auth_url' => array('type' => 'varchar', 'constraint'=> '256', 'null' => TRUE, 'default' => NULL)
+			'auth_url'			=> array('type' => 'varchar', 'constraint'=> '256', 'null' => TRUE, 'default' => NULL),
+			'frontend_auth_url'	=> array('type' => 'varchar', 'constraint'=> '256', 'null' => TRUE, 'default' => NULL)
 		);
-
 		$this->EE->dbforge->add_field($fields);
+		$this->EE->dbforge->add_key('app_id', TRUE);
 		$this->EE->dbforge->create_table('ig_picpuller_credentials');
 		
 		unset($fields);
 
 		$fields = array(
-			'member_id' => array('type' => 'varchar', 'constraint' => '64', 'null' => TRUE, 'default' => NULL),
-			'instagram_id' => array('type' => 'varchar', 'constraint' => '64', 'null' => TRUE, 'default' => NULL),
-			'oauth' => array('type' => 'varchar', 'constraint' => '255', 'null' => TRUE, 'default' => NULL)
+			'member_id' 		=> array('type' => 'varchar', 'constraint' => '64', 'null' => TRUE, 'default' => NULL),
+			'instagram_id' 		=> array('type' => 'varchar', 'constraint' => '64', 'null' => TRUE, 'default' => NULL),
+			'oauth' 			=> array('type' => 'varchar', 'constraint' => '255', 'null' => TRUE, 'default' => NULL),
+			'app_id' 			=> array('type' => 'INT', 'length' => '9', 'auto_increment' => FALSE, 'null' => TRUE)
 		);
+
+
 		$this->EE->dbforge->add_field($fields);
 		$this->EE->dbforge->create_table('ig_picpuller_oauths');
 		
@@ -121,7 +127,6 @@ class Ig_picpuller_upd {
 
 		$this->EE->dbforge->drop_table('ig_picpuller_credentials');
 		$this->EE->dbforge->drop_table('ig_picpuller_oauths');
-		
 
 		// No publish fields in this version to remove
 		//$this->EE->load->library('layout');
@@ -139,17 +144,96 @@ class Ig_picpuller_upd {
 	 */	
 	public function update($current = '')
 	{
-		
-	if (version_compare($current, '1.0.1', '='))
+
+		// What we need to do here is more complex than I wanted it to be
+		// Since DBForge doesn't allow you to alter an existing table to 
+		// add a PRIMARY KEY, we make a new table with a PRIMARY KEY
+		// we may need to create an entire new empty table with a PRIMARY KEY
+		// with a temporary name, copy the old data to it, then delete the old
+		// table, then rename the new table with the same name as the old table.
+
+	$this->EE->load->dbforge();
+
+	// If the column 'ig_site_id' doesn't exist, we update the 'ig_picpuller_credentials'
+	// table with that new column and then we insert the currently logged in site as
+	// the owner of the current Pic Puller Instagram application
+
+	if (!$this->EE->db->field_exists('ig_site_id', 'ig_picpuller_credentials'))
 	{
-		return FALSE;
+		
+		$fields = array(
+			'app_id'			=> array('type' => 'INT',  'constraint' => '10', 'unsigned' => TRUE, 'null' => FALSE, 'auto_increment' => TRUE), 
+			'ig_site_id'		=> array('type' => 'INT', 'length' => '11', 'null' => TRUE),
+			'ig_client_id'		=> array('type' => 'varchar', 'constraint' => '64', 'null' => TRUE, 'default' => NULL),
+			'ig_client_secret' 	=> array('type' => 'varchar', 'constraint'=> '64', 'null' => TRUE, 'default' => NULL)
+			,
+			'auth_url'			=> array('type' => 'varchar', 'constraint'=> '256', 'null' => TRUE, 'default' => NULL),
+			'frontend_auth_url'	=> array('type' => 'varchar', 'constraint'=> '256', 'null' => TRUE, 'default' => NULL)
+		);
+		$this->EE->dbforge->add_field($fields);
+		$this->EE->dbforge->add_key('app_id', TRUE);
+		$this->EE->dbforge->create_table('ig_picpuller_credentials_TEMP');
+
+		// Now get all the data from the OLD data base
+		$query = $this->EE->db->get('ig_picpuller_credentials');
+
+		foreach ($query->result() as $row)
+		{
+			$data = array(
+				// ig_site_id is set to the site that the user is currently logged into in the EE CP
+			'ig_site_id' => $this->EE->config->config['site_id'],
+			'ig_client_id' => $row->ig_client_id,
+			'ig_client_secret' => $row->ig_client_secret,
+			'auth_url' => $row->auth_url,
+			);
+			$this->EE->db->insert('ig_picpuller_credentials_TEMP', $data);
+		};
+
+		$this->EE->dbforge->rename_table($this->EE->db->dbprefix .'ig_picpuller_credentials', $this->EE->db->dbprefix .'ig_picpuller_credentials_OLD');
+
+		$this->EE->dbforge->rename_table($this->EE->db->dbprefix .'ig_picpuller_credentials_TEMP', $this->EE->db->dbprefix .'ig_picpuller_credentials');
+
+		$this->EE->dbforge->drop_table('ig_picpuller_credentials_OLD');
+
+		// Now update the current exp_ig_picpuller_oauths for the existing app so they can
+		// be associated with the correct IG app within Pic Puller
+
+		// First, we will add that column to the exp_ig_picpuller_oauths table in the database
+		unset($fields);
+		unset($query);
+		$fields = array(
+				'app_id' => array('type' => 'INT', 'length' => '9', 'auto_increment' => FALSE, 'null' => TRUE)
+		);
+
+		$this->EE->dbforge->add_column('ig_picpuller_oauths', $fields);
+
+		// find out what the current id of the potentially existing app is and add this to all existing oAuths
+		// in exp_ig_picpuller_oauths table
+		
+		$this->EE->db->limit(1);
+		$this->EE->db->select('app_id');
+		$query = $this->EE->db->get('ig_picpuller_credentials');
+
+		foreach ($query->result() as $row)
+		{
+    		$appID = $row->app_id;
+		}
+
+		if (isset($appID)){
+			$data = array(
+				'app_id' => $appID
+			);
+			$this->EE->db->where('app_id', NULL);
+			$this->EE->db->update('ig_picpuller_oauths', $data);
+
+		} 
+
 	}
-
-
+	
     if (version_compare($current, '0.9.2', '<'))
     {
         // Update code here
-    	$this->EE->load->dbforge();
+    	//$this->EE->load->dbforge();
     	$data = array(
 			'class' => "Ig_picpuller",
 			'method' => 'deauthorization'
