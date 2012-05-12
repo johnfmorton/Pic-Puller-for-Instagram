@@ -593,9 +593,7 @@ class Ig_picpuller_mcp {
 	
 	private function appExistsInDb()
 	{
-		// TO DO - remove this echo line
-		//echo ('appExistsInDb fucntion, current site: ' . $this->_currentSite );
-		
+	
 		// is there an application already defined in the database?
 		$this->EE->db->select('*');
 		$this->EE->db->where('ig_site_id', $this->_currentSite );
@@ -627,7 +625,6 @@ class Ig_picpuller_mcp {
 		{
 			return FALSE;
 		}
-		
 		
 	}
 	

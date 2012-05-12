@@ -22,7 +22,9 @@ $lang = array(
 
 	'default_instructions' => '<strong>Instructions:</strong> Browse for an image on Instagram or enter its media_id manually.',
 
-	'unauthorized_field_type_access'=> 'You must authorize this user account with Instagram before you can browse for an image.',
+	// ExpressionEngine site builders: You may want to alter the line below to include a link to your authorization page for your users.
+
+	'unauthorized_field_type_access'=> 'You must authorize this ExpressionEngine user account with your Instagram account before you can browse for an image from your photo stream.',
 
 	'launch_browser' => 'Launch Instagram Browser',
 

@@ -937,14 +937,12 @@ class Ig_picpuller {
 	{
 		parse_str($_SERVER['QUERY_STRING'], $_GET);
 		
-		// TO DO … Are we in the 2nd stage of the oAuth process, noticed seeing if IG has responded with a code value
 		if (isset($_GET["code"]) && $_GET["code"] != ''){
 			$user_data = $this->getOAuthFromCode($_GET["code"]);
 		}
 
-		
-
 		if (isset($user_data->{'access_token'})){
+			
 			//echo "<pre>";
 			//var_dump($this->_memberID);
 			//echo "</pre>";
@@ -962,8 +960,7 @@ class Ig_picpuller {
 			$this->EE->db->insert('ig_picpuller_oauths');
 			
 			$message =  "Success! Your Instagram app now has access to your photostream.";
-			//$vars['result'] = 'success';
-			//return $this->EE->load->view('authorization', $vars, TRUE);
+
 			$response = "success";	
 		} elseif (isset($_GET['error_description'])) {
 			$response =  "definedError";
@@ -983,9 +980,9 @@ class Ig_picpuller {
 			break;
 
 			case 'error':
-			//echo "<pre>";
-			//print_r($_GET);
-			//echo "</pre>";
+			// echo "<pre>";
+			// print_r($_GET);
+			// echo "</pre>";
 			$this->showResult("Error", "An error occurred in the authorization process with Instagram. No oAuth code was returned.<br><br>One cause of this type of error is the password not being identical in ExpressionEngine to the Instagram secret.<br><br>Another cause can be the Instagram API not responding as expected. Is the API operating normally? You can check at, <a href=\"http://api-status.com/6404/174981/Instagram-API\" target='_blank'>API Status</a>");
 			break;
 			
@@ -1255,7 +1252,7 @@ class Ig_picpuller {
 	
 	private function remove_auth_logged_in_user()
 	{
-		// TO DO : remove the select * - not needed, but want to test first
+		// TO DO : remove the select * - not needed, but want to test first, so I've left it in for this version.
 
 		$this->EE->db->select('*');
 		$this->EE->db->limit('1');

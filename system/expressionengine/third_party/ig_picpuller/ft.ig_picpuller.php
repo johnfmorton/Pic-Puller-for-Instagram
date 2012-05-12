@@ -308,8 +308,10 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 	
 	private function getAuthCredsForUser($user_id)
 	{
+		$appID = $this->getCurrentAppId();
 		$this->EE->db->select('oauth');
 		$this->EE->db->where("member_id = " . $user_id );
+		$this->EE->db->where("app_id",  $appID);
 		$this->EE->db->limit(1);
 		$query = $this->EE->db->get('ig_picpuller_oauths');
 		foreach ($query->result() as $row)
@@ -322,6 +324,46 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 			return FALSE;
 		}
 	}
+
+	// --------------------------------------------------------------------
+	
+	/**
+	 * Get the Current PP App ID for this Instagram App
+	 *
+	 * Get the authorization credentials from the Pic Puller oAuths table for a specified Expression Engine user Pic Puller application
+	 *
+	 * @access	private
+	 * @param	none
+	 * @return	int
+	 */
+
+	private function getCurrentAppId()
+	{
+		$this->EE->db->select('app_id');
+		$this->EE->db->where('ig_site_id', $this->EE->config->config['site_id']);
+		$this->EE->db->limit(1);
+		$this->EE->db->from('ig_picpuller_credentials');
+
+		$query = $this->EE->db->get();
+
+		foreach ($query->result() as $row)
+		{
+			$current_app_id = $row->app_id;
+		}
+		/*
+		 echo '<pre>';
+		 echo $current_app_id;
+		 echo '</pre>';
+		*/
+
+		if (isset($current_app_id)){
+			return $current_app_id;
+		} else {
+			return false;
+		}
+	}
+
+
 
 }
 

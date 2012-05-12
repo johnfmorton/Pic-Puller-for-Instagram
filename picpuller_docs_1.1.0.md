@@ -1,7 +1,10 @@
 # Change log
 
-1.1.0 - ??APR2012
+1.1.0 - 12MAY2012
 - Updated PP to be compatible with MSM
+- Various updates to admin panel to help users with the control panel know which site Pic Puller is dealing with when managing multiple Instagram applications.
+- Minor language and visual tweaks in the control panel for consistency.
+- Updates to Instagram management URLs that changed after Facebook's acquisition of Instagram.
 
 1.0.1 - 01MAR2012
 - Fixed incorrect longitude reporting in some functions.
@@ -325,6 +328,7 @@ ERROR: Only logged in users can authorize this application.
 
 It is recommended that you use this tag within a conditional loop that displays it only to logged in members of your site.
 
+There is an HTML file called "sample_frontend_auth_template.html" included with the module to get your front end authorization template started.
 
 -----
 
@@ -341,3 +345,18 @@ The fieldtype requires javascript.
 The fieldtype compatible with Matrix.
 
 There is a single option for the fieldtype. You can use the default instructional language that the fieldtype will automatically include or you may turn it off. 
+
+-----
+
+# Pic Puller compatibility with ExpressionEngine Multiple Site Manager
+
+As of version 1.1.0, Pic Puller will allow you to manage multiple Instagram applications in Expression Engine when you have the Multiple Site Manage installed. Each site you manage can have an Instagram application associated with it. 
+
+Each site will have it's own authorization credentials with Instagram. Each site's users will have separate credentials stored in EE for each site.
+
+One potential issue you may have with authorizing apps comes up in the scenario where your control panel is at one domain, for example siteA.com/admin.php and the site you wish to authorize with Instagram is at siteB.com. You will need to authorize with Instagram from siteB.com and be logged into siteB.com with ExpressionEngine. 
+
+The module addresses this issue by using the front-end authorization feature of Pic Puller. See the front-end authorization documentation for more information. Also see the included front-end authorization template, "sample_frontend_auth_template.html", included with the module to get your front-end authorization template started.
+
+If you manage siteB.com from the same domain, for example siteB.com/admin.php, you will not run into this problem. 
+

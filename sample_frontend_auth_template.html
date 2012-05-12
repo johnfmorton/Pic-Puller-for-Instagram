@@ -1,0 +1,29 @@
+<h1>Front End Authorization</h1>
+{if logged_in}
+
+{!-- Load jQuery from the Google repository if not already present on your page. --}
+<script>window.jQuery || document.write('<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js"><\/script>')</script>
+
+
+<p>Since you're logged in, {screen_name} (aka, user #{member_id}), you can authorize the app.</p>
+<p>{exp:ig_picpuller:authorization_link fullhtml='yes' authclass='btn primary' authtext='Authorize with Pic Puller' deauthclass='btn danger' deauthtext='Remove Pic Puller authorization'}</p>
+{/if}
+
+{if !logged_in}
+
+{!-- This template assumes you are storing this page at site/auth. You should update this to reflect the template you are actually putting this code into. --}
+
+{exp:member:login_form return="site/auth"}
+<p>
+	<label>Username</label><br>
+	<input type="text" name="username" value="" maxlength="32" size="25">
+</p>
+<p>
+	<label>Password</label><br>
+	<input type="password" name="password" value="" maxlength="32" size="25">
+<p>
+	<input type="submit" name="submit" value="Submit">
+</p>
+	   
+{/exp:member:login_form}
+{/if}
