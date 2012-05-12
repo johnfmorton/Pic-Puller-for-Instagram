@@ -1,4 +1,4 @@
-# How to install
+# Installation instructions
 
 To install Pic Puller you will need to place 2 folders containing Pic Puller files into your ExpressionEngine installation. 
 
@@ -16,7 +16,7 @@ Navigate to the folder "ig_picpuller" in the "themes" folder, themes > third_par
 
 Place this "ig_picpuller" folder in your EE site in its "themes > third_party" folder.
 
-## First time installation
+## In the control panel
 
 Log in as an Super Admin to your ExpressionEngine control panel and install the module and the fieldtype. (The use of the fieldtype requires the installation of the module, but the module is not dependent on the fieldtype, so you may choose to only install the module.)
 
