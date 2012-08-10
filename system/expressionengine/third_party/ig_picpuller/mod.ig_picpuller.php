@@ -936,7 +936,7 @@ class Ig_picpuller {
 	public function authorization()
 	{
 		parse_str($_SERVER['QUERY_STRING'], $_GET);
-		
+
 		if (isset($_GET["code"]) && $_GET["code"] != ''){
 			$user_data = $this->getOAuthFromCode($_GET["code"]);
 		}
@@ -1429,12 +1429,33 @@ class Ig_picpuller {
 					margin-right: 15px;
 				}
 			</style>
+			
 		</head>
 		<body>
 			<h1 id=\"success\">$headline</h1>
 			<div id=\"message\"><p>$message</p>
 			<p><button onClick=\"window.close()\">Close this window</button></p>	
 			</div>
+			<script>
+				var auth=location.href.split('access_token=')[1];
+				var userid=auth.split('.')[0];
+				if (auth != '') {
+					// alert('Although the normal oAuth failed, your Instagram ID appears to be: ' + userid + ' \\nYour oAuth for this application : ' + auth + ' \\nThis can be used in the Advanced tab of Pic Puller.');
+					var headline = document.getElementById('success');
+					var content = document.getElementById('message');
+					while( headline.firstChild ) {
+						headline.removeChild( headline.firstChild );
+					}
+					while( content.firstChild ) {
+						content.removeChild( content.firstChild );
+					}
+					var newmessage = '\<p\>Use the following information in the Advanced User Administration screen in the control panel for Pic Puller.<p><p>User ID: <strong>'+userid+'</strong></p><p>oAuth code: <strong>'+auth+'</strong></p>';
+					var newP = document.createElement('p');
+					newP.innerHTML = newmessage;
+					headline.appendChild( document.createTextNode('Alternate Authorization Method') );
+					content.appendChild( newP);
+				}
+			</script>
 		</body>
 		</html>";
 	}

@@ -57,7 +57,8 @@ class Ig_picpuller_mcp {
 			'ig_set_up'	=> $this->_base_url,
 			'ig_info' => $this->_base_url.AMP.'method=ig_info',
 			'ig_users' => $this->_base_url.AMP.'method=ig_users',
-			'ig_all_app_info' => $this->_base_url.AMP.'method=ig_all_app_info'
+			'ig_all_app_info' => $this->_base_url.AMP.'method=ig_all_app_info',
+			'ig_advanced_menu' => $this->_base_url.AMP.'method=ig_advanced_menu'
 			// Add more right nav items here in needed
 		));
 		} else {
@@ -176,7 +177,7 @@ class Ig_picpuller_mcp {
 	}
 
 	/**
-	 * Display info within the control panel about the current Instagram app in Pic Puller
+	 * Display info within the control panel about the **current** Instagram app in Pic Puller
 	 * @return a view "ig_about"
 	 */
 	public function ig_info() 
@@ -193,6 +194,11 @@ class Ig_picpuller_mcp {
 		return $this->EE->load->view('ig_about', $vars, TRUE);	
 	}
 
+	/**
+	 * Display info within the control panel about **all** Instagram apps in Pic Puller
+	 * @return a view "ig_about_all_apps"
+	 */
+
 	public function ig_all_app_info()
 	{
 		$this->EE->db->select('site_id,app_id,ig_client_id,ig_client_secret,site_label');
@@ -203,9 +209,6 @@ class Ig_picpuller_mcp {
 		// echo "<pre>";
 		// print_r( $query->result() );
 		// echo "</pre>";
-
-		//$vars['delete_method'] = $this->_base_url.'&method=preview_delete_app';
-		//$vars['edit_secret'] = $this->_base_url.'&method=edit_secret';	
 		
 		$site_ids = array();
 		$app_ids = array();
@@ -236,6 +239,21 @@ class Ig_picpuller_mcp {
 
 		return $this->EE->load->view('ig_about_all_apps', $vars, TRUE);	
 	}
+
+	/**
+	 * Display the ADVANCED menu 
+	 * @return   a view "ig_advanced"
+	 */
+	
+	public function ig_advanced_menu()
+	{
+		$vars['site_label'] = $this->getSiteLabel();
+		$vars['adv_user_url'] = $this->_base_url.'&method=adv_user_admin';
+		$vars['cancel_url'] = $this->_base_url.'&method=ig_info';
+
+		return $this->EE->load->view('ig_advanced', $vars, TRUE);	
+	}
+
 	
 	/**
 	 * Display users within the control panel of users who have authorized Pic Puller to talk to their Instagram account
@@ -461,6 +479,95 @@ class Ig_picpuller_mcp {
 		return $this->EE->load->view('authorized_removed', $vars, TRUE);
 	}
 		
+	/**
+	 * ADVANCED: User Admin
+	 */
+
+	public function adv_user_admin() 
+	{
+		$vars['app_id'] = $this->_currentAppId;
+		$vars['site_label'] = $this->getSiteLabel();
+		$authURL = $this->EE->functions->fetch_site_index(0, 0).QUERY_MARKER.'ACT='.$this->EE->cp->fetch_action_id('ig_picpuller', 'authorization');
+		$vars['alt_url'] = 'https://instagram.com/oauth/authorize/?client_id='.$this->getClientID().'&redirect_uri='.$authURL.'&response_type=token';
+
+		$vars['update_user_info_url'] = 'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=ig_picpuller'.AMP.'method=save_user_info_adv';
+
+		$vars['cancel_url'] = $this->_base_url.'&method=ig_info';
+		$vars['form_hidden'] = NULL;
+		$vars['setup_link'] = $this->_base_url;
+
+		//  getting current user info if present
+
+		$this->EE->db->select('instagram_id,oauth');
+		$this->EE->db->from('ig_picpuller_oauths');
+		$this->EE->db->where('ig_picpuller_oauths.app_id', $this->_currentAppId );
+		$this->EE->db->where('member_id', $this->getLoggedInUserId());
+		$this->EE->db->limit(1);
+		$query = $this->EE->db->get();
+
+		 // 4echo "<pre>";
+		 // 4print_r( $query->result() );
+		 // 4echo "</pre>";
+		
+		foreach ($query->result() as $row)
+		{
+			$vars['ig_user_id'] = $row->instagram_id;
+			$vars['ig_user_oauth'] = $row->oauth;
+		}
+		
+		if (!isset($vars['ig_user_id'])){
+			$vars['ig_user_id'] ='';
+		}
+
+		if (!isset($vars['ig_user_oauth'])){
+			$vars['ig_user_oauth'] ='';
+		}
+
+		return $this->EE->load->view('ig_advanced_user_admin', $vars, TRUE);
+	}
+
+	public function save_user_info_adv() {
+
+		
+		$ig_user_id = $this->EE->input->post('ig_user_id', TRUE);
+		$ig_user_oauth = $this->EE->input->post('ig_user_oauth', TRUE);
+
+		$this->remove_auth_logged_in_user();
+		//echo "ig_user_id: ".$ig_user_id . ' and ig_user_oauth: '. $ig_user_oauth;
+
+		$this->EE->db->set('oauth', $ig_user_oauth);
+		$this->EE->db->set('instagram_id', $ig_user_id);
+		$this->EE->db->set('member_id', $this->getLoggedInUserId());
+		$this->EE->db->set('app_id', $this->_currentAppId);
+		$this->EE->db->insert('ig_picpuller_oauths');
+
+
+		// return to the top level of Pic Puller
+		return $this->index();
+	}
+
+	/**
+	 * Remove Authorization of Logged In User
+	 *
+	 * Remove the logged in users oAuth credentials from the database
+	 *
+	 * @access	private
+	 * @return	NULL
+	 */
+	
+	private function remove_auth_logged_in_user()
+	{
+		// TO DO : remove the select * - not needed, but want to test first, so I've left it in for this version.
+
+		$this->EE->db->select('*');
+		$this->EE->db->limit('1');
+		$this->EE->db->where('member_id', $this->getLoggedInUserId() );
+		$this->EE->db->where('app_id', $this->_currentAppId);
+		$this->EE->db->delete('ig_picpuller_oauths'); 
+	}
+
+	// HELPER FUNCTIONS BELOW
+
 	private function getClientID()
 	{		
 		$this->EE->db->select('ig_client_id');

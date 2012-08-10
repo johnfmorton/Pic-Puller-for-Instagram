@@ -10,13 +10,15 @@ $lang = array(
 	'ig_picpuller_module_description' => 
 	'Pic Puller for Instagram is a module that allows you to show Instagram photos from multiple users from within Expression Engine.',
 
-	'ig_set_up' => 'Pic Puller Set Up',
+	'ig_set_up' => 'Set Up',
 
 	'ig_info' => 'Active Site App Info',
 	
 	'ig_users' => 'Authorized Users',
 
 	'ig_all_app_info' => 'Review All Apps',
+
+	'ig_advanced_menu' => 'Advanced',
 
 	'display_instructions_option_text' => 'Display default Pic Puller field instructions?',
 
