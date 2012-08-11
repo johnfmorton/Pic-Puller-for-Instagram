@@ -417,16 +417,6 @@ class Ig_picpuller {
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
 		}
 
-		// if ($data['status'] === FALSE ) { // && $this->use_stale != 'yes') {
-		// 	$variables[] = array(
-		// 		'error_type' => $data['error_type'],
-		// 		'error_message' => $data['error_message'],
-		// 		'status' => 'false'
-		// 	);
-		// 	
-		// 	return $this->EE->TMPL->parse_variables($tagdata, $variables);
-		// }
-
 		$node = $data['data'];
 
 		$variables[] = array(
@@ -564,7 +554,8 @@ class Ig_picpuller {
 				'latitude' => isset($node['location']['latitude']) ? $node['location']['latitude'] : '',
 				'longitude' => isset($node['location']['longitude']) ? $node['location']['longitude'] : '',
 				'media_id' => $node['id'],
-				'next_max_id' => $next_max_id, 
+				'next_max_id' => $next_max_id,
+				'likes' => $node['likes']['count'], 
 				'status' => 'true'
 			);
 		}

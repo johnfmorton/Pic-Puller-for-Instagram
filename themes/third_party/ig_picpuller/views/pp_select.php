@@ -63,7 +63,7 @@ $target_field = $_GET["target_field"];
 	-->
 	<link rel="stylesheet" href="<?=$third_party_theme_dir;?>themes/base/jquery.ui.all.css">
 	<style type="text/css">
-	.ig_pp.scroll-area {
+	#ig_pp.scroll-area {
 			position: relative;
 			overflow: hidden;
 			width: 815px;
@@ -71,12 +71,12 @@ $target_field = $_GET["target_field"];
 			padding: 5px;
 	}
 
-	.ig_pp .scroll-content {
+	#ig_pp .scroll-content {
 		position: absolute;
 		top:  10px;
 	}
 
-	.ig_pp .thumbnail {
+	#ig_pp .thumbnail {
 		border: 1px solid #8195a0;
 		width: 250px;
 		height: 100px;
@@ -87,15 +87,15 @@ $target_field = $_GET["target_field"];
 		background-color: #ffffff;
 	}
 
-	.ig_pp .thumbnail img {
+	#ig_pp .thumbnail img {
 		margin-right: 5px;
 	}
 
-	.ig_pp .thumbnail img{
+	#ig_pp .thumbnail img{
 		float: left;
 	}
 
-	.ig_pp .thumbnail .selectbtn {
+	#ig_pp .thumbnail .selectbtn {
 		-webkit-border-radius: 3px;
 		-moz-border-radius: 3px;
 		border-radius: 3px;
@@ -113,7 +113,7 @@ $target_field = $_GET["target_field"];
 
 	}
 
-	.ig_pp .thumbnail .selectbtn:hover {
+	#ig_pp .thumbnail .selectbtn:hover {
 		text-decoration: none;
 		
 
@@ -127,13 +127,13 @@ $target_field = $_GET["target_field"];
 		background-image:         linear-gradient(to bottom, #fc2e5a, #d60d4c);
 	}
 
-	.ig_pp div.headline {
+	#ig_pp div.headline {
 		color: #1e2a32;
 		font-size: 12px;
 		margin-bottom: 10px;
 	}
 
-	.ig_pp .scroll-bar {
+	#ig_pp .scroll-bar {
 		position: absolute;
 		top: 3.5%;
 		right: 5px;
@@ -211,7 +211,6 @@ $target_field = $_GET["target_field"];
 			})
 		}
 
-
 		//////////////////////////////////////////
 		// Let's get this party started. Right? //
 		//////////////////////////////////////////
@@ -223,7 +222,7 @@ $target_field = $_GET["target_field"];
 <body>
 
 
-<div class="ig_pp scroll-area">
+<div id='ig_pp' class="scroll-area">
 
 	<div class="scroll-content">
 	</div>

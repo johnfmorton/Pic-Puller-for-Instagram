@@ -1,5 +1,12 @@
 # Change log
 
+1.1.1 - 10AUG2012
+- exp:ig_picpuller:media tag now returns number of 'likes' for an image
+- Updated link to Instagram site for removal of user applications
+- Updated Colorbox javascript to isolate it from other modules' use of the same library
+- Introduction of "Advanced" tab.
+- First "Advanced" option: alternate method of validating with Instagram 
+
 1.1.0 - 12MAY2012
 - Updated PP to be compatible with MSM
 - Various updates to admin panel to help users with the control panel know which site Pic Puller is dealing with when managing multiple Instagram applications.
@@ -286,6 +293,7 @@ user_id: the Instagram user id of the user whose account the image is from
 full_name: the full name provided by the user whose account the image is from
 profile_picture: URL to the profile image of the user
 website: the website information whose account the image is from, if available
+likes: number of likes for piece of media
 
 Tags returned in an unsuccessful Expression Engine loop:
 status: “false”

@@ -1,39 +1,39 @@
 /*
-    ColorBox Core Style:
+    ppcolorbox Core Style:
     The following CSS is consistent between example themes and should not be altered.
 */
-#colorbox, #cboxOverlay, #cboxWrapper{position:absolute; top:0; left:0; z-index:9999; overflow:hidden;}
-#cboxOverlay{position:fixed; width:100%; height:100%;}
-#cboxMiddleLeft, #cboxBottomLeft{clear:left;}
-#cboxContent{position:relative;}
-#cboxLoadedContent{overflow:auto;}
-#cboxTitle{margin:0;}
-#cboxLoadingOverlay, #cboxLoadingGraphic{position:absolute; top:0; left:0; width:100%; height:100%;}
-#cboxPrevious, #cboxNext, #cboxClose, #cboxSlideshow{cursor:pointer;}
-.cboxPhoto{float:left; margin:auto; border:0; display:block;}
-.cboxIframe{width:100%; height:100%; display:block; border:0;}
+#ppcolorbox, #ppcboxOverlay, #ppcboxWrapper{position:absolute; top:0; left:0; z-index:9999; overflow:hidden;}
+#ppcboxOverlay{position:fixed; width:100%; height:100%;}
+#ppcboxMiddleLeft, #ppcboxBottomLeft{clear:left;}
+#ppcboxContent{position:relative;}
+#ppcboxLoadedContent{overflow:auto;}
+#ppcboxTitle{margin:0;}
+#ppcboxLoadingOverlay, #ppcboxLoadingGraphic{position:absolute; top:0; left:0; width:100%; height:100%;}
+#ppcboxPrevious, #ppcboxNext, #ppcboxClose, #ppcboxSlideshow{cursor:pointer;}
+.ppcboxPhoto{float:left; margin:auto; border:0; display:block;}
+.ppcboxIframe{width:100%; height:100%; display:block; border:0;}
 
 /* 
     Styles specifically for Pic Puller:
 */
-#cboxWrapper {
+#ppcboxWrapper {
 	-webkit-border-radius: 12px 12px 0px 0px;
 	-moz-border-radius: 12px 12px 0px 0px;
 	border-radius: 12px 12px 0px 0px;
 	-moz-background-clip: padding; -webkit-background-clip: padding-box; background-clip: padding-box;
 	background-color: #334149;
 }
-#cboxOverlay{background:#fff;}
-#colorbox{}
-#cboxContent{margin-top:32px; overflow:visible;
+#ppcboxOverlay{background:#fff;}
+#ppcolorbox{}
+#ppcboxContent{margin-top:32px; overflow:visible;
 background-color: #ededed;
 }
-.cboxIframe{background:#fff;}
-#cboxError{padding:50px; border:1px solid #ccc;}
-#cboxLoadedContent{
+.ppcboxIframe{background:#fff;}
+#ppcboxError{padding:50px; border:1px solid #ccc;}
+#ppcboxLoadedContent{
 border: 1px solid #999;
 }
-#cboxLoadingGraphic{
+#ppcboxLoadingGraphic{
 /*
 This needed to be defined in the PHP file because it relied on a dynamically set path to the 
 third part themes folder.
@@ -41,36 +41,36 @@ third part themes folder.
 background:url(images/loading.gif) no-repeat center center;
 */
 }
-#cboxTitle{
+#ppcboxTitle{
 	position:absolute; top:-22px; 
 	left:11px; color: #ffffff;
 	font-weight: bold;
 }
-#cboxCurrent{position:absolute; top:-22px; right:205px; text-indent:-9999px;}
-#cboxSlideshow, #cboxPrevious, #cboxNext, #cboxClose{
+#ppcboxCurrent{position:absolute; top:-22px; right:205px; text-indent:-9999px;}
+#ppcboxSlideshow, #ppcboxPrevious, #ppcboxNext, #ppcboxClose{
 width:20px; 
 height:20px; 
 position:absolute; 
 top:-20px; 
 }
-#cboxPrevious{background-position:0px 0px; right:44px;}
-#cboxPrevious:hover{background-position:0px -25px;}
-#cboxNext{background-position:-25px 0px; right:22px;}
-#cboxNext:hover{background-position:-25px -25px;}
-#cboxClose{
+#ppcboxPrevious{background-position:0px 0px; right:44px;}
+#ppcboxPrevious:hover{background-position:0px -25px;}
+#ppcboxNext{background-position:-25px 0px; right:22px;}
+#ppcboxNext:hover{background-position:-25px -25px;}
+#ppcboxClose{
 	color: #FFF;
 	top:  -22px;
 	right: 20px;
 	font-weight: bold;
 	text-decoration: underline;
 }
-#cboxClose:hover{
+#ppcboxClose:hover{
 	color: #cacaca;
 }
-.cboxSlideshow_on #cboxPrevious, .cboxSlideshow_off #cboxPrevious{right:66px;}
-.cboxSlideshow_on #cboxSlideshow{background-position:-75px -25px; right:44px;}
-.cboxSlideshow_on #cboxSlideshow:hover{background-position:-100px -25px;}
-.cboxSlideshow_off #cboxSlideshow{background-position:-100px 0px; right:44px;}
-.cboxSlideshow_off #cboxSlideshow:hover{background-position:-75px -25px;}
+.ppcboxSlideshow_on #ppcboxPrevious, .ppcboxSlideshow_off #ppcboxPrevious{right:66px;}
+.ppcboxSlideshow_on #ppcboxSlideshow{background-position:-75px -25px; right:44px;}
+.ppcboxSlideshow_on #ppcboxSlideshow:hover{background-position:-100px -25px;}
+.ppcboxSlideshow_off #ppcboxSlideshow{background-position:-100px 0px; right:44px;}
+.ppcboxSlideshow_off #ppcboxSlideshow:hover{background-position:-75px -25px;}
         
 	    

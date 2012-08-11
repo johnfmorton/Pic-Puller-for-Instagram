@@ -4,7 +4,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 	
 	var $info = array(
 		'name'		=> 'Pic Puller for Instagram Browser',
-		'version'	=> '1.0.0'
+		'version'	=> '1.1.0'
 	);
 
 	static $counter = 0;
@@ -22,7 +22,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 	function display_field($data)
 	{
 		$this->EE->cp->load_package_css('colorbox');
-		$this->EE->cp->load_package_js('jquery.colorbox-min');
+		$this->EE->cp->load_package_js('jquery.ppcolorbox-min');
 		$this->EE->cp->load_package_js('jquery-ui-1.8.17.custom.min');
 		$this->EE->cp->load_package_js('scripts');
 
@@ -74,7 +74,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 	function display_cell( $data )
 	{
 		$this->EE->cp->load_package_css('colorbox');
-		$this->EE->cp->load_package_js('jquery.colorbox-min');
+		$this->EE->cp->load_package_js('jquery.ppcolorbox-min');
 		$this->EE->cp->load_package_js('jquery-ui-1.8.17.custom.min');
 		$this->EE->cp->load_package_js('scripts');
 
