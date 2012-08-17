@@ -176,7 +176,7 @@ $target_field = $_GET["target_field"];
 
 		$('.scroll-content').delegate('.selectbtn', 'click', function(event) {
 			$('#activePPtarget').val($(this).attr('data-id'));
-			$.colorbox.close();
+			$.ppcolorbox.close();
 			return false;
 		});
 

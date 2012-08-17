@@ -77,8 +77,18 @@ jQuery is here for debugging purposes only.
 
 	// the @ symbol will make this fail silently, so we'll need to check that $json actually is parsable and show alternate images instead
 	
-	$json = @file_get_contents($jsonurl,0,null,null);
+	//$json = @file_get_contents($jsonurl,0,null,null);
 	
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, $jsonurl);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	$json = curl_exec($ch);
+
+	//echo "<pre>";
+	//print_r($json);
+	//echo "</pre>";
+
+
 	$json_output = json_decode($json);
 	// does the $json_output->data array actually exist? ie, Was there an error getting the data from Instagram?		
 	if (is_array($json_output->data)) {
@@ -106,6 +116,17 @@ jQuery is here for debugging purposes only.
 					<div class='headline'>Need more to choose from?</div>
 					<a href='$nextURL' class='pp_morebt'>Load more images</a>
 				</div>";
+
+				break;
+			}
+		}
+
+	} else {
+		echo "Error: Unable to communicate with Instagram to retreive images.";
+	}
+
+?>
+v>";
 
 				break;
 			}

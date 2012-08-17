@@ -1,11 +1,12 @@
 # Change log
 
-1.1.1 - 10AUG2012
-- exp:ig_picpuller:media tag now returns number of 'likes' for an image
-- Updated link to Instagram site for removal of user applications
-- Updated Colorbox javascript to isolate it from other modules' use of the same library
-- Introduction of "Advanced" tab.
-- First "Advanced" option: alternate method of validating with Instagram 
+1.2.0 - 11AUG2012
+- exp:ig_picpuller:media tag now returns number of 'likes' for an image.
+- Updated link to Instagram site for removal of user applications.
+- Introduction of "Advanced" tab to module.
+- First "Advanced" option: alternate method of validating with Instagram.
+- In "Pic Puller for Instagram Browser", changed from "file_get_contents" method to "cURL" method for retrieving images in the  fieldtype display. 
+- In "Pic Puller for Instagram Browser", Colorbox javascript to isolate it from other modules' use of the same library.
 
 1.1.0 - 12MAY2012
 - Updated PP to be compatible with MSM
