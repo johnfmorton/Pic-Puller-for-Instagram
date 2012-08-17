@@ -122,7 +122,7 @@
 	</script>
 	<?php }  else { 
 		if ($frontend_auth_url==='') {
-			echo "<p>You'll need to use front end authorization since you're trying to authorize an Instagram app for a domain than the actual URL of the control panel you're logged into.</p>";
+			echo "<p>You'll need to use front end authorization since you're trying to authorize an Instagram app for a domain than the actual URL of the control panel you're logged into. Alternatively, you may try the <em><a href=\"$adv_user_url\">$ig_adv_user_auth</a></em> proceedure in the <em><a href=\"$adv_menu_url\">$ig_advanced_menu</a></em> menu.</p>";
 		} else {
 			echo "<p>Authorize <em>$site_label</em>'s Instagram application for access at <a href='$frontend_auth_url' target='_blank'>$frontend_auth_url</a>. The user must be logged into ExpressionEngine to complete authorization.</p>";
 		}

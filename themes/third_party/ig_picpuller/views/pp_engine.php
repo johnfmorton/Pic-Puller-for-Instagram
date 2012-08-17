@@ -77,7 +77,7 @@ jQuery is here for debugging purposes only.
 
 	// the @ symbol will make this fail silently, so we'll need to check that $json actually is parsable and show alternate images instead
 	
-	//$json = @file_get_contents($jsonurl,0,null,null);
+	// $json = @file_get_contents($jsonurl,0,null,null);
 	
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, $jsonurl);
@@ -114,19 +114,7 @@ jQuery is here for debugging purposes only.
 				$nextURL = $third_party_theme_dir."pp_engine.php?"."access_token=".$oauthkey."&count=".$count."&max_id=".$new_next_max_id;
 				echo "<div class='thumbnail getmore'>
 					<div class='headline'>Need more to choose from?</div>
-					<a href='$nextURL' class='pp_morebt'>Load more images</a>
-				</div>";
-
-				break;
-			}
-		}
-
-	} else {
-		echo "Error: Unable to communicate with Instagram to retreive images.";
-	}
-
-?>
-v>";
+					<a href='$nextURL' class='pp_morebt'>Load more images</a></div>";
 
 				break;
 			}

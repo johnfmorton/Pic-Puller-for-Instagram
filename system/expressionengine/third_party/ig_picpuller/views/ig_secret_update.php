@@ -27,4 +27,4 @@ echo "<tr><td>".form_label('Instagram Client Secret ', 'ig_client_secret')."</td
 
 <br>
 
-<p>Note: Your old secret was <em><strong><?=$client_secret;?></strong></em>. To keep this unchanged, <strong><a href="<?=$cancel_url;?>">CANCEL</a></strong> and return to the App Info page.</p>
+<p>Note: Your old secret was <em><strong><?=$client_secret;?></strong></em>. To keep this unchanged, <strong><a href="<?=$cancel_url;?>">CANCEL</a></strong> and return to the <em><?=$ig_info_name;?></em> menu.</p>

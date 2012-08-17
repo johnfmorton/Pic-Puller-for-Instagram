@@ -18,7 +18,9 @@ $lang = array(
 
 	'ig_all_app_info' => 'Review All Apps',
 
-	'ig_advanced_menu' => 'Advanced',
+	'ig_advanced_menu' => 'Advanced Options',
+
+	'ig_adv_user_auth'  => 'Alternate User Authorization',
 
 	'display_instructions_option_text' => 'Display default Pic Puller field instructions?',
 

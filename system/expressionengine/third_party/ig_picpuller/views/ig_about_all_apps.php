@@ -12,7 +12,7 @@ if (count($client_ids) > 0) {
 </style>
 
 <p>Below are all of the Instagram applications that live within your ExpressionEngine site. If you have MSM installed, you may see multiple applications listed below.</p>
-<p>You can only edit the Pic Puller Instagram application of the current active site in the ExpressionEngine control panel. You may do that from <a href="<?=$app_info_link;?>"><em><?=$edit_tab_name;?></em></a>.</p>
+<p>You can only edit the Pic Puller Instagram application of the current active site in the ExpressionEngine control panel. You may do that from <a href="<?=$app_info_link;?>"><em><?=$ig_info_name;?></em></a>.</p>
 
 <table border="1" cellspacing="2" cellpadding="5" width='100%'>
 	<tr><th>EE site name</th><th>Instagram Client ID</th><th>Instagram Client Secret</th></tr>

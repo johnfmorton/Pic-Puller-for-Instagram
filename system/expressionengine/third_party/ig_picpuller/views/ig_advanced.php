@@ -1,9 +1,9 @@
-<h3>Advanced Options for <em><?=$site_label;?></em></h3>
+<h3><?=$ig_advanced_menu;?> for <em><?=$site_label;?></em></h3>
 
-<p>Ideally, you never need to use the options below.</p>
+<p>Select an advanced option below.</p>
 
 <ul>
-	<li><a href="<?=$adv_user_url;?>">Alternate User Authorization</a></li>
+	<li><a href="<?=$adv_user_url;?>" class="submit"><?=$ig_adv_user_auth;?></a></li>
 
 <!-- 
 	<li><a href="#">Update the authorization URL.</a></li>

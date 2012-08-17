@@ -1,12 +1,22 @@
 # Change log
 
-1.2.0 - 11AUG2012
-- exp:ig_picpuller:media tag now returns number of 'likes' for an image.
-- Updated link to Instagram site for removal of user applications.
+1.2.0 - 17AUG2012
+- exp:ig_picpuller:media tag now returns number of 'likes' for an image and the 'comment_count' for an image.
+- exp:ig_picpuller:media_recent tag now returns number of 'likes' for an image and the 'comment_count' for an image.
+- exp:ig_picpuller:user_liked tag now returns number of 'likes' for an image and the 'comment_count' for an image.
+- exp:ig_picpuller:user_feed tag now returns number of 'likes' for an image and the 'comment_count' for an image.
+- exp:ig_picpuller:media_tagged tag now returns number of 'likes' for an image and the 'comment_count' for an image.
+- exp:ig_picpuller:popular tag now returns number of 'likes' for an image and the 'comment_count' for an image.
+- Updated link to Instagram site for removal of user applications after user has removed authorization from within ExpressionEngine.
 - Introduction of "Advanced" tab to module.
 - First "Advanced" option: alternate method of validating with Instagram.
 - In "Pic Puller for Instagram Browser", changed from "file_get_contents" method to "cURL" method for retrieving images in the  fieldtype display. 
-- In "Pic Puller for Instagram Browser", Colorbox javascript to isolate it from other modules' use of the same library.
+- In "Pic Puller for Instagram Browser", Colorbox javascript updated to isolate it from other modules' use of the same library. (For example, the add-on Channel Images had CSS that would conflict with Pic Puller CSS files.)
+- Removed extraneous CSS files from "Pic Puller for Instagram Browser" theme.
+
+1.1.1 - (private beta release only) 7AUG2012
+- CSS conflict test run.
+- Field type pp_engine.php variation test run.
 
 1.1.0 - 12MAY2012
 - Updated PP to be compatible with MSM
@@ -26,7 +36,7 @@
 0.9.2 - 04FEB2012
 - Added support for authorizing logged in members from the front end of ExpressionEngine site.
 
-0.9.1 - 28JAN2012
+0.9.1 - (private beta release only) 28JAN2012
 - Added 'media' tag to retrieve individual media by Instagram ID
 
 0.9.0 - 24JAN2012

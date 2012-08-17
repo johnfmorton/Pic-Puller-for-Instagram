@@ -21,4 +21,4 @@ if ($frontend_auth_url === '' ){
 	<?=$frontend_auth_url;?>
 </pre></p>
 <br>
-<p><strong><a href="<?=$cancel_url;?>">Return to the App Info page</a></strong>.</p>
+<p><strong><a href="<?=$cancel_url;?>">Return to the <em><?=$ig_info_name;?></em> menu</a></strong>.</p>

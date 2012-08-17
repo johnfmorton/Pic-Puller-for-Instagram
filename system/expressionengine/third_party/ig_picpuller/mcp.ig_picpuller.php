@@ -93,6 +93,13 @@ class Ig_picpuller_mcp {
 		$vars['moduleShortTitle'] = lang('ig_picpuller_short_module_name');
 		$vars['site_label'] = $this->getSiteLabel();
 
+		$vars['adv_menu_url'] = $this->_base_url.'&method=ig_advanced_menu';
+		$vars['ig_advanced_menu'] = lang('ig_advanced_menu');
+		$vars['ig_adv_user_auth'] = lang('ig_adv_user_auth');
+		$vars['adv_user_url'] = $this->_base_url.'&method=adv_user_admin';
+
+
+
 		//$baseURLpattern = '/(http:\/\/)([a-zA-Z0-9\.\-]*\/)/';
 		$baseURLpattern = '/(?:https?:\/\/)?(?:www\.)?([a-zA-Z0-9\.\-]*\/)/';;
 		
@@ -234,7 +241,7 @@ class Ig_picpuller_mcp {
 		$vars['moduleShortTitle'] = lang('ig_picpuller_short_module_name');
 
 		$vars['app_info_link'] = $this->_base_url.'&method=ig_info';
-		$vars['edit_tab_name'] =  $this->EE->lang->line('ig_info');
+		$vars['ig_info_name'] =  $this->EE->lang->line('ig_info');
 		$vars['current_site_id'] = $this->_currentSite;
 
 		return $this->EE->load->view('ig_about_all_apps', $vars, TRUE);	
@@ -249,7 +256,13 @@ class Ig_picpuller_mcp {
 	{
 		$vars['site_label'] = $this->getSiteLabel();
 		$vars['adv_user_url'] = $this->_base_url.'&method=adv_user_admin';
+		$vars['ig_info_name'] =  $this->EE->lang->line('ig_info');
 		$vars['cancel_url'] = $this->_base_url.'&method=ig_info';
+
+		// menu names from lang file
+		$vars['ig_advanced_menu'] = lang('ig_advanced_menu');
+		$vars['ig_adv_user_auth'] = lang('ig_adv_user_auth');
+
 
 		return $this->EE->load->view('ig_advanced', $vars, TRUE);	
 	}
@@ -307,6 +320,7 @@ class Ig_picpuller_mcp {
 		$vars['client_secret'] = $this->getSecret();
 		$vars['form_hidden'] = NULL;
 		$vars['update_secret_url'] = 'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=ig_picpuller'.AMP.'method=update_secret';
+		$vars['ig_info_name'] =  $this->EE->lang->line('ig_info');
 		$vars['cancel_url'] = $this->_base_url.'&method=ig_info';
 		
 		return $this->EE->load->view('ig_secret_update', $vars, TRUE); 
@@ -335,6 +349,7 @@ class Ig_picpuller_mcp {
 		$vars['client_secret'] = $ig_client_secret;
 		$vars['frontend_auth_url'] = $this->getFrontEndAuth();
 		$vars['homeurl'] = $this->_base_url;
+		$vars['ig_info_name'] =  $this->EE->lang->line('ig_info');
 		$vars['cancel_url'] = $this->_base_url.'&method=ig_info';
 		return $this->EE->load->view('update_settings_confirmation', $vars, TRUE);
 	}
@@ -350,6 +365,7 @@ class Ig_picpuller_mcp {
 		$vars['frontend_auth_url'] = $this->getFrontEndAuth();
 		$vars['form_hidden'] = NULL;
 		$vars['update_frontend_url'] = 'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=ig_picpuller'.AMP.'method=update_frontend_url';
+		$vars['ig_info_name'] =  $this->EE->lang->line('ig_info');
 		$vars['cancel_url'] = $this->_base_url.'&method=ig_info';
 		
 		return $this->EE->load->view('ig_frontedurl_update', $vars, TRUE); 
@@ -380,6 +396,7 @@ class Ig_picpuller_mcp {
 		$vars['client_secret'] = $this->getSecret();
 		$vars['frontend_auth_url'] = $this->getFrontEndAuth();
 		$vars['homeurl'] = $this->_base_url;
+		$vars['ig_info_name'] =  $this->EE->lang->line('ig_info');
 		$vars['cancel_url'] = $this->_base_url.'&method=ig_info';
 		return $this->EE->load->view('update_settings_confirmation', $vars, TRUE);
 	}
@@ -399,6 +416,8 @@ class Ig_picpuller_mcp {
 		// fields:
 		//  ig_client_id
 		//  ig_client_secret
+		//  
+
 		$vars['moduleTitle'] = lang('ig_picpuller_module_name');
 		$vars['moduleShortTitle'] = lang('ig_picpuller_short_module_name');
 		$vars['app_info_link'] = $this->_base_url.'&method=ig_info';
@@ -435,6 +454,7 @@ class Ig_picpuller_mcp {
 		$vars['client_id'] = $this->getClientID();
 
 		$vars['delete_method'] = $this->_base_url.'&method=delete_app';
+		$vars['ig_info_name'] =  $this->EE->lang->line('ig_info');
 		$vars['cancel_url'] = $this->_base_url.'&method=ig_info';
 
 		$vars['site_label'] = $this->getSiteLabel();
@@ -487,11 +507,13 @@ class Ig_picpuller_mcp {
 	{
 		$vars['app_id'] = $this->_currentAppId;
 		$vars['site_label'] = $this->getSiteLabel();
+		$vars['ig_adv_user_auth'] = lang('ig_adv_user_auth');
+		$vars['ig_advanced_menu'] = lang('ig_advanced_menu');
 		$authURL = $this->EE->functions->fetch_site_index(0, 0).QUERY_MARKER.'ACT='.$this->EE->cp->fetch_action_id('ig_picpuller', 'authorization');
 		$vars['alt_url'] = 'https://instagram.com/oauth/authorize/?client_id='.$this->getClientID().'&redirect_uri='.$authURL.'&response_type=token';
 
 		$vars['update_user_info_url'] = 'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=ig_picpuller'.AMP.'method=save_user_info_adv';
-
+		$vars['ig_info_name'] =  $this->EE->lang->line('ig_info');
 		$vars['cancel_url'] = $this->_base_url.'&method=ig_info';
 		$vars['form_hidden'] = NULL;
 		$vars['setup_link'] = $this->_base_url;

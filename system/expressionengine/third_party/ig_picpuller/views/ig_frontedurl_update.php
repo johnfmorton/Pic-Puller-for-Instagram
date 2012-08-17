@@ -34,4 +34,4 @@ echo "<tr><td>".form_label('Front-end Authorization URL ', 'frontend_auth_url').
 
 <br>
 
-<p>Note: Your current front-end authorization URL is <em><strong><?=$frontend_auth_url;?></strong></em>. To keep this unchanged, <strong><a href="<?=$cancel_url;?>">CANCEL</a></strong> and return to the App Info page.</p>
+<p>Note: Your current front-end authorization URL is <em><strong><?=$frontend_auth_url;?></strong></em>. To keep this unchanged, <strong><a href="<?=$cancel_url;?>">CANCEL</a></strong> and return to the <em><?=$ig_info_name;?></em> menu.</p>

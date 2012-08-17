@@ -244,6 +244,8 @@ class Ig_picpuller {
 				'latitude' => isset($node['location']['latitude']) ? $node['location']['latitude'] : '',
 				'longitude' => isset($node['location']['longitude']) ? $node['location']['longitude'] : '',
 				'media_id' => $node['id'],
+				'comment_count' => $node['comments']['count'],
+				'likes' => $node['likes']['count'], 
 				'status' => 'true'
 			);
 		}
@@ -433,7 +435,8 @@ class Ig_picpuller {
 			'standard_resolution' => $node['images']['standard_resolution']['url'],
 			'latitude' => isset($node['location']['latitude']) ? $node['location']['latitude'] : '',
 			'longitude' => isset($node['location']['longitude']) ? $node['location']['longitude'] : '',
-			'likes' => $node['likes']['count'],
+			'comment_count' => $node['comments']['count'],
+			'likes' => $node['likes']['count'], 
 			'status' => 'true'
 		);
 		
@@ -555,6 +558,7 @@ class Ig_picpuller {
 				'longitude' => isset($node['location']['longitude']) ? $node['location']['longitude'] : '',
 				'media_id' => $node['id'],
 				'next_max_id' => $next_max_id,
+				'comment_count' => $node['comments']['count'],
 				'likes' => $node['likes']['count'], 
 				'status' => 'true'
 			);
@@ -682,6 +686,8 @@ class Ig_picpuller {
 				'website' => $node['user']['website'],
 				'full_name' => $node['user']['full_name'],
 				'user_id' => $node['user']['id'],
+				'comment_count' => $node['comments']['count'],
+				'likes' => $node['likes']['count'], 
 				'status' => 'true'
 			);
 		}
@@ -794,6 +800,8 @@ class Ig_picpuller {
 				'website' => $node['user']['website'],
 				'full_name' => $node['user']['full_name'],
 				'user_id' => $node['user']['id'],
+				'comment_count' => $node['comments']['count'],
+				'likes' => $node['likes']['count'], 
 				'status' => 'true'
 			);
 		}
@@ -916,6 +924,8 @@ class Ig_picpuller {
 				'website' => $node['user']['website'],
 				'full_name' => $node['user']['full_name'],
 				'user_id' => $node['user']['id'],
+				'comment_count' => $node['comments']['count'],
+				'likes' => $node['likes']['count'], 
 				'status' => 'true'
 			);
 		}

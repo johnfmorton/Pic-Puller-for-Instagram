@@ -10,7 +10,7 @@ if (isset($client_id) ) {
 
 <p>You may reinstall your Instagram application, but your users will need to re-authorize your application in the <em><?=$moduleShortTitle?></em> moduel control panel to access their images.</p>
 
-<p>To keep your Instagram application installed, you may <strong><a href="<?=$cancel_url;?>">CANCEL this process</a></strong> and return to the App Info page.</p>
+<p>To keep your Instagram application installed, you may <strong><a href="<?=$cancel_url;?>">CANCEL this process</a></strong> and return to the <em><?=$ig_info_name;?></em> menu.</p>
 
 <br>
 <p><a href="<?=$delete_method;?>" class='submit'>YES, Remove this application</a></p>

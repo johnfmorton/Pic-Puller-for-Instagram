@@ -1,10 +1,10 @@
-<h3>Advanced ► Alternate User Authorization for <em><?=$site_label;?></em></h3>
+<h3><?=$ig_advanced_menu;?> ► <?=$ig_adv_user_auth;?> for <em><?=$site_label;?></em></h3>
 
 <?php 
 	if ( $app_id != '' ) {
 ?>
 
-<p>This method of authorization is not the recommended proceedure for user authorization your Instagram application with Pic Puller. It's here as a fall back method for servers fail in oAuth process. This method is only available to SuperAdmin level users. It is incompabilite with Pic Puller's front-end authorization process.</p>
+<p>This method of authorization is not the recommended proceedure for user authorization your Instagram application with Pic Puller. It's here as a fall back method for servers that fail in oAuth process. This method is only available to SuperAdmin level users. It is incompabilite with Pic Puller's front-end authorization process.</p>
 
 <p>It <em>does not</em> solve the issue that caused the normal authorization process to fail.</p>
 
@@ -53,7 +53,13 @@ echo "<tr><td>".form_label('Instagram oAuth', 'ig_user_oauth')."</td><td>".form_
 
 <br>
 
-<p>Note: Currently the oAuth for this logged in user is set to <em><strong><?=$ig_user_oauth;?></strong></em>. To keep this unchanged, <strong><a href="<?=$cancel_url;?>">CANCEL</a></strong> and return to the App Info page.</p>
+<?php 
+	if ($ig_user_oauth == '') {
+		$ig_user_oauth = '<em>(no value set)</em>';
+	};
+?>
+
+<p>Note: Currently the oAuth for this logged in user is set to <em><strong><?=$ig_user_oauth;?></strong></em>. To keep this unchanged, <strong><a href="<?=$cancel_url;?>">CANCEL</a></strong> and return to the <em><?=$ig_info_name;?></em> menu.</p>
 
 <?php 
 
