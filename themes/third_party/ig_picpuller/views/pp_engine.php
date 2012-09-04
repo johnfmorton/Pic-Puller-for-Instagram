@@ -82,6 +82,7 @@ jQuery is here for debugging purposes only.
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, $jsonurl);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 	$json = curl_exec($ch);
 
 	//echo "<pre>";
