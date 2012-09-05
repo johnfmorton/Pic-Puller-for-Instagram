@@ -87,18 +87,19 @@ class Ig_picpuller {
 	 * @param	none
 	 * @return	string - beeps
 	 */
+	}
 
 	 public function authorization_link() 
 	 {
-	 	if (!$this->applicationExists() ) {
+		if (!$this->applicationExists() ) {
 			return 'ERROR: There is no Instagram application in the system to authorize.';
 		};
 
-	 	if (! $this->EE->session->userdata('member_id')){
-	 		return 'ERROR: Only logged in users can authorize this application.';
-	 	}
-	 	
-	 	$loggedInUser = $this->getInstagramId ($this->get_logged_in_user_id());
+		if (! $this->EE->session->userdata('member_id')){
+			return 'ERROR: Only logged in users can authorize this application.';
+		}
+		
+		$loggedInUser = $this->getInstagramId ($this->get_logged_in_user_id());
 		
 		$fullhtml = $this->EE->TMPL->fetch_param('fullhtml');
 		
@@ -229,6 +230,8 @@ class Ig_picpuller {
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
 		}
 
+		$cacheddata = (isset($data['cacheddata'])) ? 'yes' : 'no';
+
 		foreach($data['data'] as $node)
 		{
 			$variables[] = array(
@@ -246,7 +249,8 @@ class Ig_picpuller {
 				'media_id' => $node['id'],
 				'comment_count' => $node['comments']['count'],
 				'likes' => $node['likes']['count'], 
-				'status' => 'true'
+				'status' => 'true',
+				'cacheddata' => $cacheddata
 			);
 		}
 		return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -323,7 +327,7 @@ class Ig_picpuller {
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
 		}
-		
+		$cacheddata = (isset($data['cacheddata'])) ? 'yes' : 'no';
 		$node = $data['data'];
 		$variables[] = array(
 			'username' => $node['username'],
@@ -335,7 +339,8 @@ class Ig_picpuller {
 			'counts_followed_by' => strval($node['counts']['followed_by']),
 			'counts_follows' => strval($node['counts']['follows']),
 			'id' => $node['id'],
-			'status' => 'true'
+			'status' => 'true',
+			'cacheddata' => $cacheddata
 		);
 		return $this->EE->TMPL->parse_variables($tagdata, $variables);
 
@@ -355,7 +360,7 @@ class Ig_picpuller {
 	 */
 	 public function media()
 	 {
-	 	$tagdata = $this->EE->TMPL->tagdata;
+		$tagdata = $this->EE->TMPL->tagdata;
 		
 		if (!$this->applicationExists() ) {
 			$variables[] = array(
@@ -418,7 +423,7 @@ class Ig_picpuller {
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
 		}
-
+		$cacheddata = (isset($data['cacheddata'])) ? 'yes' : 'no';
 		$node = $data['data'];
 
 		$variables[] = array(
@@ -437,7 +442,8 @@ class Ig_picpuller {
 			'longitude' => isset($node['location']['longitude']) ? $node['location']['longitude'] : '',
 			'comment_count' => $node['comments']['count'],
 			'likes' => $node['likes']['count'], 
-			'status' => 'true'
+			'status' => 'true',
+			'cacheddata' => $cacheddata
 		);
 		
 		return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -545,6 +551,8 @@ class Ig_picpuller {
 			$next_max_id = $data['pagination']['next_max_id']; 
 		}
 		
+		$cacheddata = (isset($data['cacheddata'])) ? 'yes' : 'no';
+
 		foreach($data['data'] as $node)
 		{
 			$variables[] = array(
@@ -560,7 +568,8 @@ class Ig_picpuller {
 				'next_max_id' => $next_max_id,
 				'comment_count' => $node['comments']['count'],
 				'likes' => $node['likes']['count'], 
-				'status' => 'true'
+				'status' => 'true',
+				'cacheddata' => $cacheddata
 			);
 		}
 		return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -667,6 +676,8 @@ class Ig_picpuller {
 		if (isset($data['pagination']['next_max_id'])){
 			$next_max_id = $data['pagination']['next_max_id']; 
 		}		
+
+		$cacheddata = (isset($data['cacheddata'])) ? 'yes' : 'no';
 		
 		foreach($data['data'] as $node)
 		{
@@ -688,7 +699,8 @@ class Ig_picpuller {
 				'user_id' => $node['user']['id'],
 				'comment_count' => $node['comments']['count'],
 				'likes' => $node['likes']['count'], 
-				'status' => 'true'
+				'status' => 'true',
+				'cacheddata' => $cacheddata
 			);
 		}
 		return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -782,6 +794,8 @@ class Ig_picpuller {
 			$next_max_id = $data['pagination']['next_max_like_id'];
 		}
 		
+		$cacheddata = (isset($data['cacheddata'])) ? 'yes' : 'no';
+
 		foreach($data['data'] as $node)
 		{
 			$variables[] = array(
@@ -802,7 +816,8 @@ class Ig_picpuller {
 				'user_id' => $node['user']['id'],
 				'comment_count' => $node['comments']['count'],
 				'likes' => $node['likes']['count'], 
-				'status' => 'true'
+				'status' => 'true',
+				'cacheddata' => $cacheddata
 			);
 		}
 		return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -906,6 +921,7 @@ class Ig_picpuller {
 		var_dump($data['pagination']);
 		echo '</pre>';
 		*/
+		$cacheddata = (isset($data['cacheddata'])) ? 'yes' : 'no';
 		foreach($data['data'] as $node)
 		{
 			$variables[] = array(
@@ -926,7 +942,8 @@ class Ig_picpuller {
 				'user_id' => $node['user']['id'],
 				'comment_count' => $node['comments']['count'],
 				'likes' => $node['likes']['count'], 
-				'status' => 'true'
+				'status' => 'true',
+				'cacheddata' => $cacheddata
 			);
 		}
 		return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -1043,7 +1060,7 @@ class Ig_picpuller {
 		
 		if ($returndata === FALSE) {  
 
-		    //echo "cURL Error: " . curl_error($ch);  
+			//echo "cURL Error: " . curl_error($ch);  
 
 		}
 		$info = curl_getinfo($ch);  
@@ -1077,7 +1094,7 @@ class Ig_picpuller {
 
 		foreach ($query->result() as $row)
 		{
-    		$oauth = $row->oauth;
+			$oauth = $row->oauth;
 		}
 		if (isset($oauth)){
 			return $oauth;
@@ -1104,7 +1121,7 @@ class Ig_picpuller {
 
 		foreach ($query->result() as $row)
 		{
-    		$ig_client_id = $row->ig_client_id;
+			$ig_client_id = $row->ig_client_id;
 		}
 		if (isset($ig_client_id))
 		{
@@ -1132,7 +1149,7 @@ class Ig_picpuller {
 
 		foreach ($query->result() as $row)
 		{
-    		$app_id = $row->app_id;
+			$app_id = $row->app_id;
 		}
 		if (isset($app_id))
 		{
@@ -1161,7 +1178,7 @@ class Ig_picpuller {
 
 		foreach ($query->result() as $row)
 		{
-    		$ig_client_secret = $row->ig_client_secret;
+			$ig_client_secret = $row->ig_client_secret;
 		}
 		if (isset($ig_client_secret)){
 			return $ig_client_secret;
@@ -1188,7 +1205,7 @@ class Ig_picpuller {
 
 		foreach ($query->result() as $row)
 		{
-    		$auth_url = $row->auth_url;
+			$auth_url = $row->auth_url;
 		}
 		if (isset($auth_url)){
 			return $auth_url;
@@ -1233,7 +1250,7 @@ class Ig_picpuller {
 
 		foreach ($query->result() as $row)
 		{
-    		$instagram_id = $row->instagram_id;
+			$instagram_id = $row->instagram_id;
 		}
 		if (isset($instagram_id)){
 			return $instagram_id;
@@ -1298,7 +1315,8 @@ class Ig_picpuller {
 		echo '</pre>';
 		*/
 
-		$valid_data = $this->_validate_data($data, $url);		
+		$valid_data = $this->_validate_data($data, $url);
+
 		return $valid_data;
 
 	}
@@ -1316,7 +1334,7 @@ class Ig_picpuller {
 	
 	private function _validate_data($data, $url){
 		
-		// to FAKE a non-responsive error from Instagram, change the initial conditional statement below
+		// to FAKE a non-responsive error from Instagram, change the initial conditional meta code statement below
 		
 		if ($data != '')
 		{
@@ -1355,10 +1373,10 @@ class Ig_picpuller {
 					$data = $this->_check_cache($url, $this->use_stale);
 
 					if ($data) {
-
+						$data['cacheddata'] = TRUE;
 						$error_array = array(
 							'status' => TRUE,
-							'error_message' => (isset($meta['error_message']) ? $meta['error_message'] : 'Using cached data.' ), //. ' Using stale data as back up if available.',
+							'error_message' => (isset($meta['error_message']) ? $meta['error_message'] : 'No data returned from Instagram API. Check http://api-status.com/6404/174981/Instagram-API. Using cached data.' ), //. ' Using stale data as back up if available.',
 							'error_type' =>  (isset($meta['error_type']) ? $meta['error_type'] : 'NoCodeReturned')
 						);
 					} 
@@ -1367,7 +1385,7 @@ class Ig_picpuller {
 
 						$error_array = array(
 							'status' => FALSE,
-							'error_message' => (isset($meta['error_message']) ? $meta['error_message'] : 'No error message provided by Instagram.' ),
+							'error_message' => (isset($meta['error_message']) ? $meta['error_message'] : 'No error message provided by Instagram. No cached data available.' ),
 							'error_type' =>  (isset($meta['error_type']) ? $meta['error_type'] : 'NoCodeReturned')
 						);
 
@@ -1384,14 +1402,14 @@ class Ig_picpuller {
 			{
 				$data = $this->_check_cache($url, $this->use_stale);
 			}
-			
-			
-			
-			$error_array = array (
-				'error_message' => 'No data returned from Instagram API. Check http://api-status.com/6404/174981/Instagram-API.',
-				'error_type' => 'NoResponse',
-				'status' => FALSE
+			if ($data) {
+				$data['cacheddata'] = TRUE;
+				$error_array = array(
+					'status' => TRUE,
+					'error_message' => (isset($meta['error_message']) ? $meta['error_message'] : 'No data returned from Instagram API. Check http://api-status.com/6404/174981/Instagram-API. Using cached data.' ), //. ' Using stale data as back up if available.',
+					'error_type' =>  (isset($meta['error_type']) ? $meta['error_type'] : 'NoCodeReturned')
 				);
+			} 
 
 		}
 		return array_merge($data, $error_array);
@@ -1490,7 +1508,7 @@ class Ig_picpuller {
 	private function _check_cache($url, $use_stale = FALSE)
 	{	
 		// Check for cache directory
-				
+		$this->EE->TMPL->log_item("Checking Cache");		
 		$dir = APPPATH.'cache/'.$this->cache_name.'/';
 		
 		$this->EE->TMPL->log_item('CHECK CASHE: dir, '. $dir);
@@ -1503,22 +1521,22 @@ class Ig_picpuller {
 		
 		// Check for cache file
 		
-        $file = $dir.md5($url);
+		$file = $dir.md5($url);
 		
 		if ( ! file_exists($file) OR ! ($fp = @fopen($file, 'rb')))
 		{
 			return FALSE;
 		}
-		       
+			   
 		flock($fp, LOCK_SH);
-                    
+					
 		$cache = @fread($fp, filesize($file));
-                    
+					
 		flock($fp, LOCK_UN);
-        
+		
 		fclose($fp);
 
-        // Grab the timestamp from the first line
+		// Grab the timestamp from the first line
 
 		$eol = strpos($cache, "\n");
 		
@@ -1585,7 +1603,7 @@ class Ig_picpuller {
 		fwrite($fp, $data);
 		flock($fp, LOCK_UN);
 		fclose($fp);
-        
+		
 		@chmod($file, 0777);
 
 		// now clean up the cache
