@@ -1,4 +1,4 @@
-<h3>Update Instagram Client Front-end URL</h3>
+<h3>Update Instagram Client Front-end URL for <em><?=$site_label;?></em></h3>
 
 <p>Enter in the Front-end URL for your application below.</p>
 

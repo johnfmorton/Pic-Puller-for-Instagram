@@ -24,7 +24,7 @@ Follow the instructions within the module to set up your Instragram application.
 
 # How to update from a previous version
 
-(Before you update: Please do a backup of your database and files before updating. Moving to version Pic Puller 1.1.0 updates 2 tables in your ExpressionEngine database: exp_ig_picpuller_oauths and exp_ig_picpuller_credentials. Backups are the only way to go back to your previous data.)
+(Before you update: Please do a backup of your database and files before updating. Moving to version Pic Puller 1.1.0 and Pic Puller 1.3.0 updates 2 tables in your ExpressionEngine database: exp_ig_picpuller_oauths and exp_ig_picpuller_credentials. Backups are the only way to go back to your previous data.)
 
 To update Pic Puller, replace the "ig_picpuller" folder in your system > expressionengine > third_party folder with the most recent version. Do the same for the "themes" folder as well.
 
@@ -34,9 +34,23 @@ If you are updating PicPuller from version 0.9.2 or lower, you will need to inst
 
 WARNING: ExpressionEngine's installation screen can be confusing if you have the module installed already and are trying to add the field type. Both radio buttons should be set to "install" in the status are. Do not accidentally uninstall the module. If you do, you will need to go through the Instagram app set up again. This will most likely mean you need to update your authorization URL at Instagram, but not create an entirely new application. Your users will also need to reauthorize with Pic Puller.
 
+# Note for those update from a version before 1.3.0
+
+In version 1.3.0 there was a significant change that will BREAK your current working templates unless you read through this section. It's an easy fix for you, but it must be done after you install the update or you will not have images returned in your Pic Puller loops.
+
+Initially Pic Puller's returned tags were based on the tag returned by Instagram. That meant if Instagram returned 'low_resolution' then your Pic Puller tag would be 'low_resolution'. The use of the default names was creating problems for a number of users unfortunately. Naming conflicts were causing data not to be rendered. 
+
+To solve this naming conflict problem, starting with version 1.3.0, Pic Puller will prefix every tag returned with 'ig_' by default. The prefix can be set on a per site basis to whatever you like.
+
+If your templates were working for you before version 1.3.0, you may choose to reset your Pic Puller application to using an empty string, i.e. no prefix at all. 
+
+To edit the prefix, in the Pic Puller module visit the "Active Site App Info" tab and choose 'edit' under the "Prefix for all tags" column. 
+
+Your existing templates should continue to work with no update needed to their code.
+
 # Notes on MSM compatibility:
 
-The major update to version 1.1.0 is compatibility with ExpressionEngine Multiple Site Manager. This allows Pic Puller to install multiple Instagram applications within an EE site with MSM installed. Each site you manage will be able to have its own Instagram application. Read the accompanying details in the accompanying documentation file for details.
+The major update to version 1.1.0 is compatibility with ExpressionEngine Multiple Site Manager. This allows Pic Puller to install multiple Instagram applications within an EE site with MSM installed. Each site you manage will be able to have its own Instagram application. Read the details in the accompanying documentation file for details.
 
 --
 

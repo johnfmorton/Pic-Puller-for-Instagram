@@ -35,6 +35,7 @@ class Ig_picpuller {
 	// $_currentSite will identify whatever is the current site for use in cases where MSM is being used.
 	private $_currentSite;
 	private $_appID;
+	private $_ig_picpuller_prefix;
 
 
 	/**
@@ -46,6 +47,7 @@ class Ig_picpuller {
 		$this->_currentSite = $this->EE->config->config['site_id'];
 		$this->_appID = $this->getAppID();
 		$this->_memberID = $this->get_logged_in_user_id();
+		$this->_ig_picpuller_prefix = $this->get_ig_picpuller_prefix();
 	}
 	
 	// ----------------------------------------------------------------
@@ -75,40 +77,20 @@ class Ig_picpuller {
 		};
 		
 		$this->EE->TMPL->log_item('Pic Puller for Instagram: is installed an returning data. Beep.');
-		return "Beep. Beep beep.";
+		return "Beep. Beep beep beep beep. Beep beep.";
 	 }
 	
 	/**
-	 * Front End Authorization
+	 * Create a new channel for Pic Puller
 	 *
-	 * This function permits users who do not have access to the control panel to authorize Pic Puller
+	 * This function should be called by the advanced menu instead of this current method which
+	 * requires adding tags to a template to execute them.
 	 *
 	 * @access	private
 	 * @param	none
 	 * @return	string - beeps
 	 */
-	
-	//public function create_igpp_channel()
-	//{
-	//	$this->EE->load->library('api'); 
-	//	$this->EE->api->instantiate('channel_structure');
-//
-	//	$data = array(
-	//			'channel_title'     => 'Pic Puller Created Channel',
-	//			'channel_name'      => 'ig_pp_autochannel',
-	//			'field_group'       => 2,
-	//			'channel_url'       => 'http://example.com/index.php/news/',
-	//			'status_group'      => 1
-	//	);
-//
-	//	if ($this->EE->api_channel_structure->create_channel($data) === FALSE)
-	//	{
-	//			show_error('An Error Occurred Creating the Channel');
-	//	}
-	//	
-	//	$this->EE->api_channel_structure->create_channel((array) $data);
-	//}
-	
+	/*
 	public function create_pp_channel_field_group()
 	{
 		$this->EE->load->library('api'); 
@@ -188,15 +170,10 @@ class Ig_picpuller {
 			}
 		}
 		
-		
-
-
-		
-		
-		return "Beep. Beep beep.";
+		return "Beep.";
 
 	}
-
+	*/
 	 public function authorization_link() 
 	 {
 		if (!$this->applicationExists() ) {
@@ -277,10 +254,6 @@ class Ig_picpuller {
 
 			return $deauthorization_link;
 		}
-/*
-		$tagdata = $this->EE->TMPL->tagdata;
-		return $this->EE->TMPL->parse_variables($tagdata, $variables);
-*/
 	 }
 
 
@@ -302,9 +275,9 @@ class Ig_picpuller {
 		
 		if (!$this->applicationExists() ) {
 			$variables[] = array(
-				'error_type' => 'NoInstagramApp',
-				'error_message' => 'There is no application stored in the Expression Engine data base. It appear set up is not complete.',
-				'status' => 'false'
+				$this->_ig_picpuller_prefix.'error_type' => 'NoInstagramApp',
+				$this->_ig_picpuller_prefix.'error_message' => 'There is no application stored in the Expression Engine data base. It appear set up is not complete.',
+				$this->_ig_picpuller_prefix.'status' => 'false'
 			);
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -330,9 +303,9 @@ class Ig_picpuller {
 		
 		if ($data['status'] === FALSE ) { // && $this->use_stale != 'yes') {
 			$variables[] = array(
-				'error_type' => $data['error_type'],
-				'error_message' => $data['error_message'],
-				'status' => 'false'
+				$this->_ig_picpuller_prefix.'error_type' => $data['error_type'],
+				$this->_ig_picpuller_prefix.'error_message' => $data['error_message'],
+				$this->_ig_picpuller_prefix.'status' => 'false'
 			);
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -343,22 +316,22 @@ class Ig_picpuller {
 		foreach($data['data'] as $node)
 		{
 			$variables[] = array(
-				'username' => $node['user']['username'],
-				'full_name' => $node['user']['full_name'],
-				'profile_picture' => $node['user']['profile_picture']['url'],
-				'created_time' => $node['created_time'],
-				'link' => $node['link'],
-				'caption' => $node['caption']['text'],
-				'low_resolution' => $node['images']['low_resolution']['url'],
-				'thumbnail' => $node['images']['thumbnail']['url'],
-				'standard_resolution' => $node['images']['standard_resolution']['url'],
-				'latitude' => isset($node['location']['latitude']) ? $node['location']['latitude'] : '',
-				'longitude' => isset($node['location']['longitude']) ? $node['location']['longitude'] : '',
-				'media_id' => $node['id'],
-				'comment_count' => $node['comments']['count'],
-				'likes' => $node['likes']['count'], 
-				'status' => 'true',
-				'cacheddata' => $cacheddata
+				$this->_ig_picpuller_prefix.'username' => $node['user']['username'],
+				$this->_ig_picpuller_prefix.'full_name' => $node['user']['full_name'],
+				$this->_ig_picpuller_prefix.'profile_picture' => $node['user']['profile_picture']['url'],
+				$this->_ig_picpuller_prefix.'created_time' => $node['created_time'],
+				$this->_ig_picpuller_prefix.'link' => $node['link'],
+				$this->_ig_picpuller_prefix.'caption' => $node['caption']['text'],
+				$this->_ig_picpuller_prefix.'low_resolution' => $node['images']['low_resolution']['url'],
+				$this->_ig_picpuller_prefix.'thumbnail' => $node['images']['thumbnail']['url'],
+				$this->_ig_picpuller_prefix.'standard_resolution' => $node['images']['standard_resolution']['url'],
+				$this->_ig_picpuller_prefix.'latitude' => isset($node['location']['latitude']) ? $node['location']['latitude'] : '',
+				$this->_ig_picpuller_prefix.'longitude' => isset($node['location']['longitude']) ? $node['location']['longitude'] : '',
+				$this->_ig_picpuller_prefix.'media_id' => $node['id'],
+				$this->_ig_picpuller_prefix.'comment_count' => $node['comments']['count'],
+				$this->_ig_picpuller_prefix.'likes' => $node['likes']['count'], 
+				$this->_ig_picpuller_prefix.'status' => 'true',
+				$this->_ig_picpuller_prefix.'cacheddata' => $cacheddata
 			);
 		}
 		return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -383,9 +356,9 @@ class Ig_picpuller {
 		
 		if (!$this->applicationExists() ) {
 			$variables[] = array(
-				'error_type' => 'NoInstagramApp',
-				'error_message' => 'There is no application stored in the Expression Engine data base. It appear set up is not complete.',
-				'status' => 'false'
+				$this->_ig_picpuller_prefix.'error_type' => 'NoInstagramApp',
+				$this->_ig_picpuller_prefix.'error_message' => 'There is no application stored in the Expression Engine data base. It appear set up is not complete.',
+				$this->_ig_picpuller_prefix.'status' => 'false'
 			);
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -400,9 +373,9 @@ class Ig_picpuller {
 		{
 			//return "ERROR: No user ID set for this function";
 			$variables[] = array(
-				'error_type' => 'MissingReqParameter',
-				'error_message' => 'No user ID set for this function',
-				'status' => 'false'
+				$this->_ig_picpuller_prefix.'error_type' => 'MissingReqParameter',
+				$this->_ig_picpuller_prefix.'error_message' => 'No user ID set for this function',
+				$this->_ig_picpuller_prefix.'status' => 'false'
 			);
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -414,9 +387,9 @@ class Ig_picpuller {
 		{
 			//return "ERROR: No user ID set for this function";
 			$variables[] = array(
-				'error_type' => 'UnauthorizedUser',
-				'error_message' => 'User has not authorized Pic Puller for access to Instagram.',
-				'status' => 'false'
+				$this->_ig_picpuller_prefix.'error_type' => 'UnauthorizedUser',
+				$this->_ig_picpuller_prefix.'error_message' => 'User has not authorized Pic Puller for access to Instagram.',
+				$this->_ig_picpuller_prefix.'status' => 'false'
 			);
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -428,9 +401,9 @@ class Ig_picpuller {
 		
 		if ($data['status'] === FALSE ) { // && $this->use_stale != 'yes') {
 			$variables[] = array(
-				'error_type' => $data['error_type'],
-				'error_message' => $data['error_message'],
-				'status' => 'false'
+				$this->_ig_picpuller_prefix.'error_type' => $data['error_type'],
+				$this->_ig_picpuller_prefix.'error_message' => $data['error_message'],
+				$this->_ig_picpuller_prefix.'status' => 'false'
 			);
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -438,17 +411,17 @@ class Ig_picpuller {
 		$cacheddata = (isset($data['cacheddata'])) ? 'yes' : 'no';
 		$node = $data['data'];
 		$variables[] = array(
-			'username' => $node['username'],
-			'bio' => $node['bio'],
-			'profile_picture' => $node['profile_picture'],
-			'website' => $node['website'],
-			'full_name' => $node['full_name'],
-			'counts_media' => strval($node['counts']['media']),
-			'counts_followed_by' => strval($node['counts']['followed_by']),
-			'counts_follows' => strval($node['counts']['follows']),
-			'id' => $node['id'],
-			'status' => 'true',
-			'cacheddata' => $cacheddata
+			$this->_ig_picpuller_prefix.'username' => $node['username'],
+			$this->_ig_picpuller_prefix.'bio' => $node['bio'],
+			$this->_ig_picpuller_prefix.'profile_picture' => $node['profile_picture'],
+			$this->_ig_picpuller_prefix.'website' => $node['website'],
+			$this->_ig_picpuller_prefix.'full_name' => $node['full_name'],
+			$this->_ig_picpuller_prefix.'counts_media' => strval($node['counts']['media']),
+			$this->_ig_picpuller_prefix.'counts_followed_by' => strval($node['counts']['followed_by']),
+			$this->_ig_picpuller_prefix.'counts_follows' => strval($node['counts']['follows']),
+			$this->_ig_picpuller_prefix.'id' => $node['id'],
+			$this->_ig_picpuller_prefix.'status' => 'true',
+			$this->_ig_picpuller_prefix.'cacheddata' => $cacheddata
 		);
 		return $this->EE->TMPL->parse_variables($tagdata, $variables);
 
@@ -472,9 +445,9 @@ class Ig_picpuller {
 		
 		if (!$this->applicationExists() ) {
 			$variables[] = array(
-				'error_type' => 'NoInstagramApp',
-				'error_message' => 'There is no application stored in the Expression Engine data base. It appear set up is not complete.',
-				'status' => 'false'
+				$this->_ig_picpuller_prefix.'error_type' => 'NoInstagramApp',
+				$this->_ig_picpuller_prefix.'error_message' => 'There is no application stored in the Expression Engine data base. It appear set up is not complete.',
+				$this->_ig_picpuller_prefix.'status' => 'false'
 			);
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -490,9 +463,9 @@ class Ig_picpuller {
 		{
 			//return "ERROR: No user ID set for this function";
 			$variables[] = array(
-				'error_type' => 'MissingReqParameter',
-				'error_message' => 'No user ID set for this function',
-				'status' => 'false'
+				$this->_ig_picpuller_prefix.'error_type' => 'MissingReqParameter',
+				$this->_ig_picpuller_prefix.'error_message' => 'No user ID set for this function',
+				$this->_ig_picpuller_prefix.'status' => 'false'
 			);
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -502,9 +475,9 @@ class Ig_picpuller {
 		{
 			//return "ERROR: No user ID set for this function";
 			$variables[] = array(
-				'error_type' => 'MissingReqParameter',
-				'error_message' => 'No media_id set for this function',
-				'status' => 'false'
+				$this->_ig_picpuller_prefix.'error_type' => 'MissingReqParameter',
+				$this->_ig_picpuller_prefix.'error_message' => 'No media_id set for this function',
+				$this->_ig_picpuller_prefix.'status' => 'false'
 			);
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -524,9 +497,9 @@ class Ig_picpuller {
 
 		if ($data['status'] === FALSE) {
 			$variables[] = array(
-				'error_type' => $data['error_type'],
-				'error_message' => $data['error_message'],
-				'status' => 'false'
+				$this->_ig_picpuller_prefix.'error_type' => $data['error_type'],
+				$this->_ig_picpuller_prefix.'error_message' => $data['error_message'],
+				$this->_ig_picpuller_prefix.'status' => 'false'
 			);
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -535,23 +508,23 @@ class Ig_picpuller {
 		$node = $data['data'];
 
 		$variables[] = array(
-			'username' => $node['user']['username'],
-			'user_id' => $node['user']['id'],
-			'full_name' => $node['user']['full_name'],
-			'profile_picture' => $node['user']['profile_picture'],
-			'website' => $node['user']['website'],
-			'created_time' => $node['created_time'],
-			'link' => $node['link'],
-			'caption' => $node['caption']['text'],
-			'low_resolution' => $node['images']['low_resolution']['url'],
-			'thumbnail' => $node['images']['thumbnail']['url'],
-			'standard_resolution' => $node['images']['standard_resolution']['url'],
-			'latitude' => isset($node['location']['latitude']) ? $node['location']['latitude'] : '',
-			'longitude' => isset($node['location']['longitude']) ? $node['location']['longitude'] : '',
-			'comment_count' => $node['comments']['count'],
-			'likes' => $node['likes']['count'], 
-			'status' => 'true',
-			'cacheddata' => $cacheddata
+			$this->_ig_picpuller_prefix.'username' => $node['user']['username'],
+			$this->_ig_picpuller_prefix.'user_id' => $node['user']['id'],
+			$this->_ig_picpuller_prefix.'full_name' => $node['user']['full_name'],
+			$this->_ig_picpuller_prefix.'profile_picture' => $node['user']['profile_picture'],
+			$this->_ig_picpuller_prefix.'website' => $node['user']['website'],
+			$this->_ig_picpuller_prefix.'created_time' => $node['created_time'],
+			$this->_ig_picpuller_prefix.'link' => $node['link'],
+			$this->_ig_picpuller_prefix.'caption' => $node['caption']['text'],
+			$this->_ig_picpuller_prefix.'low_resolution' => $node['images']['low_resolution']['url'],
+			$this->_ig_picpuller_prefix.'thumbnail' => $node['images']['thumbnail']['url'],
+			$this->_ig_picpuller_prefix.'standard_resolution' => $node['images']['standard_resolution']['url'],
+			$this->_ig_picpuller_prefix.'latitude' => isset($node['location']['latitude']) ? $node['location']['latitude'] : '',
+			$this->_ig_picpuller_prefix.'longitude' => isset($node['location']['longitude']) ? $node['location']['longitude'] : '',
+			$this->_ig_picpuller_prefix.'comment_count' => $node['comments']['count'],
+			$this->_ig_picpuller_prefix.'likes' => $node['likes']['count'], 
+			$this->_ig_picpuller_prefix.'status' => 'true',
+			$this->_ig_picpuller_prefix.'cacheddata' => $cacheddata
 		);
 		
 		return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -577,9 +550,9 @@ class Ig_picpuller {
 		
 		if (!$this->applicationExists() ) {
 			$variables[] = array(
-				'error_type' => 'NoInstagramApp',
-				'error_message' => 'There is no application stored in the Expression Engine data base. It appear set up is not complete.',
-				'status' => 'false'
+				$this->_ig_picpuller_prefix.'error_type' => 'NoInstagramApp',
+				$this->_ig_picpuller_prefix.'error_message' => 'There is no application stored in the Expression Engine data base. It appear set up is not complete.',
+				$this->_ig_picpuller_prefix.'status' => 'false'
 			);
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -616,9 +589,9 @@ class Ig_picpuller {
 		{
 			//return "ERROR: No user ID set for this function";
 			$variables[] = array(
-				'error_type' => 'MissingReqParameter',
-				'error_message' => 'No user ID set for this function',
-				'status' => 'false'
+				$this->_ig_picpuller_prefix.'error_type' => 'MissingReqParameter',
+				$this->_ig_picpuller_prefix.'error_message' => 'No user ID set for this function',
+				$this->_ig_picpuller_prefix.'status' => 'false'
 			);
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -630,9 +603,9 @@ class Ig_picpuller {
 		if(!$ig_user_id) 
 		{
 			$variables[] = array(
-				'error_type' => 'UnauthorizedUser',
-				'error_message' => 'User has not authorized Pic Puller for access to Instagram.',
-				'status' => 'false'
+				$this->_ig_picpuller_prefix.'error_type' => 'UnauthorizedUser',
+				$this->_ig_picpuller_prefix.'error_message' => 'User has not authorized Pic Puller for access to Instagram.',
+				$this->_ig_picpuller_prefix.'status' => 'false'
 			);
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -644,9 +617,9 @@ class Ig_picpuller {
 		
 		if ($data['status'] === FALSE ) { // && $this->use_stale != 'yes') {
 			$variables[] = array(
-				'error_type' => $data['error_type'],
-				'error_message' => $data['error_message'],
-				'status' => 'false'
+				$this->_ig_picpuller_prefix.'error_type' => $data['error_type'],
+				$this->_ig_picpuller_prefix.'error_message' => $data['error_message'],
+				$this->_ig_picpuller_prefix.'status' => 'false'
 			);
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -664,20 +637,20 @@ class Ig_picpuller {
 		foreach($data['data'] as $node)
 		{
 			$variables[] = array(
-				'created_time' => $node['created_time'],
-				'link' => $node['link'],
-				'caption' => $node['caption']['text'],
-				'low_resolution' => $node['images']['low_resolution']['url'],
-				'thumbnail' => $node['images']['thumbnail']['url'],
-				'standard_resolution' => $node['images']['standard_resolution']['url'],
-				'latitude' => isset($node['location']['latitude']) ? $node['location']['latitude'] : '',
-				'longitude' => isset($node['location']['longitude']) ? $node['location']['longitude'] : '',
-				'media_id' => $node['id'],
-				'next_max_id' => $next_max_id,
-				'comment_count' => $node['comments']['count'],
-				'likes' => $node['likes']['count'], 
-				'status' => 'true',
-				'cacheddata' => $cacheddata
+				$this->_ig_picpuller_prefix.'created_time' => $node['created_time'],
+				$this->_ig_picpuller_prefix.'link' => $node['link'],
+				$this->_ig_picpuller_prefix.'caption' => $node['caption']['text'],
+				$this->_ig_picpuller_prefix.'low_resolution' => $node['images']['low_resolution']['url'],
+				$this->_ig_picpuller_prefix.'thumbnail' => $node['images']['thumbnail']['url'],
+				$this->_ig_picpuller_prefix.'standard_resolution' => $node['images']['standard_resolution']['url'],
+				$this->_ig_picpuller_prefix.'latitude' => isset($node['location']['latitude']) ? $node['location']['latitude'] : '',
+				$this->_ig_picpuller_prefix.'longitude' => isset($node['location']['longitude']) ? $node['location']['longitude'] : '',
+				$this->_ig_picpuller_prefix.'media_id' => $node['id'],
+				$this->_ig_picpuller_prefix.'next_max_id' => $next_max_id,
+				$this->_ig_picpuller_prefix.'comment_count' => $node['comments']['count'],
+				$this->_ig_picpuller_prefix.'likes' => $node['likes']['count'], 
+				$this->_ig_picpuller_prefix.'status' => 'true',
+				$this->_ig_picpuller_prefix.'cacheddata' => $cacheddata
 			);
 		}
 		return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -702,9 +675,9 @@ class Ig_picpuller {
 		
 		if (!$this->applicationExists() ) {
 			$variables[] = array(
-				'error_type' => 'NoInstagramApp',
-				'error_message' => 'There is no application stored in the Expression Engine data base. It appear set up is not complete.',
-				'status' => 'false'
+				$this->_ig_picpuller_prefix.'error_type' => 'NoInstagramApp',
+				$this->_ig_picpuller_prefix.'error_message' => 'There is no application stored in the Expression Engine data base. It appear set up is not complete.',
+				$this->_ig_picpuller_prefix.'status' => 'false'
 			);
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -740,9 +713,9 @@ class Ig_picpuller {
 		{
 			//return "ERROR: No user ID set for this function";
 			$variables[] = array(
-				'error_type' => 'MissingReqParameter',
-				'error_message' => 'No user ID set for this function',
-				'status' => 'false'
+				$this->_ig_picpuller_prefix.'error_type' => 'MissingReqParameter',
+				$this->_ig_picpuller_prefix.'error_message' => 'No user ID set for this function',
+				$this->_ig_picpuller_prefix.'status' => 'false'
 			);
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -755,9 +728,9 @@ class Ig_picpuller {
 		{
 			//return "ERROR: No user ID set for this function";
 			$variables[] = array(
-				'error_type' => 'UnauthorizedUser',
-				'error_message' => 'User has not authorized Pic Puller for access to Instagram.',
-				'status' => 'false'
+				$this->_ig_picpuller_prefix.'error_type' => 'UnauthorizedUser',
+				$this->_ig_picpuller_prefix.'error_message' => 'User has not authorized Pic Puller for access to Instagram.',
+				$this->_ig_picpuller_prefix.'status' => 'false'
 			);
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -769,9 +742,9 @@ class Ig_picpuller {
 		
 		if ($data['status'] === FALSE ) { // && $this->use_stale != 'yes') {
 			$variables[] = array(
-				'error_type' => $data['error_type'],
-				'error_message' => $data['error_message'],
-				'status' => 'false'
+				$this->_ig_picpuller_prefix.'error_type' => $data['error_type'],
+				$this->_ig_picpuller_prefix.'error_message' => $data['error_message'],
+				$this->_ig_picpuller_prefix.'status' => 'false'
 			);
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -790,25 +763,25 @@ class Ig_picpuller {
 		foreach($data['data'] as $node)
 		{
 			$variables[] = array(
-				'created_time' => $node['created_time'],
-				'link' => $node['link'],
-				'caption' => $node['caption']['text'],
-				'low_resolution' => $node['images']['low_resolution']['url'],
-				'thumbnail' => $node['images']['thumbnail']['url'],
-				'standard_resolution' => $node['images']['standard_resolution']['url'],
-				'latitude' => isset($node['location']['latitude']) ? $node['location']['latitude'] : '',
-				'longitude' => isset($node['location']['longitude']) ? $node['location']['longitude'] : '',
-				'media_id' => $node['id'],
-				'next_max_id' => $next_max_id, 
-				'profile_picture' => $node['user']['profile_picture'],
-				'username' => $node['user']['username'],
-				'website' => $node['user']['website'],
-				'full_name' => $node['user']['full_name'],
-				'user_id' => $node['user']['id'],
-				'comment_count' => $node['comments']['count'],
-				'likes' => $node['likes']['count'], 
-				'status' => 'true',
-				'cacheddata' => $cacheddata
+				$this->_ig_picpuller_prefix.'created_time' => $node['created_time'],
+				$this->_ig_picpuller_prefix.'link' => $node['link'],
+				$this->_ig_picpuller_prefix.'caption' => $node['caption']['text'],
+				$this->_ig_picpuller_prefix.'low_resolution' => $node['images']['low_resolution']['url'],
+				$this->_ig_picpuller_prefix.'thumbnail' => $node['images']['thumbnail']['url'],
+				$this->_ig_picpuller_prefix.'standard_resolution' => $node['images']['standard_resolution']['url'],
+				$this->_ig_picpuller_prefix.'latitude' => isset($node['location']['latitude']) ? $node['location']['latitude'] : '',
+				$this->_ig_picpuller_prefix.'longitude' => isset($node['location']['longitude']) ? $node['location']['longitude'] : '',
+				$this->_ig_picpuller_prefix.'media_id' => $node['id'],
+				$this->_ig_picpuller_prefix.'next_max_id' => $next_max_id, 
+				$this->_ig_picpuller_prefix.'profile_picture' => $node['user']['profile_picture'],
+				$this->_ig_picpuller_prefix.'username' => $node['user']['username'],
+				$this->_ig_picpuller_prefix.'website' => $node['user']['website'],
+				$this->_ig_picpuller_prefix.'full_name' => $node['user']['full_name'],
+				$this->_ig_picpuller_prefix.'user_id' => $node['user']['id'],
+				$this->_ig_picpuller_prefix.'comment_count' => $node['comments']['count'],
+				$this->_ig_picpuller_prefix.'likes' => $node['likes']['count'], 
+				$this->_ig_picpuller_prefix.'status' => 'true',
+				$this->_ig_picpuller_prefix.'cacheddata' => $cacheddata
 			);
 		}
 		return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -833,9 +806,9 @@ class Ig_picpuller {
 		
 		if (!$this->applicationExists() ) {
 			$variables[] = array(
-				'error_type' => 'NoInstagramApp',
-				'error_message' => 'There is no application stored in the Expression Engine data base. It appear set up is not complete.',
-				'status' => 'false'
+				$this->_ig_picpuller_prefix.'error_type' => 'NoInstagramApp',
+				$this->_ig_picpuller_prefix.'error_message' => 'There is no application stored in the Expression Engine data base. It appear set up is not complete.',
+				$this->_ig_picpuller_prefix.'status' => 'false'
 			);
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -872,9 +845,9 @@ class Ig_picpuller {
 		{
 			//return "ERROR: No user ID set for this function";
 			$variables[] = array(
-				'error_type' => 'MissingReqParameter',
-				'error_message' => 'No user ID set for this function',
-				'status' => 'false'
+				$this->_ig_picpuller_prefix.'error_type' => 'MissingReqParameter',
+				$this->_ig_picpuller_prefix.'error_message' => 'No user ID set for this function',
+				$this->_ig_picpuller_prefix.'status' => 'false'
 			);
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -888,9 +861,9 @@ class Ig_picpuller {
 		
 		if ($data['status'] === FALSE ) { // && $this->use_stale != 'yes') {
 			$variables[] = array(
-				'error_type' => $data['error_type'],
-				'error_message' => $data['error_message'],
-				'status' => 'false'
+				$this->_ig_picpuller_prefix.'error_type' => $data['error_type'],
+				$this->_ig_picpuller_prefix.'error_message' => $data['error_message'],
+				$this->_ig_picpuller_prefix.'status' => 'false'
 			);
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -907,25 +880,25 @@ class Ig_picpuller {
 		foreach($data['data'] as $node)
 		{
 			$variables[] = array(
-				'created_time' => $node['created_time'],
-				'link' => $node['link'],
-				'caption' => $node['caption']['text'],
-				'low_resolution' => $node['images']['low_resolution']['url'],
-				'thumbnail' => $node['images']['thumbnail']['url'],
-				'standard_resolution' => $node['images']['standard_resolution']['url'],
-				'latitude' => isset($node['location']['latitude']) ? $node['location']['latitude'] : '',
-				'longitude' => isset($node['location']['longitude']) ? $node['location']['longitude'] : '',
-				'media_id' => $node['id'],
-				'next_max_id' => $next_max_id,
-				'profile_picture' => $node['user']['profile_picture'],
-				'username' => $node['user']['username'],
-				'website' => $node['user']['website'],
-				'full_name' => $node['user']['full_name'],
-				'user_id' => $node['user']['id'],
-				'comment_count' => $node['comments']['count'],
-				'likes' => $node['likes']['count'], 
-				'status' => 'true',
-				'cacheddata' => $cacheddata
+				$this->_ig_picpuller_prefix.'created_time' => $node['created_time'],
+				$this->_ig_picpuller_prefix.'link' => $node['link'],
+				$this->_ig_picpuller_prefix.'caption' => $node['caption']['text'],
+				$this->_ig_picpuller_prefix.'low_resolution' => $node['images']['low_resolution']['url'],
+				$this->_ig_picpuller_prefix.'thumbnail' => $node['images']['thumbnail']['url'],
+				$this->_ig_picpuller_prefix.'standard_resolution' => $node['images']['standard_resolution']['url'],
+				$this->_ig_picpuller_prefix.'latitude' => isset($node['location']['latitude']) ? $node['location']['latitude'] : '',
+				$this->_ig_picpuller_prefix.'longitude' => isset($node['location']['longitude']) ? $node['location']['longitude'] : '',
+				$this->_ig_picpuller_prefix.'media_id' => $node['id'],
+				$this->_ig_picpuller_prefix.'next_max_id' => $next_max_id,
+				$this->_ig_picpuller_prefix.'profile_picture' => $node['user']['profile_picture'],
+				$this->_ig_picpuller_prefix.'username' => $node['user']['username'],
+				$this->_ig_picpuller_prefix.'website' => $node['user']['website'],
+				$this->_ig_picpuller_prefix.'full_name' => $node['user']['full_name'],
+				$this->_ig_picpuller_prefix.'user_id' => $node['user']['id'],
+				$this->_ig_picpuller_prefix.'comment_count' => $node['comments']['count'],
+				$this->_ig_picpuller_prefix.'likes' => $node['likes']['count'], 
+				$this->_ig_picpuller_prefix.'status' => 'true',
+				$this->_ig_picpuller_prefix.'cacheddata' => $cacheddata
 			);
 		}
 		return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -950,9 +923,9 @@ class Ig_picpuller {
 		
 		if (!$this->applicationExists() ) {
 			$variables[] = array(
-				'error_type' => 'NoInstagramApp',
-				'error_message' => 'There is no application stored in the Expression Engine data base. It appear set up is not complete.',
-				'status' => 'false'
+				$this->_ig_picpuller_prefix.'error_type' => 'NoInstagramApp',
+				$this->_ig_picpuller_prefix.'error_message' => 'There is no application stored in the Expression Engine data base. It appear set up is not complete.',
+				$this->_ig_picpuller_prefix.'status' => 'false'
 			);
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -989,9 +962,9 @@ class Ig_picpuller {
 		{
 			//return "ERROR: No user ID set for this function";
 			$variables[] = array(
-				'error_type' => 'MissingReqParameter',
-				'error_message' => 'No user ID set for this function',
-				'status' => 'false'
+				$this->_ig_picpuller_prefix.'error_type' => 'MissingReqParameter',
+				$this->_ig_picpuller_prefix.'error_message' => 'No user ID set for this function',
+				$this->_ig_picpuller_prefix.'status' => 'false'
 			);
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -1010,9 +983,9 @@ class Ig_picpuller {
 		
 		if ($data['status'] === FALSE ) { // && $this->use_stale != 'yes') {
 			$variables[] = array(
-				'error_type' => $data['error_type'],
-				'error_message' => $data['error_message'],
-				'status' => 'false'
+				$this->_ig_picpuller_prefix.'error_type' => $data['error_type'],
+				$this->_ig_picpuller_prefix.'error_message' => $data['error_message'],
+				$this->_ig_picpuller_prefix.'status' => 'false'
 			);
 			
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -1033,25 +1006,25 @@ class Ig_picpuller {
 		foreach($data['data'] as $node)
 		{
 			$variables[] = array(
-				'created_time' => $node['created_time'],
-				'link' => $node['link'],
-				'caption' => $node['caption']['text'],
-				'low_resolution' => $node['images']['low_resolution']['url'],
-				'thumbnail' => $node['images']['thumbnail']['url'],
-				'standard_resolution' => $node['images']['standard_resolution']['url'],
-				'latitude' => isset($node['location']['latitude']) ? $node['location']['latitude'] : '',
-				'longitude' => isset($node['location']['longitude']) ? $node['location']['longitude'] : '',
-				'media_id' => $node['id'],
-				'next_max_id' => $next_max_id,
-				'profile_picture' => $node['user']['profile_picture'],
-				'username' => $node['user']['username'],
-				'website' => $node['user']['website'],
-				'full_name' => $node['user']['full_name'],
-				'user_id' => $node['user']['id'],
-				'comment_count' => $node['comments']['count'],
-				'likes' => $node['likes']['count'], 
-				'status' => 'true',
-				'cacheddata' => $cacheddata
+				$this->_ig_picpuller_prefix.'created_time' => $node['created_time'],
+				$this->_ig_picpuller_prefix.'link' => $node['link'],
+				$this->_ig_picpuller_prefix.'caption' => $node['caption']['text'],
+				$this->_ig_picpuller_prefix.'low_resolution' => $node['images']['low_resolution']['url'],
+				$this->_ig_picpuller_prefix.'thumbnail' => $node['images']['thumbnail']['url'],
+				$this->_ig_picpuller_prefix.'standard_resolution' => $node['images']['standard_resolution']['url'],
+				$this->_ig_picpuller_prefix.'latitude' => isset($node['location']['latitude']) ? $node['location']['latitude'] : '',
+				$this->_ig_picpuller_prefix.'longitude' => isset($node['location']['longitude']) ? $node['location']['longitude'] : '',
+				$this->_ig_picpuller_prefix.'media_id' => $node['id'],
+				$this->_ig_picpuller_prefix.'next_max_id' => $next_max_id,
+				$this->_ig_picpuller_prefix.'profile_picture' => $node['user']['profile_picture'],
+				$this->_ig_picpuller_prefix.'username' => $node['user']['username'],
+				$this->_ig_picpuller_prefix.'website' => $node['user']['website'],
+				$this->_ig_picpuller_prefix.'full_name' => $node['user']['full_name'],
+				$this->_ig_picpuller_prefix.'user_id' => $node['user']['id'],
+				$this->_ig_picpuller_prefix.'comment_count' => $node['comments']['count'],
+				$this->_ig_picpuller_prefix.'likes' => $node['likes']['count'], 
+				$this->_ig_picpuller_prefix.'status' => 'true',
+				$this->_ig_picpuller_prefix.'cacheddata' => $cacheddata
 			);
 		}
 		return $this->EE->TMPL->parse_variables($tagdata, $variables);
@@ -1322,6 +1295,34 @@ class Ig_picpuller {
 		}
 	}
 	
+	/**
+	 * Get ig_picpuller_prefix
+	 *
+	 * Get the prefix from the Pic Puller Credentials table for the existing Pic Puller application.
+	 * This prefix will be used for all tags for this application.
+	 *
+	 * @access	private
+	 * @return	mixed - returns a string, the prefix, if available in DB, or an empty string if unavailable
+	 */
+	
+	private function get_ig_picpuller_prefix()
+	{
+		$this->EE->db->select('ig_picpuller_prefix');
+		$this->EE->db->where('ig_site_id', $this->_currentSite);
+		$this->EE->db->limit(1);
+		$query = $this->EE->db->get('ig_picpuller_credentials');
+
+		foreach ($query->result() as $row)
+		{
+			$ig_picpuller_prefix = $row->ig_picpuller_prefix;
+		}
+		if (isset($ig_picpuller_prefix)){
+			return $ig_picpuller_prefix;
+		} else {
+			return '';
+		}
+	}
+
 	/**
 	 * Get Logged in user ID
 	 *

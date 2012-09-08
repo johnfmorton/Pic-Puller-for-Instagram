@@ -98,9 +98,6 @@ class Ig_picpuller_mcp {
 		$vars['ig_adv_user_auth'] = lang('ig_adv_user_auth');
 		$vars['adv_user_url'] = $this->_base_url.'&method=adv_user_admin';
 
-
-
-		//$baseURLpattern = '/(http:\/\/)([a-zA-Z0-9\.\-]*\/)/';
 		$baseURLpattern = '/(?:https?:\/\/)?(?:www\.)?([a-zA-Z0-9\.\-]*\/)/';;
 		
 		preg_match($baseURLpattern, $this->EE->config->config['base_url'], $current_base_url);
@@ -195,8 +192,11 @@ class Ig_picpuller_mcp {
 		$vars['client_id'] = $this->getClientID();
 		$vars['client_secret'] = $this->getSecret();
 		$vars['frontend_auth_url'] = $this->getFrontEndAuth();
+		$vars['ig_picpuller_prefix'] = $this->get_ig_picpuller_prefix();
+		// The URLs to edit the app
 		$vars['delete_method'] = $this->_base_url.'&method=preview_delete_app';
-		$vars['edit_secret'] = $this->_base_url.'&method=edit_secret';	
+		$vars['edit_secret'] = $this->_base_url.'&method=edit_secret';
+		$vars['edit_prefix'] = $this->_base_url.'&method=edit_prefix';
 		$vars['edit_frontend_url'] = $this->_base_url.'&method=edit_frontend_url';		
 		return $this->EE->load->view('ig_about', $vars, TRUE);	
 	}
@@ -208,7 +208,7 @@ class Ig_picpuller_mcp {
 
 	public function ig_all_app_info()
 	{
-		$this->EE->db->select('site_id,app_id,ig_client_id,ig_client_secret,site_label');
+		$this->EE->db->select('site_id,app_id,ig_client_id,ig_client_secret,site_label,ig_picpuller_prefix');
 		$this->EE->db->from('ig_picpuller_credentials');
 		$this->EE->db->join('sites', 'ig_picpuller_credentials.ig_site_id = sites.site_id');
 		$query = $this->EE->db->get();
@@ -221,7 +221,8 @@ class Ig_picpuller_mcp {
 		$app_ids = array();
 		$site_labels = array();
 		$client_ids = array();
-		$client_secrets = array();	
+		$client_secrets = array();
+		$ig_picpuller_prefixs = array();
 		
 		foreach ($query->result() as $row)
 		{
@@ -230,6 +231,7 @@ class Ig_picpuller_mcp {
 			array_push($site_labels, $row->site_label);
 			array_push($client_ids, $row->ig_client_id);
 			array_push($client_secrets, $row->ig_client_secret);
+			array_push($ig_picpuller_prefixs, $row->ig_picpuller_prefix);
 		}
 
 		$vars['site_ids'] = $site_ids;
@@ -237,6 +239,7 @@ class Ig_picpuller_mcp {
 		$vars['site_labels'] = $site_labels;
 		$vars['client_ids']	= $client_ids;
 		$vars['client_secrets']	= $client_secrets;
+		$vars['ig_picpuller_prefixs'] = $ig_picpuller_prefixs;
 		$vars['moduleTitle'] = lang('ig_picpuller_module_name');
 		$vars['moduleShortTitle'] = lang('ig_picpuller_short_module_name');
 
@@ -316,10 +319,11 @@ class Ig_picpuller_mcp {
 	 */
 	public function edit_secret()
 	{
+		$vars['site_label'] = $this->getSiteLabel();
 		$vars['client_id'] = $this->getClientID();
 		$vars['client_secret'] = $this->getSecret();
 		$vars['form_hidden'] = NULL;
-		$vars['update_secret_url'] = 'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=ig_picpuller'.AMP.'method=update_secret';
+		$vars['update_secret_url'] = 'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=ig_picpuller'.AMP.'method=edit_secret_step2';
 		$vars['ig_info_name'] =  $this->EE->lang->line('ig_info');
 		$vars['cancel_url'] = $this->_base_url.'&method=ig_info';
 		
@@ -330,8 +334,9 @@ class Ig_picpuller_mcp {
 	 * Update the secret (aka password) in the database
 	 * @return a view "save_settings"
 	 */
-	public function update_secret()
+	public function edit_secret_step2()
 	{
+		$vars['site_label'] = $this->getSiteLabel();
 		$vars['moduleTitle'] = lang('ig_picpuller_module_name');
 		$vars['moduleShortTitle'] = lang('ig_picpuller_short_module_name');
 		$this->EE->cp->set_variable('cp_page_title', lang('ig_picpuller_module_name'));
@@ -348,6 +353,54 @@ class Ig_picpuller_mcp {
 		$vars['client_id'] = $ig_client_id;
 		$vars['client_secret'] = $ig_client_secret;
 		$vars['frontend_auth_url'] = $this->getFrontEndAuth();
+		$vars['ig_picpuller_prefix'] =$this->get_ig_picpuller_prefix();
+		$vars['homeurl'] = $this->_base_url;
+		$vars['ig_info_name'] =  $this->EE->lang->line('ig_info');
+		$vars['cancel_url'] = $this->_base_url.'&method=ig_info';
+		return $this->EE->load->view('update_settings_confirmation', $vars, TRUE);
+	}
+
+	/**
+	 * Display a view that will let user update the secret (aka password) of their Instram App
+	 * @return a view "ig_secret_update"
+	 */
+	public function edit_prefix()
+	{
+		$vars['site_label'] = $this->getSiteLabel();
+		$vars['client_id'] = $this->getClientID();
+		$vars['client_secret'] = $this->getSecret();
+		$vars['ig_picpuller_prefix'] = $this->get_ig_picpuller_prefix();
+		$vars['form_hidden'] = NULL;
+		$vars['update_secret_url'] = 'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=ig_picpuller'.AMP.'method=edit_prefix_step2';
+		$vars['ig_info_name'] =  $this->EE->lang->line('ig_info');
+		$vars['cancel_url'] = $this->_base_url.'&method=ig_info';
+		
+		return $this->EE->load->view('ig_prefix_update', $vars, TRUE); 
+	}
+
+	/**
+	 * Update the secret (aka password) in the database
+	 * @return a view "save_settings"
+	 */
+	public function edit_prefix_step2()
+	{
+		$vars['site_label'] = $this->getSiteLabel();
+		$vars['moduleTitle'] = lang('ig_picpuller_module_name');
+		$vars['moduleShortTitle'] = lang('ig_picpuller_short_module_name');
+		$this->EE->cp->set_variable('cp_page_title', lang('ig_picpuller_module_name'));
+		$ig_client_id = $this->getClientID();
+		$ig_picpuller_prefix = $this->EE->input->post('ig_picpuller_prefix', TRUE);
+		$data = array(
+			'ig_picpuller_prefix' => $ig_picpuller_prefix
+		);
+
+		$this->EE->db->where('ig_client_id', $ig_client_id);
+		$this->EE->db->update('ig_picpuller_credentials', $data);
+
+		$vars['client_id'] = $ig_client_id;
+		$vars['client_secret'] = $this->getSecret();
+		$vars['frontend_auth_url'] = $this->getFrontEndAuth();
+		$vars['ig_picpuller_prefix'] =$ig_picpuller_prefix;
 		$vars['homeurl'] = $this->_base_url;
 		$vars['ig_info_name'] =  $this->EE->lang->line('ig_info');
 		$vars['cancel_url'] = $this->_base_url.'&method=ig_info';
@@ -360,11 +413,12 @@ class Ig_picpuller_mcp {
 	 */
 	public function edit_frontend_url()
 	{
+		$vars['site_label'] = $this->getSiteLabel();
 		$vars['client_id'] = $this->getClientID();
 		$vars['client_secret'] = $this->getSecret();
 		$vars['frontend_auth_url'] = $this->getFrontEndAuth();
 		$vars['form_hidden'] = NULL;
-		$vars['update_frontend_url'] = 'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=ig_picpuller'.AMP.'method=update_frontend_url';
+		$vars['update_frontend_url'] = 'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=ig_picpuller'.AMP.'method=edit_frontend_url_step2';
 		$vars['ig_info_name'] =  $this->EE->lang->line('ig_info');
 		$vars['cancel_url'] = $this->_base_url.'&method=ig_info';
 		
@@ -377,8 +431,9 @@ class Ig_picpuller_mcp {
 	 * Update the secret (aka password) in the database
 	 * @return a view "save_settings"
 	 */
-	public function update_frontend_url()
+	public function edit_frontend_url_step2()
 	{
+		$vars['site_label'] = $this->getSiteLabel();
 		$vars['moduleTitle'] = lang('ig_picpuller_module_name');
 		$vars['moduleShortTitle'] = lang('ig_picpuller_short_module_name');
 		$this->EE->cp->set_variable('cp_page_title', lang('ig_picpuller_module_name'));
@@ -395,6 +450,7 @@ class Ig_picpuller_mcp {
 		$vars['client_id'] = $ig_client_id;
 		$vars['client_secret'] = $this->getSecret();
 		$vars['frontend_auth_url'] = $this->getFrontEndAuth();
+		$vars['ig_picpuller_prefix'] =$this->get_ig_picpuller_prefix();
 		$vars['homeurl'] = $this->_base_url;
 		$vars['ig_info_name'] =  $this->EE->lang->line('ig_info');
 		$vars['cancel_url'] = $this->_base_url.'&method=ig_info';
@@ -416,7 +472,9 @@ class Ig_picpuller_mcp {
 		// fields:
 		//  ig_client_id
 		//  ig_client_secret
-		//  
+		//  ig_picpuller_prefix
+
+		$default_prefix = 'ig_';
 
 		$vars['moduleTitle'] = lang('ig_picpuller_module_name');
 		$vars['moduleShortTitle'] = lang('ig_picpuller_short_module_name');
@@ -431,6 +489,7 @@ class Ig_picpuller_mcp {
 		// NO - cant empty table now $this->EE->db->empty_table('ig_picpuller_credentials'); 
 		$this->EE->db->set('ig_client_id', $ig_client_id);
 		$this->EE->db->set('ig_client_secret', $ig_client_secret);
+		$this->EE->db->set('ig_picpuller_prefix', $default_prefix);
 		$this->EE->db->set('ig_site_id', $this->_currentSite);
 		$this->EE->db->set('auth_url', $this->getRedirectURL() );
 		$this->EE->db->insert('ig_picpuller_credentials'); 
@@ -607,7 +666,35 @@ class Ig_picpuller_mcp {
 			return;
 		}
 	}
+
+	/**
+	 * Get ig_picpuller_prefix
+	 *
+	 * Get the prefix from the Pic Puller Credentials table for the existing Pic Puller application.
+	 * This prefix will be used for all tags for this application.
+	 *
+	 * @access	private
+	 * @return	mixed - returns a string, the prefix, if available in DB, or an empty string if unavailable
+	 */
 	
+	private function get_ig_picpuller_prefix()
+	{
+		$this->EE->db->select('ig_picpuller_prefix');
+		$this->EE->db->where('ig_site_id', $this->_currentSite);
+		$this->EE->db->limit(1);
+		$query = $this->EE->db->get('ig_picpuller_credentials');
+
+		foreach ($query->result() as $row)
+		{
+			$ig_picpuller_prefix = $row->ig_picpuller_prefix;
+		}
+		if (isset($ig_picpuller_prefix)){
+			return $ig_picpuller_prefix;
+		} else {
+			return '';
+		}
+	}	
+
 	private function getSecret()
 	{
 		$this->EE->db->select('ig_client_secret');

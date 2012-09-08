@@ -26,7 +26,7 @@
 
 class Ig_picpuller_upd {
 	
-	public $version = '1.2.0';
+	public $version = '1.3.0';
 	
 	private $EE;
 	
@@ -78,6 +78,7 @@ class Ig_picpuller_upd {
 			'ig_client_id'		=> array('type' => 'varchar', 'constraint' => '64', 'null' => TRUE, 'default' => NULL),
 			'ig_client_secret' 	=> array('type' => 'varchar', 'constraint'=> '64', 'null' => TRUE, 'default' => NULL)
 			,
+			'ig_picpuller_prefix'	=> array('type' => 'varchar', 'constraint'=> '128', 'null' => TRUE, 'default' => NULL),
 			'auth_url'			=> array('type' => 'varchar', 'constraint'=> '256', 'null' => TRUE, 'default' => NULL),
 			'frontend_auth_url'	=> array('type' => 'varchar', 'constraint'=> '256', 'null' => TRUE, 'default' => NULL)
 		);
@@ -154,13 +155,14 @@ class Ig_picpuller_upd {
 
 	$this->EE->load->dbforge();
 
+	$default_prefix = 'ig_';
+
 	// If the column 'ig_site_id' doesn't exist, we update the 'ig_picpuller_credentials'
 	// table with that new column and then we insert the currently logged in site as
 	// the owner of the current Pic Puller Instagram application
 
 	if (!$this->EE->db->field_exists('ig_site_id', 'ig_picpuller_credentials'))
 	{
-		
 		$fields = array(
 			'app_id'			=> array('type' => 'INT',  'constraint' => '10', 'unsigned' => TRUE, 'null' => FALSE, 'auto_increment' => TRUE), 
 			'ig_site_id'		=> array('type' => 'INT', 'length' => '11', 'null' => TRUE),
@@ -227,9 +229,53 @@ class Ig_picpuller_upd {
 			$this->EE->db->update('ig_picpuller_oauths', $data);
 
 		} 
-
 	}
 	
+	// Since the prefix option was added in a later version of Pic Puller, we need to do that as its own operation.
+	// The previous instructions made sure we now have the column 'ig_site_id' required for the MSM compatibility.
+	// Now we will add in the new column, ig+picpuller_prefix, to the ig_picpuller_credentials database. It will be 
+	// prepopulated with the value in the variable '$default_prefix' defined at the beginnning of this update function.
+
+	if (!$this->EE->db->field_exists('ig_picpuller_prefix', 'ig_picpuller_credentials'))
+	{
+		$fields = array(
+			'app_id'			=> array('type' => 'INT',  'constraint' => '10', 'unsigned' => TRUE, 'null' => FALSE, 'auto_increment' => TRUE), 
+			'ig_site_id'		=> array('type' => 'INT', 'length' => '11', 'null' => TRUE),
+			'ig_client_id'		=> array('type' => 'varchar', 'constraint' => '64', 'null' => TRUE, 'default' => NULL),
+			'ig_client_secret' 	=> array('type' => 'varchar', 'constraint'=> '64', 'null' => TRUE, 'default' => NULL)
+			,
+			'ig_picpuller_prefix'	=> array('type' => 'varchar', 'constraint'=> '128', 'null' => TRUE, 'default' => NULL),
+			'auth_url'			=> array('type' => 'varchar', 'constraint'=> '256', 'null' => TRUE, 'default' => NULL),
+			'frontend_auth_url'	=> array('type' => 'varchar', 'constraint'=> '256', 'null' => TRUE, 'default' => NULL)
+		);
+		$this->EE->dbforge->add_field($fields);
+		$this->EE->dbforge->add_key('app_id', TRUE);
+		$this->EE->dbforge->create_table('ig_picpuller_credentials_TEMP2');
+
+		// Now get all the data from the OLD data base
+		$query = $this->EE->db->get('ig_picpuller_credentials');
+
+		foreach ($query->result() as $row)
+		{
+			$data = array(
+				// ig_site_id is set to the site that the user is currently logged into in the EE CP
+			'ig_site_id' => $row->ig_site_id,
+			'ig_client_id' => $row->ig_client_id,
+			'ig_client_secret' => $row->ig_client_secret,
+			'ig_picpuller_prefix' => $default_prefix,
+			'auth_url' => $row->auth_url,
+			);
+			$this->EE->db->insert('ig_picpuller_credentials_TEMP2', $data);
+		};
+
+		$this->EE->dbforge->rename_table($this->EE->db->dbprefix .'ig_picpuller_credentials', $this->EE->db->dbprefix .'ig_picpuller_credentials_OLD2');
+
+		$this->EE->dbforge->rename_table($this->EE->db->dbprefix .'ig_picpuller_credentials_TEMP2', $this->EE->db->dbprefix .'ig_picpuller_credentials');
+
+		$this->EE->dbforge->drop_table('ig_picpuller_credentials_OLD2');
+
+	}
+
     if (version_compare($current, '0.9.2', '<'))
     {
         // Update code here

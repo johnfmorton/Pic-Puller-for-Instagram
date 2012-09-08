@@ -1,5 +1,12 @@
 # Change log
 
+1.3.0 - 08SEPT2012
+- All tags returned by Pic Puller are now prefixed with 'ig_' to avoid naming conflicts. Those updating, please read special note in your downloaded ZIP file on how to keep your current templates working properly.
+- The default prefix 'ig_' can be reset to different string under the 'Active Site App Info' on a per application basis. Each Pic Puller app, in an MSM set up, can have its own prefix.
+- New tag added to all return loops. 'ig_cacheddata' will respond 'yes' when cached data is being returned, and 'no' when live data from Instagram is being returned.
+- The verbiage of some error messages were rewritten to indicate when cached data was not available.
+- In "Pic Puller for Instagram Browser", updated pp_engine with missing curl_close.
+
 1.2.0 - 17AUG2012
 - exp:ig_picpuller:media tag now returns number of 'likes' for an image and the 'comment_count' for an image.
 - exp:ig_picpuller:media_recent tag now returns number of 'likes' for an image and the 'comment_count' for an image.
@@ -58,27 +65,28 @@ Required parameters:
 none
 
 Optional parameters:
-limit: an integer that determines how many images to return. Maximum of 32 allowed by Instagram.
+limit: an integer for how many images to request from Instagram. Instagram may return fewer under some circumstances. Maximum of 32 allowed by Instagram.
 use_stale_cache: either ‘yes’ or ‘no’ (defaults to ‘yes’ if undefined)
 
 Tags returned in a successful Expression Engine loop:
 status: a string of “true” is returned when data is returned
-media_id: the Instagram unique media ID for the image
-created_time: time stamp of image creation time, Unix timestamp formatted
-link: URL of the images homepage on Instagram
-caption: The caption provided by the author. Note, it may be left untitled which will return an empty string.
-thumbnail: URL to image, sized 150x150
-low_resolution: URL to image, sized 306x306
-standard_resolution: URL to image, sized 612x612
-latitude: latitude data, if available
-longitude: longitude data, if available
-username: the Instagram username of the user whose account the image is from
-full_name: the full name provided by the user whose account the image is from
-profile_picture: URL to the profile image of the user
+ig_media_id: the Instagram unique media ID for the image
+ig_created_time: time stamp of image creation time, Unix timestamp formatted
+ig_link: URL of the images homepage on Instagram
+ig_caption: The caption provided by the author. Note, it may be left untitled which will return an empty string.
+ig_thumbnail: URL to image, sized 150x150
+ig_low_resolution: URL to image, sized 306x306
+ig_standard_resolution: URL to image, sized 612x612
+ig_latitude: latitude data, if available
+ig_longitude: longitude data, if available
+ig_username: the Instagram username of the user whose account the image is from
+ig_full_name: the full name provided by the user whose account the image is from
+ig_profile_picture: URL to the profile image of the user
 
 Tags returned in an unsuccessful Expression Engine loop:
-status: “false”
-error: a string describing the error
+ig_status: “false”
+ig_error_type: a single code word indicating the type of error (NoInstagramApp, MissingReqParameter, UnauthorizedUser issued by Pic Puller. Other codes are passed through from Instagram.)
+ig_error_message: a string describing the error
 
 # User information
 
@@ -97,20 +105,21 @@ Optional parameters:
 use_stale_cache: either ‘yes’ or ‘no’ (defaults to ‘yes’ if undefined)
 
 Tags returned in a successful Expression Engine loop:
-status: “true” or “false” — “true” when valid results returned
-username: the Instagram username
-id: the Instagram user id
-bio: biography information provided by the Instagram user
-profile_picture: URL to the profile image of the user
-website: the website URL provided by the user on Instagram
-full_name: the full name provided by the user on Instagram
-counts_media: the number of images in this user’s Instagram feed in total
-counts_followed_by: the number of users who follow this user on Instagram
-counts_follows: the number of users this user follows on Instagram
+ig_status: “true” or “false” — “true” when valid results returned
+ig_username: the Instagram username
+ig_id: the Instagram user id
+ig_bio: biography information provided by the Instagram user
+ig_profile_picture: URL to the profile image of the user
+ig_website: the website URL provided by the user on Instagram
+ig_full_name: the full name provided by the user on Instagram
+ig_counts_media: the number of images in this user’s Instagram feed in total
+ig_counts_followed_by: the number of users who follow this user on Instagram
+ig_counts_follows: the number of users this user follows on Instagram
 
 Tags returned in an unsuccessful Expression Engine loop:
-status: “false”
-error: a string describing the error
+ig_status: “false”
+ig_error_type: a single code word indicating the type of error (NoInstagramApp, MissingReqParameter, UnauthorizedUser issued by Pic Puller. Other codes are passed through from Instagram.)
+ig_error_message: a string describing the error
 
 # User feed
 
@@ -126,31 +135,32 @@ Required parameters:
 user_id: This is the ID number of an Expression Engine user. (It is not the Instagram user id number.)
 
 Optional parameters:
-limit: an integer that determines how many images to return. Maximum of 32 allowed by Instagram.
+limit: an integer for how many images to request from Instagram. Instagram may return fewer under some circumstances. Maximum of 32 allowed by Instagram.
 use_stale_cache: either ‘yes’ or ‘no’ (defaults to ‘yes’ if undefined)
 max_id: an integer used to determine pagination of results. (See next_max_id in the ‘Tags returned’ below section for more information.)
 
 Tags returned in a successful Expression Engine loop:
-status: “true” or “false” — “true” when valid results returned
-media_id: the Instagram unique media ID for the image
-created_time: time stamp of image creation time, Unix timestamp formated
-link: URL of the images homepage on Instagram
-caption: The caption provided by the author. Note, it may be left untitled which will return an empty string.
-thumbnail: URL to image, sized 150x150
-low_resolution: URL to image, sized 306x306
-standard_resolution: URL to image, sized 612x612
-latitude: latitude data, if available
-longitude: longitude data, if available
-next_max_id: an integer, provided by Instagram, used to return the next set in the same series of images. Pass this value into the max_id parameter of the loop to get the next page of results.
-user_id: the Instagram user ID of the user whose account the image is from
-username: the Instagram username of the user whose account the image is from
-profile_picture: URL to the profile image of the user
-website: the website URL provided by the user whose account the image is from
-full_name: the full name provided by the user whose account the image is from
+ig_status: “true” or “false” — “true” when valid results returned
+ig_media_id: the Instagram unique media ID for the image
+ig_created_time: time stamp of image creation time, Unix timestamp formatted
+ig_link: URL of the images homepage on Instagram
+ig_caption: The caption provided by the author. Note, it may be ig_left untitled which will return an empty string.
+ig_thumbnail: URL to image, sized 150x150
+ig_low_resolution: URL to image, sized 306x306
+ig_standard_resolution: URL to image, sized 612x612
+ig_latitude: latitude data, if available
+ig_longitude: longitude data, if available
+ig_next_max_id: an integer, provided by Instagram, used to return the next set in the same series of images. Pass this value into the max_id parameter of the loop to get the next page of results.
+ig_user_id: the Instagram user ID of the user whose account the image is from
+ig_username: the Instagram username of the user whose account the image is from
+ig_profile_picture: URL to the profile image of the user
+ig_website: the website URL provided by the user whose account the image is from
+ig_full_name: the full name provided by the user whose account the image is from
 
 Tags returned in an unsuccessful Expression Engine loop:
-status: “false”
-error: a string describing the error
+ig_status: “false”
+ig_error_type: a single code word indicating the type of error (NoInstagramApp, MissingReqParameter, UnauthorizedUser issued by Pic Puller. Other codes are passed through from Instagram.)
+ig_error_message: a string describing the error
 
 # Recent media
 
@@ -166,26 +176,27 @@ Required parameters:
 user_id: the Expression Engine user id (not an Instagram user id)
 
 Optional parameters:
-limit: an integer that determines how many images to return. Maximum of 32 allowed by Instagram.
+limit: an integer for how many images to request from Instagram. Instagram may return fewer under some circumstances. Maximum of 32 allowed by Instagram.
 use_stale_cache: either ‘yes’ or ‘no’ (defaults to ‘yes’ if undefined)
 max_id: an integer used to determine pagination of results. (See next_max_id in the ‘Tags returned’ below section for more information.)
 
 Tags returned in a successful Expression Engine loop:
-status: a string of “true” is returned when data is returned
-media_id: the Instagram unique media ID for the image
-created_time: time stamp of image creation time, Unix timestamp formattede
-link: URL of the images homepage on Instagram
-caption: The caption provided by the author. Note, it may be left untitled which will return an empty string.
-thumbnail: URL to image, sized 150x150
-low_resolution: URL to image, sized 306x306
-standard_resolution: URL to image, sized 612x612
-latitude: latitude data, if available
-longitude: longitude data, if available
-next_max_id: an integer, provided by Instagram, used to return the next set in the same series of images. Pass this value into the max_id parameter of the loop to get the next page of results.
+ig_status: a string of “true” is returned when data is returned
+ig_media_id: the Instagram unique media ID for the image
+ig_created_time: time stamp of image creation time, Unix timestamp formatted
+ig_link: URL of the images homepage on Instagram
+ig_caption: The caption provided by the author. Note, it may be left untitled which will return an empty string.
+ig_thumbnail: URL to image, sized 150x150
+ig_low_resolution: URL to image, sized 306x306
+ig_standard_resolution: URL to image, sized 612x612
+ig_latitude: latitude data, if available
+ig_longitude: longitude data, if available
+ig_next_max_id: an integer, provided by Instagram, used to return the next set in the same series of images. Pass this value into the max_id parameter of the loop to get the next page of results.
 
 Tags returned in an unsuccessful Expression Engine loop:
-status: “false”
-error: a string describing the error
+ig_status: “false”
+ig_error_type: a single code word indicating the type of error (NoInstagramApp, MissingReqParameter, UnauthorizedUser issued by Pic Puller. Other codes are passed through from Instagram.)
+ig_error_message: a string describing the error
 
 # Liked image feed
 
@@ -201,32 +212,33 @@ Required parameters:
 user_id: the Expression Engine user id (not an Instagram user id)
 
 Optional parameters:
-limit: an integer that determines how many images to return. Maximum of 32 allowed by Instagram.
+limit: an integer for how many images to request from Instagram. Instagram may return fewer under some circumstances. Maximum of 32 allowed by Instagram.
 use_stale_cache: either ‘yes’ or ‘no’ (defaults to ‘yes’ if undefined)
 max_id: an integer used to determine pagination of results. (See next_max_id in the ‘Tags returned’ below section for more information.)
 
 Tags returned in a successful Expression Engine loop:
-status: a string of “true” is returned when data is returned
-media_id: the Instagram unique media ID for the image
-created_time: time stamp of image creation time, Unix timestamp formatted
-link: URL of the images homepage on Instagram
-caption: The caption provided by the author. Note, it may be left untitled which will return an empty string.
-thumbnail: URL to image, sized 150x150
-low_resolution: URL to image, sized 306x306
-standard_resolution: URL to image, sized 612x612
-latitude: latitude data, if available
-longitude: longitude data, if available
-next_max_id: an integer, provided by Instagram, used to return the next set in the same series of images. Pass this value into the max_id parameter of the loop to get the next page of results.
+ig_status: a string of “true” is returned when data is returned
+ig_media_id: the Instagram unique media ID for the image
+ig_created_time: time stamp of image creation time, Unix timestamp formatted
+ig_link: URL of the images homepage on Instagram
+ig_caption: The caption provided by the author. Note, it may be left untitled which will return an empty string.
+ig_thumbnail: URL to image, sized 150x150
+ig_low_resolution: URL to image, sized 306x306
+ig_standard_resolution: URL to image, sized 612x612
+ig_latitude: latitude data, if available
+ig_longitude: longitude data, if available
+ig_next_max_id: an integer, provided by Instagram, used to return the next set in the same series of images. Pass this value into the max_id parameter of the loop to get the next page of results.
 
-username: the Instagram username of the user whose account the image is from
-full_name: the full name provided by the user whose account the image is from
-profile_picture: URL to the profile image of the user
-website: the website URL provided by the user whose account the image is from
-user_id: the Instagram user ID of the user whose account the image is from
+ig_username: the Instagram username of the user whose account the image is from
+ig_full_name: the full name provided by the user whose account the image is from
+ig_profile_picture: URL to the profile image of the user
+ig_website: the website URL provided by the user whose account the image is from
+ig_user_id: the Instagram user ID of the user whose account the image is from
 
 Tags returned in an unsuccessful Expression Engine loop:
-status: “false”
-error: a string describing the error
+ig_status: “false”
+ig_error_type: a single code word indicating the type of error (NoInstagramApp, MissingReqParameter, UnauthorizedUser issued by Pic Puller. Other codes are passed through from Instagram.)
+ig_error_message: a string describing the error
 
 # Media by tag
 
@@ -235,7 +247,7 @@ error: a string describing the error
 Description:
 Get a list of recently tagged media. Note that this media is ordered by when the media was tagged with this tag, rather than the order it was posted. 
 
-For consistency amongst the tags used in Pic Puller, the ExpressionEngine tags use ‘next_max_id’ for pagination. If you refer to the Instagram documentation, you will see references ‘max_tag_id’ is used for pagination. That does not apply to Pic Puller. Those tags are rewritten by the module to be ‘next_max_id’.
+For consistency amongst the tags used in Pic Puller, the ExpressionEngine tags use ‘ig_next_max_id’ for pagination. If you refer to the Instagram documentation, you will see references ‘max_tag_id’ is used for pagination. That does not apply to Pic Puller. Those tags are rewritten by the module to be ‘ig_next_max_id’.
 
 Instragram docs page for this function:
 http://instagram.com/developer/endpoints/tags/#get_tags_media_recent
@@ -244,31 +256,32 @@ Required parameters:
 user_id: the Expression Engine user id (not an Instagram user id)
 
 Optional parameters:
-limit: an integer that determines how many images to return. Maximum of 32 allowed by Instagram.
+limit: an integer for how many images to request from Instagram. Instagram may return fewer under some circumstances. Maximum of 32 allowed by Instagram.
 use_stale_cache: either ‘yes’ or ‘no’ (defaults to ‘yes’ if undefined)
 max_id: an integer used to determine pagination of results. (See next_max_id in the ‘Tags returned’ below section for more information.)
 
 Tags returned in a successful Expression Engine loop:
-status: “true” or “false” — “true” when valid results returned
-media_id: the Instagram unique media ID for the image
-created_time: time stamp of image creation time, Unix timestamp formated
-link: URL of the images homepage on Instagram
-caption: The caption provided by the author. Note, it may be left untitled which will return an empty string.
-thumbnail: URL to image, sized 150x150
-low_resolution: URL to image, sized 306x306
-standard_resolution: URL to image, sized 612x612
-latitude: latitude data, if available
-longitude: longitude data, if available
-next_max_id: an integer, provided by Instagram, used to return the next set in the same series of images. Pass this value into the max_id parameter of the loop to get the next page of results.
-user_id: the Instagram user ID of the user whose account the image is from
-username: the Instagram username of the user whose account the image is from
-profile_picture: URL to the profile image of the user
-website: the website URL provided by the user whose account the image is from
-full_name: the full name provided by the user whose account the image is from
+ig_status: “true” or “false” — “true” when valid results returned
+ig_media_id: the Instagram unique media ID for the image
+created_time: time stamp of image creation time, Unix timestamp formatted
+ig_link: URL of the images homepage on Instagram
+ig_caption: The caption provided by the author. Note, it may be left untitled which will return an empty string.
+ig_thumbnail: URL to image, sized 150x150
+ig_low_resolution: URL to image, sized 306x306
+ig_standard_resolution: URL to image, sized 612x612
+ig_latitude: latitude data, if available
+ig_longitude: longitude data, if available
+ig_next_max_id: an integer, provided by Instagram, used to return the next set in the same series of images. Pass this value into the max_id parameter of the loop to get the next page of results.
+ig_user_id: the Instagram user ID of the user whose account the image is from
+ig_username: the Instagram username of the user whose account the image is from
+ig_profile_picture: URL to the profile image of the user
+ig_website: the website URL provided by the user whose account the image is from
+ig_full_name: the full name provided by the user whose account the image is from
 
 Tags returned in an unsuccessful Expression Engine loop:
-status: “false”
-error: a string describing the error
+ig_status: “false”
+ig_error_type: a single code word indicating the type of error (NoInstagramApp, MissingReqParameter, UnauthorizedUser issued by Pic Puller. Other codes are passed through from Instagram.)
+ig_error_message: a string describing the error
 
 # Media by ID
 
@@ -290,25 +303,26 @@ Optional parameters:
 use_stale_cache: either ‘yes’ or ‘no’ (defaults to ‘yes’ if undefined)
 
 Tags returned in a successful Expression Engine loop:
-status: a string of “true” is returned when data is returned
-created_time: time stamp of image creation time, Unix timestamp formatted
-link: URL of the images homepage on Instagram
-caption: The caption provided by the author. Note, it may be left untitled which will return an empty string.
-thumbnail: URL to image, sized 150x150
-low_resolution: URL to image, sized 306x306
-standard_resolution: URL to image, sized 612x612
-latitude: latitude data, if available
-longitude: longitude data, if available
-username: the Instagram username of the user whose account the image is from
-user_id: the Instagram user id of the user whose account the image is from
-full_name: the full name provided by the user whose account the image is from
-profile_picture: URL to the profile image of the user
-website: the website information whose account the image is from, if available
-likes: number of likes for piece of media
+ig_status: a string of “true” is returned when data is returned
+ig_created_time: time stamp of image creation time, Unix timestamp formatted
+ig_link: URL of the images homepage on Instagram
+ig_caption: The caption provided by the author. Note, it may be left untitled which will return an empty string.
+ig_thumbnail: URL to image, sized 150x150
+ig_low_resolution: URL to image, sized 306x306
+ig_standard_resolution: URL to image, sized 612x612
+ig_latitude: latitude data, if available
+ig_longitude: longitude data, if available
+ig_username: the Instagram username of the user whose account the image is from
+ig_user_id: the Instagram user id of the user whose account the image is from
+ig_full_name: the full name provided by the user whose account the image is from
+ig_profile_picture: URL to the profile image of the user
+ig_website: the website information whose account the image is from, if available
+ig_likes: number of likes for piece of media
 
 Tags returned in an unsuccessful Expression Engine loop:
-status: “false”
-error: a string describing the error
+ig_status: “false”
+ig_error_type: a single code word indicating the type of error (NoInstagramApp, MissingReqParameter, UnauthorizedUser issued by Pic Puller. Other codes are passed through from Instagram.)
+ig_error_message: a string describing the error
 
 # Authorization Link for use on ExpressionEngine front end.
 
@@ -353,15 +367,15 @@ There is an HTML file called "sample_frontend_auth_template.html" included with 
 
 # 'Pic Puller for Instagram Browser' Fieldtype
 
-As of version 1.0.0, the 'Pic Puller for Instagram Browser' fieldtype is part of Pic Puller.
+As of version 1.0.0, the 'Pic Puller for Instagram Browser' fieldtype is part of Pic Puller. It will allow a user who has authorized your Pic Puller application to browse their own photo stream for images. They can select one image and the image browser will populate it's field with the selected image's Instagram media_id.
 
-It's intended use is to be used in conjunction with the Pic Puller 'media' tag pair. The fieldtype will store a media_id from Instagram. The field type assists getting the desired media_id by using a photo browser interface that displays the logged in user's photos.
+The media_id is intended use is to be used in conjunction with the Pic Puller 'media' tag pair. The fieldtype will store a media_id from Instagram. The field type assists getting the desired media_id by using a photo browser interface that displays the logged in user's photos.
 
 Since only users who have authorized Pic Puller can show the media browser, users who have not authorized are shown a message indicating they need to authorize before using the media browser. 
 
 The fieldtype requires javascript. 
 
-The fieldtype compatible with Matrix.
+The fieldtype is compatible with Matrix.
 
 There is a single option for the fieldtype. You can use the default instructional language that the fieldtype will automatically include or you may turn it off. 
 
@@ -379,3 +393,4 @@ The module addresses this issue by using the front-end authorization feature of 
 
 If you manage siteB.com from the same domain, for example siteB.com/admin.php, you will not run into this problem. 
 
+There is an optional authorization method you may try in this situation.The alternate authorization method is intended to get around some stubborn servers that won't allow the normal authorization process, but it has proven useful in this situation as well. This option is available to SuperAdmin level users only under the "Advanced" tab.

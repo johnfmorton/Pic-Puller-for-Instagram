@@ -81,17 +81,23 @@ jQuery is here for debugging purposes only.
 	
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, $jsonurl);
+	// to prevent the response from being outputted
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	// don't verify the SSL cert
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 	$json = curl_exec($ch);
 	curl_close($ch);
+
+	// Need to debug? Uncomment out the following.
 	//echo "<pre>";
 	//print_r($json);
 	//echo "</pre>";
 
 
 	$json_output = json_decode($json);
-	// does the $json_output->data array actually exist? ie, Was there an error getting the data from Instagram?		
+	
+
+	// does the $json_output->data array actually exist? ie, Was there an error getting the data from Instagram?
 	if (is_array($json_output->data)) {
 		$theCount = 0;
 		$new_next_max_id = $json_output->pagination->next_max_id;
