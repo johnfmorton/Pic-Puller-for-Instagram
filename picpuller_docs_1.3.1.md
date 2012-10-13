@@ -1,6 +1,9 @@
 # Change log
 
-1.3.0 - 08SEPT2012
+1.3.1 - 2012OCT13
+- Updated pagination for tagged_media to use 'next_max_id' instead of 'next_max_tag_id' due to 'next_max_tag_id' being deprecated in the Instagram API.
+
+1.3.0 - 2012SEPT08
 - All tags returned by Pic Puller are now prefixed with 'ig_' to avoid naming conflicts. Those updating, please read special note in your downloaded ZIP file on how to keep your current templates working properly.
 - The default prefix 'ig_' can be reset to different string under the 'Active Site App Info' on a per application basis. Each Pic Puller app, in an MSM set up, can have its own prefix.
 - New tag added to all return loops. 'ig_cacheddata' will respond 'yes' when cached data is being returned, and 'no' when live data from Instagram is being returned.

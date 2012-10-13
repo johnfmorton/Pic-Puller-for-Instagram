@@ -994,8 +994,8 @@ class Ig_picpuller {
 		$node = $data['data'];
 		
 		$next_max_id = '';
-		if (isset($data['pagination']['next_max_tag_id'])){
-			$next_max_id = $data['pagination']['next_max_tag_id'];
+		if (isset($data['pagination']['next_max_id'])){
+			$next_max_id = $data['pagination']['next_max_id'];
 		}
 		/*
 		echo '<pre>';
