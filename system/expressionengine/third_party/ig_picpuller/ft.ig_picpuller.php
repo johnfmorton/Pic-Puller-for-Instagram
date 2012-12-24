@@ -23,6 +23,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 	{
 		$this->EE->cp->load_package_css('colorbox');
 		$this->EE->cp->load_package_js('jquery.ppcolorbox-min');
+		$this->EE->cp->load_package_js('jquery.lockSubmit');
 		$this->EE->cp->load_package_js('jquery-ui-1.8.17.custom.min');
 		$this->EE->cp->load_package_js('scripts');
 
@@ -41,6 +42,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 		
 		if ($oauth != '') {
 			$pp_select = $pp_theme_views.'pp_select.php?access_token='.$oauth; //.'&target_field='.$this->field_name;
+			$pp_search = $pp_theme_views.'pp_search.php?access_token='.$oauth; //.'&target_field='.$this->field_name;
 
 			if ($this->settings['display_pp_instructions'] === 'yes') {
 				$instructions = '<div class="instruction_text"><p style="margin-left: 1px;">'.lang('default_instructions').'</p></div>';
@@ -52,7 +54,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 				form_input(array(
 				'name'  => $this->field_name,
 				'value' => $data
-			))."<br><br><a class='igbrowserbt' href='$pp_select' style='display:none;'>".lang('launch_browser')." &raquo;</a>";
+			))."<br><br><a class='igbrowserbt' href='$pp_select' style='display:none;'>".lang('launch_browser')." &raquo;</a>  |  <a class='igsearchbt' href='$pp_search' style='display:none;'>".lang('launch_search_browser')." &raquo;</a>";
 
 			return $input;
 		} 
@@ -94,6 +96,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 		if ($oauth != '') {
 			
 			$pp_select = $pp_theme_views.'pp_select.php?access_token='.$oauth; //.'&target_field='.'id_'.$this->field_id.'_col_'.$this->col_id;
+			$pp_search = $pp_theme_views.'pp_search.php?access_token='.$oauth; 
 
 			if ($this->settings['display_pp_instructions'] === 'yes') {
 				$instructions = '<div class="instruction_text"><p style="margin-left: 0px;">'.lang('default_instructions').'</p></div>';
@@ -102,7 +105,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 			}
 
 			$html = $instructions.'<input value="'.$data.'" name="'.$this->cell_name.'" style="width: 90%; padding: 2px; margin: 5px 0;"><br>
-				<a class="igbrowserbtmatrix" href="'.$pp_select.'" style="display:none;">'.lang('launch_browser').' &raquo;</a>';
+				<a class="igbrowserbtmatrix" href="'.$pp_select.'" style="display:none;">'.lang('launch_browser').' &raquo;</a> | <a class="igsearchbtmatrix" href="'.$pp_search.'" style="display:none;">'.lang('launch_search_browser').' &raquo;</a>';
 			return $html;
 		} 
 		else 

@@ -30,7 +30,9 @@ $lang = array(
 
 	'unauthorized_field_type_access'=> 'You must authorize this ExpressionEngine user account with your Instagram account before you can browse for an image from your photo stream.',
 
-	'launch_browser' => 'Launch Instagram Browser',
+	'launch_browser' => 'Browse your Instagram images',
+
+	'launch_search_browser' => 'Search Instagram images',
 
 	'preference' => 'Pic Puller for Instagram Browser preferences'
 		
