@@ -1,5 +1,8 @@
 # Change log
 
+1.4.1 - 2012DEC27
+-Fixed an issue where pre-existing field type, made prior to version 1.4.0 of Pic Puller, would display global preference instead of local preference in the edit screen.
+
 1.4.0 - 2012DEC25
 -Pic Puller for Instagram Browser field type updated.
 -Field type now supports tag search of all Instagram

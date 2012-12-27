@@ -4,7 +4,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 	
 	var $info = array(
 		'name'		=> 'Pic Puller for Instagram Browser',
-		'version'	=> '1.4.0'
+		'version'	=> '1.4.1'
 	);
 
 	static $counter = 0;
@@ -304,11 +304,16 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 
 		// Get the instructions prefs
 		// Check to see if particular field has settings for this particular instance
-		if(isset($this->settings['display_pp_instructions'])) {
-			$display_pp_instructions = $this->settings['display_pp_instructions'];
+		
+		// echo '<pre>';
+		// print_r($data['display_pp_instructions']);
+		// echo '</pre>';
+		
+		if(isset($data['display_pp_instructions'])) {
+			$display_pp_instructions = $data['display_pp_instructions'];
 		} else {
 			// if no settings are found, try to use the global settings, if those are not present, default to "yes"
-			$display_pp_instructions = isset($data['display_pp_instructions']) ? $data['display_pp_instructions'] : 'yes';
+			$display_pp_instructions = isset($this->settings['display_pp_instructions']) ? $this->settings['display_pp_instructions'] : 'yes';
 		}
 
 		$checked_instr = TRUE; 
@@ -329,17 +334,16 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 			'checked' => !$checked_instr
 		);
 
-		// echo '<pre>';
-		// print_r($this->settings);
-		// echo '</pre>';
+		
 
 		// Get the personal stream browser prefs 
 		// Check to see if particular field has settings for this particular instance
-		if(isset($this->settings['display_pp_stream'])) {
-			$display_pp_stream = $this->settings['display_pp_stream'];
+		
+		if(isset($data['display_pp_stream'])) {
+			$display_pp_stream = $data['display_pp_stream'];
 		} else {
 			// if no settings are found, try to use the global settings, if those are not present, default to "yes"
-			$display_pp_stream = isset($data['display_pp_stream']) ? $data['display_pp_stream'] : 'yes';
+			$display_pp_stream = isset($this->settings['display_pp_stream']) ? $this->settings['display_pp_stream'] : 'yes';
 		}
 
 		$checked_stream = TRUE; 
@@ -360,13 +364,15 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 			'checked' => !$checked_stream
 		);
 
+
 		// Get the search browser prefs
 		// Check to see if particular field has settings for this particular instance
-		if(isset($this->settings['display_pp_search'])) {
-			$display_pp_search = $this->settings['display_pp_search'];
+		
+		if(isset($data['display_pp_search'])) {
+			$display_pp_search = $data['display_pp_search'];
 		} else {
 			// if no settings are found, try to use the global settings, if those are not present, default to "yes"
-			$display_pp_search = isset($data['display_pp_search']) ? $data['display_pp_search'] : 'yes';
+			$display_pp_search = isset($this->settings['display_pp_search']) ? $this->settings['display_pp_search'] : 'yes';
 		}
 
 		$checked_search = TRUE; 
@@ -387,11 +393,9 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 			'checked' => !$checked_search
 		);
 
-
-
 		$this->EE->table->add_row(
 			lang('display_instructions_option_text', 'display_instructions_option_text'),
-			'Yes: '.form_radio($radio1).NBS.' No: '.form_radio($radio2)
+			'Yes: '.form_radio($radio1).NBS.NBS.' No: '.form_radio($radio2)
 		);
 
 		$this->EE->table->add_row(
@@ -416,11 +420,11 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 		
 		// Get the instructions prefs
 		// Check to see if particular field has settings for this particular instance
-		if(isset($this->settings['display_pp_instructions'])) {
-			$display_pp_instructions = $this->settings['display_pp_instructions'];
+		if(isset($data['display_pp_instructions'])) {
+			$display_pp_instructions = $data['display_pp_instructions'];
 		} else {
 			// if no settings are found, try to use the global settings, if those are not present, default to "yes"
-			$display_pp_instructions = isset($data['display_pp_instructions']) ? $data['display_pp_instructions'] : 'yes';
+			$display_pp_instructions = isset($this->settings['display_pp_instructions']) ? $this->settings['display_pp_instructions'] : 'yes';
 		}
 		
 		$checked_instr = TRUE; 
@@ -443,11 +447,11 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 
 		// Get the personal stream browser prefs 
 		// Check to see if particular field has settings for this particular instance
-		if(isset($this->settings['display_pp_stream'])) {
-			$display_pp_stream = $this->settings['display_pp_stream'];
+		if(isset($data['display_pp_stream'])) {
+			$display_pp_stream = $data['display_pp_stream'];
 		} else {
 			// if no settings are found, try to use the global settings, if those are not present, default to "yes"
-			$display_pp_stream = isset($data['display_pp_stream']) ? $data['display_pp_stream'] : 'yes';
+			$display_pp_stream = isset($this->settings['display_pp_stream']) ? $this->settings['display_pp_stream'] : 'yes';
 		}
 
 		$checked_stream = TRUE; 
@@ -470,11 +474,11 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 
 		// Get the search browser prefs
 		// Check to see if particular field has settings for this particular instance
-		if(isset($this->settings['display_pp_search'])) {
-			$display_pp_search = $this->settings['display_pp_search'];
+		if(isset($data['display_pp_search'])) {
+			$display_pp_search = $data['display_pp_search'];
 		} else {
 			// if no settings are found, try to use the global settings, if those are not present, default to "yes"
-			$display_pp_search = isset($data['display_pp_search']) ? $data['display_pp_search'] : 'yes';
+			$display_pp_search = isset($this->settings['display_pp_search']) ? $this->settings['display_pp_search'] : 'yes';
 		}
 
 		$checked_search = TRUE; 
@@ -498,15 +502,15 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 		return array(
 		array (  
 			lang('display_instructions_option_text', 'display_instructions_option_text') ,
-			'Yes: '.form_radio($radio1).NBS.' No: '.form_radio($radio2)
+			'Yes: '.form_radio($radio1).NBS.NBS.' No: '.form_radio($radio2)
 			 ),
 		array (
 			lang('display_personal_stream_option_text', 'display_personal_stream_option_text'),
-			'Yes: '.form_radio($radio3).NBS.' No: '.form_radio($radio4)
+			'Yes: '.form_radio($radio3).NBS.NBS.' No: '.form_radio($radio4)
 			),
 		array (
 			lang('display_search_option_text', 'display_search_option_text'),
-			'Yes: '.form_radio($radio5).NBS.' No: '.form_radio($radio6)
+			'Yes: '.form_radio($radio5).NBS.NBS.' No: '.form_radio($radio6)
 			)
 		);
 
