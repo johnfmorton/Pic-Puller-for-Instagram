@@ -65,7 +65,7 @@ $target_field = $_GET["target_field"];
 	http://blog.leenix.co.uk/2009/09/jquery-plugin-locksubmit-stop-submit.html
 
 	-->
-	<link rel="stylesheet" href="<?=$third_party_theme_dir;?>themes/base/jquery.ui.all.css">
+	<link rel="stylesheet" href="<?php echo $third_party_theme_dir;?>themes/base/jquery.ui.all.css">
 	<style type="text/css">
 
 	#ig_search_field {
@@ -141,6 +141,8 @@ $target_field = $_GET["target_field"];
 		color: #1e2a32;
 		font-size: 12px;
 		margin-bottom: 10px;
+		height: 70px;
+		overflow: hidden;
 	}
 
 	#ig_pp .scroll-bar {
@@ -172,14 +174,17 @@ $target_field = $_GET["target_field"];
 		// make search button work, but check to be sure the listener isn't already bound to the ppcboxTitle from
 		// a previous search instance
 		if ($("#ppcboxTitle").data('events') == null){
-		$('#ppcboxTitle').delegate('#ig_search_button', "click", function(event) {
-			console.log(event);
-			console.log('You clicked the search button: ' + $('#ig_search_field').val());
-			event.preventDefault();
-			$("#ig_search_button").attr("disabled", true);
-			executeSearch($('#ig_search_field').val());
-		});
+			$('#ppcboxTitle').delegate('#ig_search_button', "click", function(event) {
+				console.log(event);
+				console.log('You clicked the search button: ' + $('#ig_search_field').val());
+				event.preventDefault();
+				$("#ig_search_button").attr("disabled", true);
+				executeSearch($('#ig_search_field').val());
+			});
+			
 		}
+
+		// Make the scroll bar work using jQuery UI
 
 		$('.scroll-bar').slider({
 			orientation: 'vertical',
@@ -208,6 +213,7 @@ $target_field = $_GET["target_field"];
 			$.ppcolorbox.close();
 			return false;
 		});
+		
 
 		function executeSearch(tag_to_search) {
 			console.log('executeSearch fired');
@@ -253,11 +259,11 @@ $target_field = $_GET["target_field"];
 
 					$("#ig_search_field").val('');
 
-					// if ($("#ig_search_field").val() != ''){
-					// 	$("#ig_search_button").attr("disabled", false);
-					// } else {
-					// 	$("#ig_search_button").attr("disabled", true);
-					// }
+					if ($("#ig_search_field").val() != ''){
+						$("#ig_search_button").attr("disabled", false);
+					} else {
+						$("#ig_search_button").attr("disabled", true);
+					}
 					
 				},
 				statusCode: {
@@ -284,7 +290,7 @@ $target_field = $_GET["target_field"];
 <div id='ig_pp' class="scroll-area searchversion">
 
 	<div class="scroll-content">
-		<!-- <div>Search for a single tag: <input type="text" name="ig_tag"></div> -->
+		<div id='ig_search_feedback'></div>
 		
 	</div>
 	<div class="scroll-bar-wrap">

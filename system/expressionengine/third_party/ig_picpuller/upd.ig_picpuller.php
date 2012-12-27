@@ -26,7 +26,7 @@
 
 class Ig_picpuller_upd {
 	
-	public $version = '1.3.9';
+	public $version = '1.4.0';
 	
 	private $EE;
 	
@@ -94,7 +94,6 @@ class Ig_picpuller_upd {
 			'oauth' 			=> array('type' => 'varchar', 'constraint' => '255', 'null' => TRUE, 'default' => NULL),
 			'app_id' 			=> array('type' => 'INT', 'length' => '9', 'auto_increment' => FALSE, 'null' => TRUE)
 		);
-
 
 		$this->EE->dbforge->add_field($fields);
 		$this->EE->dbforge->create_table('ig_picpuller_oauths');

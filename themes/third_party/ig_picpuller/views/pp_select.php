@@ -61,7 +61,7 @@ $target_field = $_GET["target_field"];
 	It's loaded from within the system/third_party/ig_picpuller 
 	directly into the control panel.
 	-->
-	<link rel="stylesheet" href="<?=$third_party_theme_dir;?>themes/base/jquery.ui.all.css">
+	<link rel="stylesheet" href="<?php echo $third_party_theme_dir;?>themes/base/jquery.ui.all.css">
 	<style type="text/css">
 	#ig_pp.scroll-area {
 			position: relative;
@@ -131,6 +131,8 @@ $target_field = $_GET["target_field"];
 		color: #1e2a32;
 		font-size: 12px;
 		margin-bottom: 10px;
+		height: 70px;
+		overflow: hidden;
 	}
 
 	#ig_pp .scroll-bar {

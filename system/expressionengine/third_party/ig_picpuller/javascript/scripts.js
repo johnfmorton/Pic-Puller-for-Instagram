@@ -6,9 +6,7 @@ $(function() {
 	$('.igbrowserbt').show();
 	$('.igbrowserbt').ppcolorbox({width:"830px", height:"525px", title: 'Choose a photo from your Instagram feed',
 				onOpen: function() {
-						//$(this).parent().$('input').attr('id', 'activePPtarget');
 						$(this).parent().find('input').attr('id', 'activePPtarget');
-						//console.log($(this).parent().find('input'));
 					},
 				onCleanup: function() {
 						$('#activePPtarget').removeAttr('id');
@@ -19,15 +17,13 @@ $(function() {
 	$('.igsearchbt').show();
 	$('.igsearchbt').ppcolorbox({width:"830px", height:"525px", title: '<input type="text" id="ig_search_field" name="ig_tag" placeholder="Search for a single tag"><input type="submit" id="ig_search_button" value="Search">',
 				onOpen: function() {
-						//$(this).parent().$('input').attr('id', 'activePPtarget');
 						$(this).parent().find('input').attr('id', 'activePPtarget');
-						//console.log($(this).parent().find('input'));
 					},
 				onComplete: function() {
 					$("#ig_search_button").attr("disabled", true);
 
 					$("#ig_search_field").keyup(function(event) {
-						console.log('testing search field : ' + $("#ig_search_field").val());
+						//console.log('testing search field : ' + $("#ig_search_field").val());
 						if($("#ig_search_field").val() != '') {
 							$("#ig_search_button").attr("disabled", false);
 						} else {
@@ -69,16 +65,23 @@ $(function() {
 							//$(this).prev().attr('id', 'activePPtarget');
 							$(this).parent().find('input').attr('id', 'activePPtarget');
 						},
+					onComplete: function() {
+					$("#ig_search_button").attr("disabled", true);
+
+					$("#ig_search_field").keyup(function(event) {
+						console.log('testing search field : ' + $("#ig_search_field").val());
+						if($("#ig_search_field").val() != '') {
+							$("#ig_search_button").attr("disabled", false);
+						} else {
+							$("#ig_search_button").attr("disabled", true);
+						}
+					});
+				},
 					onCleanup: function() {
 							$('#activePPtarget').removeAttr('id');
 						}
 					});
 		});
 	}
-
-	
-
-
-
 });
 

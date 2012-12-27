@@ -4,7 +4,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 	
 	var $info = array(
 		'name'		=> 'Pic Puller for Instagram Browser',
-		'version'	=> '1.3.0'
+		'version'	=> '1.4.0'
 	);
 
 	static $counter = 0;
@@ -22,8 +22,8 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 	function display_field($data)
 	{
 		$this->EE->cp->load_package_css('colorbox');
+		$this->EE->cp->load_package_css('style');
 		$this->EE->cp->load_package_js('jquery.ppcolorbox-min');
-		$this->EE->cp->load_package_js('jquery.lockSubmit');
 		$this->EE->cp->load_package_js('jquery-ui-1.8.17.custom.min');
 		$this->EE->cp->load_package_js('scripts');
 
@@ -50,11 +50,41 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 				$instructions = '';
 			}
 
+			// Check to see if particular field has settings for this particular instance
+
+			if(isset($this->settings['display_pp_stream'])) {
+				$display_pp_stream = $this->settings['display_pp_stream'];
+			} else {
+				// if no settings are found, try to use the global settings, if those are not present, default to "yes"
+				$display_pp_stream = isset($data['display_pp_stream']) ? $data['display_pp_stream'] : 'yes';
+			}
+
+			if ($display_pp_stream === 'yes') {
+				$stream_button = "<a class='igbrowserbt' href='$pp_select' style='display:none;'>".lang('launch_browser')." &raquo;</a> ";
+			} else {
+				$stream_button = '';
+			}
+
+			// Check to see if particular field has settings for this particular instance
+
+			if(isset($this->settings['display_pp_search'])) {
+				$display_pp_search = $this->settings['display_pp_search'];
+			} else {
+				// if no settings are found, try to use the global settings, if those are not present, default to "yes"
+				$display_pp_search = isset($data['display_pp_search']) ? $data['display_pp_search'] : 'yes';
+			}
+
+			if ($display_pp_search === 'yes') {
+				$search_button = "<a class='igsearchbt' href='$pp_search' style='display:none;'>".lang('launch_search_browser')." &raquo;</a>";
+			} else {
+				$search_button = '';
+			}
+
 			$input = $instructions . '<br>' .
 				form_input(array(
 				'name'  => $this->field_name,
 				'value' => $data
-			))."<br><br><a class='igbrowserbt' href='$pp_select' style='display:none;'>".lang('launch_browser')." &raquo;</a>  |  <a class='igsearchbt' href='$pp_search' style='display:none;'>".lang('launch_search_browser')." &raquo;</a>";
+			))."<br><br>$stream_button$search_button";
 
 			return $input;
 		} 
@@ -78,6 +108,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 		$this->EE->cp->load_package_css('colorbox');
 		$this->EE->cp->load_package_js('jquery.ppcolorbox-min');
 		$this->EE->cp->load_package_js('jquery-ui-1.8.17.custom.min');
+		$this->EE->cp->load_package_css('style');
 		$this->EE->cp->load_package_js('scripts');
 
 		$this->EE->lang->loadfile('ig_picpuller');
@@ -104,8 +135,36 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 				$instructions = '';
 			}
 
-			$html = $instructions.'<input value="'.$data.'" name="'.$this->cell_name.'" style="width: 90%; padding: 2px; margin: 5px 0;"><br>
-				<a class="igbrowserbtmatrix" href="'.$pp_select.'" style="display:none;">'.lang('launch_browser').' &raquo;</a> | <a class="igsearchbtmatrix" href="'.$pp_search.'" style="display:none;">'.lang('launch_search_browser').' &raquo;</a>';
+			// Check to see if particular Matrix field has settings for this particular instance
+			 
+			if(isset($this->settings['display_pp_stream'])) {
+				$display_pp_stream = $this->settings['display_pp_stream'];
+			} else {
+				// if no settings are found, try to use the global settings, if those are not present, default to "yes"
+				$display_pp_stream = isset($data['display_pp_stream']) ? $data['display_pp_stream'] : 'yes';
+			}
+
+			if ($display_pp_stream === 'yes') {
+				$stream_button = "<a class='igbrowserbtmatrix' href='$pp_select' style='display:none;'>".lang('launch_browser')." &raquo;</a> ";
+			} else {
+				$stream_button = '';
+			}
+
+			// Check to see if particular Matrix field has settings for this particular instance
+
+			if(isset($this->settings['display_pp_search'])) {
+				$display_pp_search = $this->settings['display_pp_search'];
+			} else {
+				// if no settings are found, try to use the global settings, if those are not present, default to "yes"
+				$display_pp_search = isset($data['display_pp_search']) ? $data['display_pp_search'] : 'yes';
+			}
+
+			if ($display_pp_search === 'yes') {
+				$search_button = "<a class='igsearchbtmatrix' href='$pp_search' style='display:none;'>".lang('launch_search_browser')." &raquo;</a>";
+			} else {
+				$search_button = '';
+			}
+			$html = $instructions.'<input value="'.$data.'" name="'.$this->cell_name.'" style="width: 90%; padding: 2px; margin: 5px 0;"><br>'.$stream_button.$search_button;
 			return $html;
 		} 
 		else 
@@ -132,24 +191,70 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 
 		$val = array_merge($this->settings, $_POST);
 
-		$display_pp_instructions = $val['display_pp_instructions'];
+		// Get the instructions prefs
+		// See if there are global setting set for this option, if not, default to "yes"
+		$display_pp_instructions = isset($val['display_pp_instructions']) ? $val['display_pp_instructions'] : 'yes';
 
-		$checked = TRUE; 
+		$checked_instr = TRUE; 
 
 		if ($display_pp_instructions === 'no') {
-			$checked = FALSE;
+			$checked_instr = FALSE;
 		}
 
 		$radio1 = array(
 			'name' => 'display_pp_instructions',
 			'value' => 'yes',
-			'checked' => $checked
+			'checked' => $checked_instr
 		);
 
 		$radio2 = array(
 			'name' => 'display_pp_instructions',
 			'value' => 'no',
-			'checked' => !$checked
+			'checked' => !$checked_instr
+		);
+
+		// Get the personal stream browser prefs 
+		// See if there are global setting set for this option, if not, default to "yes"
+		$display_pp_stream = isset($val['display_pp_stream']) ? $val['display_pp_stream'] : 'yes';
+
+		$checked_stream = TRUE; 
+		
+		if ($display_pp_stream === 'no') {
+			$checked_stream = FALSE;
+		}
+
+		$radio3 = array(
+			'name' => 'display_pp_stream',
+			'value' => 'yes',
+			'checked' => $checked_stream
+		);
+
+		$radio4 = array(
+			'name' => 'display_pp_stream',
+			'value' => 'no',
+			'checked' => !$checked_stream
+		);
+
+		// Get the search browser prefs
+		// See if there are global setting set for this option, if not, default to "yes"
+		$display_pp_search = isset($val['display_pp_search']) ? $val['display_pp_search'] : 'yes';
+
+		$checked_search = TRUE; 
+		
+		if ($display_pp_search === 'no') {
+			$checked_search = FALSE;
+		}
+
+		$radio5 = array(
+			'name' => 'display_pp_search',
+			'value' => 'yes',
+			'checked' => $checked_search
+		);
+
+		$radio6 = array(
+			'name' => 'display_pp_search',
+			'value' => 'no',
+			'checked' => !$checked_search
 		);
 
 		$this->EE->table->set_template(array(
@@ -163,6 +268,16 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 		$this->EE->table->add_row(
 			lang('display_instructions_option_text', 'display_instructions_option_text'),
 			 'Yes: '.form_radio($radio1).NBS.NBS.' No: '.form_radio($radio2)
+		);
+
+		$this->EE->table->add_row(
+			lang('display_personal_stream_option_text', 'display_personal_stream_option_text'),
+			 'Yes: '.form_radio($radio3).NBS.NBS.' No: '.form_radio($radio4)
+		);
+
+		$this->EE->table->add_row(
+			lang('display_search_option_text', 'display_search_option_text'),
+			 'Yes: '.form_radio($radio5).NBS.NBS.' No: '.form_radio($radio6)
 		);
 
 		return $this->EE->table->generate();
@@ -186,29 +301,107 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 	function display_settings($data)
 	{
 		$this->EE->lang->loadfile('ig_picpuller');
-		$display_pp_instructions = isset($data['display_pp_instructions']) ? $data['display_pp_instructions'] : $this->settings['display_pp_instructions'];
 
-		$checked = TRUE; 
+		// Get the instructions prefs
+		// Check to see if particular field has settings for this particular instance
+		if(isset($this->settings['display_pp_instructions'])) {
+			$display_pp_instructions = $this->settings['display_pp_instructions'];
+		} else {
+			// if no settings are found, try to use the global settings, if those are not present, default to "yes"
+			$display_pp_instructions = isset($data['display_pp_instructions']) ? $data['display_pp_instructions'] : 'yes';
+		}
+
+		$checked_instr = TRUE; 
 
 		if ($display_pp_instructions === 'no') {
-			$checked = FALSE;
+			$checked_instr = FALSE;
 		}
 
 		$radio1 = array(
 			'name' => 'display_pp_instructions',
 			'value' => 'yes',
-			'checked' => $checked
+			'checked' => $checked_instr
 		);
 
 		$radio2 = array(
 			'name' => 'display_pp_instructions',
 			'value' => 'no',
-			'checked' => !$checked
+			'checked' => !$checked_instr
+		);
+
+		// echo '<pre>';
+		// print_r($this->settings);
+		// echo '</pre>';
+
+		// Get the personal stream browser prefs 
+		// Check to see if particular field has settings for this particular instance
+		if(isset($this->settings['display_pp_stream'])) {
+			$display_pp_stream = $this->settings['display_pp_stream'];
+		} else {
+			// if no settings are found, try to use the global settings, if those are not present, default to "yes"
+			$display_pp_stream = isset($data['display_pp_stream']) ? $data['display_pp_stream'] : 'yes';
+		}
+
+		$checked_stream = TRUE; 
+
+		if ($display_pp_stream === 'no') {
+			$checked_stream = FALSE;
+		}
+
+		$radio3 = array(
+			'name' => 'display_pp_stream',
+			'value' => 'yes',
+			'checked' => $checked_stream
+		);
+
+		$radio4 = array(
+			'name' => 'display_pp_stream',
+			'value' => 'no',
+			'checked' => !$checked_stream
+		);
+
+		// Get the search browser prefs
+		// Check to see if particular field has settings for this particular instance
+		if(isset($this->settings['display_pp_search'])) {
+			$display_pp_search = $this->settings['display_pp_search'];
+		} else {
+			// if no settings are found, try to use the global settings, if those are not present, default to "yes"
+			$display_pp_search = isset($data['display_pp_search']) ? $data['display_pp_search'] : 'yes';
+		}
+
+		$checked_search = TRUE; 
+
+		if ($display_pp_search === 'no') {
+			$checked_search = FALSE;
+		}
+
+		$radio5 = array(
+			'name' => 'display_pp_search',
+			'value' => 'yes',
+			'checked' => $checked_search
+		);
+
+		$radio6 = array(
+			'name' => 'display_pp_search',
+			'value' => 'no',
+			'checked' => !$checked_search
+		);
+
+
+
+		$this->EE->table->add_row(
+			lang('display_instructions_option_text', 'display_instructions_option_text'),
+			'Yes: '.form_radio($radio1).NBS.' No: '.form_radio($radio2)
 		);
 
 		$this->EE->table->add_row(
-			lang('display_instructions_option_text'),
-			'Yes: '.form_radio($radio1).NBS.' No: '.form_radio($radio2)
+			lang('display_personal_stream_option_text', 'display_personal_stream_option_text'),
+			 'Yes: '.form_radio($radio3).NBS.NBS.' No: '.form_radio($radio4)
+		);
+
+		$this->EE->table->add_row(
+			lang('display_search_option_text', 'display_search_option_text'),
+			 'Yes: '.form_radio($radio5).NBS.NBS.' No: '.form_radio($radio6)
 		);
 	}
 
@@ -220,28 +413,104 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 	function display_cell_settings( $data )
 	{
 		$this->EE->lang->loadfile('ig_picpuller');
-		$display_pp_instructions = isset($data['display_pp_instructions']) ? $data['display_pp_instructions'] : $this->settings['display_pp_instructions'];
-		$checked = TRUE; 
+		
+		// Get the instructions prefs
+		// Check to see if particular field has settings for this particular instance
+		if(isset($this->settings['display_pp_instructions'])) {
+			$display_pp_instructions = $this->settings['display_pp_instructions'];
+		} else {
+			// if no settings are found, try to use the global settings, if those are not present, default to "yes"
+			$display_pp_instructions = isset($data['display_pp_instructions']) ? $data['display_pp_instructions'] : 'yes';
+		}
+		
+		$checked_instr = TRUE; 
 
 		if ($display_pp_instructions === 'no') {
-			$checked = FALSE;
+			$checked_instr = FALSE;
 		}
 
 		$radio1 = array(
 		'name' => 'display_pp_instructions',
 		'value' => 'yes',
-		'checked' => $checked
+		'checked' => $checked_instr
 		);
 
 		$radio2 = array(
 			'name' => 'display_pp_instructions',
 			'value' => 'no',
-			'checked' => !$checked
+			'checked' => !$checked_instr
 		);
+
+		// Get the personal stream browser prefs 
+		// Check to see if particular field has settings for this particular instance
+		if(isset($this->settings['display_pp_stream'])) {
+			$display_pp_stream = $this->settings['display_pp_stream'];
+		} else {
+			// if no settings are found, try to use the global settings, if those are not present, default to "yes"
+			$display_pp_stream = isset($data['display_pp_stream']) ? $data['display_pp_stream'] : 'yes';
+		}
+
+		$checked_stream = TRUE; 
+
+		if ($display_pp_stream === 'no') {
+			$checked_stream = FALSE;
+		}
+
+		$radio3 = array(
+			'name' => 'display_pp_stream',
+			'value' => 'yes',
+			'checked' => $checked_stream
+		);
+
+		$radio4 = array(
+			'name' => 'display_pp_stream',
+			'value' => 'no',
+			'checked' => !$checked_stream
+		);
+
+		// Get the search browser prefs
+		// Check to see if particular field has settings for this particular instance
+		if(isset($this->settings['display_pp_search'])) {
+			$display_pp_search = $this->settings['display_pp_search'];
+		} else {
+			// if no settings are found, try to use the global settings, if those are not present, default to "yes"
+			$display_pp_search = isset($data['display_pp_search']) ? $data['display_pp_search'] : 'yes';
+		}
+
+		$checked_search = TRUE; 
+
+		if ($display_pp_search === 'no') {
+			$checked_search = FALSE;
+		}
+
+		$radio5 = array(
+			'name' => 'display_pp_search',
+			'value' => 'yes',
+			'checked' => $checked_search
+		);
+
+		$radio6 = array(
+			'name' => 'display_pp_search',
+			'value' => 'no',
+			'checked' => !$checked_search
+		);
+
 		return array(
-		array (  lang('display_instructions_option_text') ,
-			'Yes: '.form_radio($radio1).NBS.' No: '.form_radio($radio2) )
+		array (  
+			lang('display_instructions_option_text', 'display_instructions_option_text') ,
+			'Yes: '.form_radio($radio1).NBS.' No: '.form_radio($radio2)
+			 ),
+		array (
+			lang('display_personal_stream_option_text', 'display_personal_stream_option_text'),
+			'Yes: '.form_radio($radio3).NBS.' No: '.form_radio($radio4)
+			),
+		array (
+			lang('display_search_option_text', 'display_search_option_text'),
+			'Yes: '.form_radio($radio5).NBS.' No: '.form_radio($radio6)
+			)
 		);
+
+
 	}
 
 	// --------------------------------------------------------------------
@@ -275,6 +544,8 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 		return array(
 			'ig_media_id' => '',
 			'display_pp_instructions'  => $this->EE->input->post('display_pp_instructions'),
+			'display_pp_stream'  => $this->EE->input->post('display_pp_stream'),
+			'display_pp_search'  => $this->EE->input->post('display_pp_search'),
 			'the_function' => 'media_recent'
 		);
 	}
@@ -293,6 +564,8 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 		return array(
 			'ig_media_id'	=> '',
 			'display_pp_instructions' => 'yes',
+			'display_pp_stream' => 'yes',
+			'display_pp_search' => 'yes',
 			'the_function' => 'media_recent'
 		);
 	}
@@ -365,8 +638,6 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 			return false;
 		}
 	}
-
-
 
 }
 

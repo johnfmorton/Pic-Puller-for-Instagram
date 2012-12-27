@@ -90,7 +90,7 @@ jQuery is here for debugging purposes only.
 
 			// the @ symbol will make this fail silently, so we'll need to check that $json actually is parsable and show alternate images instead
 				
-				// $json = @file_get_contents($jsonurl,0,null,null);
+			// $json = @file_get_contents($jsonurl,0,null,null);
 				
 				$ch = curl_init();
 				curl_setopt($ch, CURLOPT_URL, $jsonurl);
@@ -116,6 +116,7 @@ jQuery is here for debugging purposes only.
 					$theCount = 0;
 					$new_next_max_id = isset($json_output->pagination->next_max_tag_id) ? $json_output->pagination->next_max_tag_id : null;
 					$fullCount = count($json_output->data);
+					if($fullCount >0) {
 					foreach ( $json_output->data as $images )
 					{
 						$theCount ++;
@@ -130,7 +131,7 @@ jQuery is here for debugging purposes only.
 						}
 						echo "<div class='thumbnail' >
 								<img src='$theImage' alt='Instagram image id: $theId' width='100' height='100' border=0 >
-								<div class='headline' >$temp : $theCaption</div>
+								<div class='headline' >$theCaption</div>
 								<a href='#' class='selectbtn' data-id='$theId'>Select this image</a>
 							</div>";
 						if ($theCount == $fullCount && isset($new_next_max_id) ) {
@@ -143,9 +144,22 @@ jQuery is here for debugging purposes only.
 							break;
 						}
 					}
+				} else {
+					echo "<div class='thumbnail'>
+								<div class='headline'>No results for <em>$searchTerm</em>.</div>
+								</div>";
+							
+							break;
+				}
+
 
 				} else {
-					echo "Error: Unable to communicate with Instagram to retreive images.";
+					echo "<div class='thumbnail'>
+								<div class='headline'>No results for <em>$searchTerm</em>.</div>
+								</div>";
+							
+							break;
+					//echo "Error: Unable to communicate with Instagram to retreive images.";
 				}
 
 
@@ -171,9 +185,9 @@ jQuery is here for debugging purposes only.
 			curl_close($ch);
 
 			// Need to debug? Uncomment out the following.
-			echo "<pre>";
-			print_r($json);
-			echo "</pre>";
+			// echo "<pre>";
+			// print_r($json);
+			// echo "</pre>";
 
 
 			$json_output = json_decode($json);
@@ -183,7 +197,7 @@ jQuery is here for debugging purposes only.
 			if (is_array($json_output->data)) {
 				$theCount = 0;
 				$new_next_max_id = isset($json_output->pagination->next_max_id) ? $json_output->pagination->next_max_id : null;
-
+				$fullCount = count($json_output->data);
 				foreach ( $json_output->data as $images )
 				{
 					$theCount ++;
@@ -198,7 +212,7 @@ jQuery is here for debugging purposes only.
 							<div class='headline' >$theCaption</div>
 							<a href='#' class='selectbtn' data-id='$theId'>Select this image</a>
 						</div>";
-					if ($theCount >= $count && isset($new_next_max_id) ) {
+					if ($theCount == $fullCount && isset($new_next_max_id) ) {
 
 						$nextURL = $third_party_theme_dir."pp_engine.php?"."access_token=".$oauthkey."&count=".$count."&max_id=".$new_next_max_id;
 						echo "<div class='thumbnail getmore'>
