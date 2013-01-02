@@ -5,6 +5,19 @@
 		<link>http://static.supergeekery.com/nsm_addon_updater/changelog_ig_picpuller.xml</link>
 		<description>Build an Instagram app with built in image browsing into ExpressionEngine</description>
 		<item>
+			<title>Version 1.4.2</title>
+			<!-- Additional tag required for NSM Addon Updater -->
+			<ee_addon:version>1.4.2</ee_addon:version>
+			<link>http://devot-ee.com/add-ons/pic-puller-for-instagram</link>
+			<pubDate>Tues, 02 January 2013 18:10:00 +0500</pubDate>
+			<description><![CDATA[
+				<ul>
+					<li>Fixed an issue where PHP Warning would show up on authorization confirmation screen.</li>
+				</ul>
+			]]></description>
+		</item>
+
+		<item>
 			<title>Version 1.4.1</title>
 			<!-- Additional tag required for NSM Addon Updater -->
 			<ee_addon:version>1.4.1</ee_addon:version>
