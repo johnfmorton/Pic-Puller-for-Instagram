@@ -4,7 +4,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 	
 	var $info = array(
 		'name'		=> 'Pic Puller for Instagram Browser',
-		'version'	=> '1.4.2'
+		'version'	=> '1.4.3'
 	);
 
 	static $counter = 0;

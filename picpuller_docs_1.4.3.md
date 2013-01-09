@@ -1,5 +1,9 @@
 # Change log
 
+1.4.3 - 2013JAN09
+- Fixed some PHP warnings showing up in the Pic Puller fieldtype. Thanks Alex G!
+- CSS update for fieldtype updated to prevent scrolling when there weren't enough images to justify scrolling.
+
 1.4.2 - 2013JAN02
 - Fixed a PHP warning showing up on authorization confirmation screen. 
 
@@ -10,7 +14,7 @@
 -Pic Puller for Instagram Browser field type updated.
 -Field type now supports tag search of all Instagram
 -Cosmetic update to field type
--Updated preferences to allow or disallow browsing of user's Instram stream and the search functionality on a per instance basis
+-Updated preferences to allow or disallow browsing of user's Instgram stream and the search functionality on a per instance basis
 -Field type no longer requires PHP 'short_open_tag' be enabled.
 
 1.3.1 - 2012OCT13

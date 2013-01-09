@@ -75,7 +75,7 @@ jQuery is here for debugging purposes only.
 	}
 
 	// If multiple methods are supported, branch the method URL here
-	$method = $_GET['method'];
+	$method = isset($_GET['method']) ? $_GET['method'] : false;
 	//print_r($method);
 	
 
@@ -125,7 +125,7 @@ jQuery is here for debugging purposes only.
 
 						$theImage = $images->images->thumbnail->url;
 						$theId = $images->id;
-						$theCaption = $images->caption->text;
+						$theCaption = isset($images->caption) ? $images->caption->text : '';
 						if (!isset($theCaption)) {
 							$theCaption = '<em>untitled</em>';
 						}

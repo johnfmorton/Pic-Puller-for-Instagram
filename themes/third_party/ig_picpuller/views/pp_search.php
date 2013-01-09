@@ -12,7 +12,7 @@ class VirtualDirectory
     var $thisurl;
     function VirtualDirectory()
     {
-        $this->protocol = $_SERVER['HTTPS'] == 'on' ? 'https' : 'http';
+        $this->protocol = ( isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ) ? 'https' : 'http';
         $this->site = $this->protocol . '://' . $_SERVER['HTTP_HOST'];
         $this->thisfile = basename($_SERVER['SCRIPT_FILENAME']);
         $this->real_directories = $this->cleanUp(explode("/", str_replace($this->thisfile, "", $_SERVER['PHP_SELF'])));
@@ -48,8 +48,6 @@ $access_token = $_GET["access_token"];
 if(!isset($access_token)){
 	exit('No direct script access allowed');
 }
-
-$target_field = $_GET["target_field"];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -84,6 +82,7 @@ $target_field = $_GET["target_field"];
 	#ig_pp .scroll-content {
 		position: absolute;
 		top:  10px;
+		min-height: 460px;
 	}
 
 	#ig_pp .thumbnail {
@@ -120,7 +119,6 @@ $target_field = $_GET["target_field"];
 		background-image:     -ms-linear-gradient(top, #444444, #111111);
 		background-image:      -o-linear-gradient(top, #444444, #111111);
 		background-image:         linear-gradient(to bottom, #444444, #111111);
-
 	}
 
 	#ig_pp .thumbnail .selectbtn:hover {
