@@ -23,6 +23,8 @@ $lang = array(
 	'ig_adv_user_auth'  => 'Alternate User Authorization',
 
 	'display_instructions_option_text' => 'Display default Pic Puller field instructions?',
+	'display_personal_stream_option_text' => 'Display the Instagram Personal Photo Stream browser?',
+	'display_search_option_text' => 'Display the Instagram Tag Search browser?',
 
 	'default_instructions' => '<strong>Instructions:</strong> Browse for an image on Instagram or enter its media_id manually.',
 
@@ -30,7 +32,9 @@ $lang = array(
 
 	'unauthorized_field_type_access'=> 'You must authorize this ExpressionEngine user account with your Instagram account before you can browse for an image from your photo stream.',
 
-	'launch_browser' => 'Launch Instagram Browser',
+	'launch_browser' => 'Your Instagram Photos',
+
+	'launch_search_browser' => 'Instagram Tag Search',
 
 	'preference' => 'Pic Puller for Instagram Browser preferences'
 		

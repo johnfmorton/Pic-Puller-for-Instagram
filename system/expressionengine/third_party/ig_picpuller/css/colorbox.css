@@ -25,7 +25,10 @@
 }
 #ppcboxOverlay{background:#fff;}
 #ppcolorbox{}
-#ppcboxContent{margin-top:32px; overflow:visible;
+
+/* ppcboxContent had a 32px mt, but extra space needed for SEARCH version */
+
+#ppcboxContent{margin-top:42px; overflow:visible;
 background-color: #ededed;
 }
 .ppcboxIframe{background:#fff;}
@@ -42,11 +45,11 @@ background:url(images/loading.gif) no-repeat center center;
 */
 }
 #ppcboxTitle{
-	position:absolute; top:-22px; 
+	position:absolute; top:-27px; 
 	left:11px; color: #ffffff;
 	font-weight: bold;
 }
-#ppcboxCurrent{position:absolute; top:-22px; right:205px; text-indent:-9999px;}
+#ppcboxCurrent{position:absolute; top:-27px; right:205px; text-indent:-9999px;}
 #ppcboxSlideshow, #ppcboxPrevious, #ppcboxNext, #ppcboxClose{
 width:20px; 
 height:20px; 
@@ -59,7 +62,7 @@ top:-20px;
 #ppcboxNext:hover{background-position:-25px -25px;}
 #ppcboxClose{
 	color: #FFF;
-	top:  -22px;
+	top:  -27px;
 	right: 20px;
 	font-weight: bold;
 	text-decoration: underline;

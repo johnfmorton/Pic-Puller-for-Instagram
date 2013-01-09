@@ -5,6 +5,63 @@
 		<link>http://static.supergeekery.com/nsm_addon_updater/changelog_ig_picpuller.xml</link>
 		<description>Build an Instagram app with built in image browsing into ExpressionEngine</description>
 		<item>
+			<title>Version 1.4.3</title>
+			<!-- Additional tag required for NSM Addon Updater -->
+			<ee_addon:version>1.4.3</ee_addon:version>
+			<link>http://devot-ee.com/add-ons/pic-puller-for-instagram</link>
+			<pubDate>Tues, 09 January 2013 10:30:00 +0500</pubDate>
+			<description><![CDATA[
+				<ul>
+					<li>Fixed some PHP warnings showing up in the Pic Puller fieldtype. Thanks Alex G!</li>
+					<li>CSS update for fieldtype updated to prevent scrolling when there weren't enough images to justify scrolling.</li>
+				</ul>
+			]]></description>
+		</item>
+
+		<item>
+			<title>Version 1.4.2</title>
+			<!-- Additional tag required for NSM Addon Updater -->
+			<ee_addon:version>1.4.2</ee_addon:version>
+			<link>http://devot-ee.com/add-ons/pic-puller-for-instagram</link>
+			<pubDate>Tues, 02 January 2013 18:10:00 +0500</pubDate>
+			<description><![CDATA[
+				<ul>
+					<li>Fixed an issue where PHP Warning would show up on authorization confirmation screen.</li>
+				</ul>
+			]]></description>
+		</item>
+
+		<item>
+			<title>Version 1.4.1</title>
+			<!-- Additional tag required for NSM Addon Updater -->
+			<ee_addon:version>1.4.1</ee_addon:version>
+			<link>http://devot-ee.com/add-ons/pic-puller-for-instagram</link>
+			<pubDate>Tues, 27 December 2012 15:33:33 +0500</pubDate>
+			<description><![CDATA[
+				<ul>
+					<li>Fixed an issue where pre-existing field type, made prior to version 1.4.0 of Pic Puller, would display global preference instead of local preference in the edit screen.</li>
+				</ul>
+			]]></description>
+		</item>
+
+		<item>
+			<title>Version 1.4.0</title>
+			<!-- Additional tag required for NSM Addon Updater -->
+			<ee_addon:version>1.4.0</ee_addon:version>
+			<link>http://devot-ee.com/add-ons/pic-puller-for-instagram</link>
+			<pubDate>Tues, 25 December 2012 20:40:00 +0500</pubDate>
+			<description><![CDATA[
+				<ul>
+					<li>Pic Puller for Instagram Browser field type updated.</li>
+					<li>Field type now supports tag search of all Instagram</li>
+					<li>Cosmetic updates to field type in control panel</li>
+					<li>Updated preferences to allow or disallow browsing of user's Instgram stream and the search functionality on a per instance basis</li>
+					<li>Field type no longer requires PHP 'short_open_tag' be enabled. </li>
+				</ul>
+			]]></description>
+		</item>
+
+		<item>
 			<title>Version 1.3.1</title>
 			<!-- Additional tag required for NSM Addon Updater -->
 			<ee_addon:version>1.3.1</ee_addon:version>

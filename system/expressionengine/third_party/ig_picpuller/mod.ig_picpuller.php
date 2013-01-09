@@ -1526,6 +1526,7 @@ class Ig_picpuller {
 	}
 	
 	private function showResult($headline, $message) {
+		error_reporting(0);
 		echo "<!DOCTYPE HTML>
 		<html lang=\"en-US\">
 		<head>

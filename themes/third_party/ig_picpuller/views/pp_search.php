@@ -58,9 +58,19 @@ if(!isset($access_token)){
 	Looking for some Javascript? 
 	It's loaded from within the system/third_party/ig_picpuller 
 	directly into the control panel.
+
+	Search uses, lock submit: 
+	http://blog.leenix.co.uk/2009/09/jquery-plugin-locksubmit-stop-submit.html
+
 	-->
 	<link rel="stylesheet" href="<?php echo $third_party_theme_dir;?>themes/base/jquery.ui.all.css">
 	<style type="text/css">
+
+	#ig_search_field {
+		width: 175px;
+		margin: -4px 5px 0 0;
+	}
+
 	#ig_pp.scroll-area {
 			position: relative;
 			overflow: hidden;
@@ -139,10 +149,15 @@ if(!isset($access_token)){
 		right: 5px;
 		height: 93%;
 	}
+
+	#ig_search_button:disabled {
+		
+	}
 	</style>
 
 	<script>
 	$(function() {
+		var search_field = $("#ig_search_field");
 
 		// prevent IE errors when using console
 		if (typeof console == "undefined") {
@@ -150,6 +165,24 @@ if(!isset($access_token)){
 					log: function () {}
 				};
 		}
+
+
+		
+
+		// make search button work, but check to be sure the listener isn't already bound to the ppcboxTitle from
+		// a previous search instance
+		if ($("#ppcboxTitle").data('events') == null){
+			$('#ppcboxTitle').delegate('#ig_search_button', "click", function(event) {
+				console.log(event);
+				console.log('You clicked the search button: ' + $('#ig_search_field').val());
+				event.preventDefault();
+				$("#ig_search_button").attr("disabled", true);
+				executeSearch($('#ig_search_field').val());
+			});
+			
+		}
+
+		// Make the scroll bar work using jQuery UI
 
 		$('.scroll-bar').slider({
 			orientation: 'vertical',
@@ -166,7 +199,6 @@ if(!isset($access_token)){
 			var newTop = -((.01 * Math.abs(ui.value-100)) * maxDepth);
 			newTop +=10;
 			$('.scroll-content').css('top', newTop+'px');
-			
 		});
 		
 		$('.scroll-content').delegate('.pp_morebt', 'click', function(event) {
@@ -179,11 +211,27 @@ if(!isset($access_token)){
 			$.ppcolorbox.close();
 			return false;
 		});
+		
 
+		function executeSearch(tag_to_search) {
+			console.log('executeSearch fired');
+
+			var theURL = "<?=$third_party_theme_dir;?>pp_engine.php?access_token=<?=$access_token;?>&method=tagsearch&tag="+ tag_to_search;
+
+
+			getPics(theURL);
+		}
 
 		function getPics(urlToCall) {
 			// if getPics isn't being used for pagination it will not be given a URL for the next set of images so just use the default URL.
-			urlToCall = typeof urlToCall !== 'undefined' ? urlToCall : "<?=$third_party_theme_dir;?>pp_engine.php?access_token=<?=$access_token;?>";
+			//console.log('what was passed in: ' + urlToCall);
+
+			urlToCall = typeof urlToCall !== 'undefined' ? urlToCall : "<?=$third_party_theme_dir;?>pp_engine.php?access_token=<?=$access_token;?>&method=tagsearch&tag=" + tag_to_search;
+
+			// urlToCall = typeof urlToCall !== 'undefined' ? urlToCall : "<?=$third_party_theme_dir;?>pp_engine.php?access_token=<?=$access_token;?>";
+			
+			//console.log('calling: ' + urlToCall);
+
 			$.ajax({
 				url: urlToCall,
 				success: function(data, textStatus, jqXHR) {
@@ -201,6 +249,19 @@ if(!isset($access_token)){
 						newTop +=10;
 						$('.scroll-content').css('top', newTop+'px');
 					});
+
+					// Turn the Search button back on.
+					// 
+					// May need to clear the search field of text b/c UX is wonky
+					// if you hit search again.. you get the first page of results.
+
+					$("#ig_search_field").val('');
+
+					if ($("#ig_search_field").val() != ''){
+						$("#ig_search_button").attr("disabled", false);
+					} else {
+						$("#ig_search_button").attr("disabled", true);
+					}
 					
 				},
 				statusCode: {
@@ -211,20 +272,24 @@ if(!isset($access_token)){
 			})
 		}
 
+
 		//////////////////////////////////////////
 		// Let's get this party started. Right? //
 		//////////////////////////////////////////
 
-		getPics();
+		//getPics();
+		
 	});
 	</script>
 </head>
 <body>
 
 
-<div id='ig_pp' class="scroll-area">
+<div id='ig_pp' class="scroll-area searchversion">
 
 	<div class="scroll-content">
+		<div id='ig_search_feedback'></div>
+		
 	</div>
 	<div class="scroll-bar-wrap">
 		<div class="scroll-bar"></div>

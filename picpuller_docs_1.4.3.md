@@ -1,5 +1,22 @@
 # Change log
 
+1.4.3 - 2013JAN09
+- Fixed some PHP warnings showing up in the Pic Puller fieldtype. Thanks Alex G!
+- CSS update for fieldtype updated to prevent scrolling when there weren't enough images to justify scrolling.
+
+1.4.2 - 2013JAN02
+- Fixed a PHP warning showing up on authorization confirmation screen. 
+
+1.4.1 - 2012DEC27
+-Fixed an issue where pre-existing field type, made prior to version 1.4.0 of Pic Puller, would display global preference instead of local preference in the edit screen.
+
+1.4.0 - 2012DEC25
+-Pic Puller for Instagram Browser field type updated.
+-Field type now supports tag search of all Instagram
+-Cosmetic update to field type
+-Updated preferences to allow or disallow browsing of user's Instgram stream and the search functionality on a per instance basis
+-Field type no longer requires PHP 'short_open_tag' be enabled.
+
 1.3.1 - 2012OCT13
 - Updated pagination for tagged_media to use 'next_max_id' instead of 'next_max_tag_id' due to 'next_max_tag_id' being deprecated in the Instagram API.
 
@@ -370,7 +387,7 @@ There is an HTML file called "sample_frontend_auth_template.html" included with 
 
 # 'Pic Puller for Instagram Browser' Fieldtype
 
-As of version 1.0.0, the 'Pic Puller for Instagram Browser' fieldtype is part of Pic Puller. It will allow a user who has authorized your Pic Puller application to browse their own photo stream for images. They can select one image and the image browser will populate it's field with the selected image's Instagram media_id.
+The 'Pic Puller for Instagram Browser' fieldtype is part of Pic Puller. It will allow a user who has authorized your Pic Puller application to browse their own photo stream for images. They can select one image and the image browser will populate it's field with the selected image's Instagram media_id.
 
 The media_id is intended use is to be used in conjunction with the Pic Puller 'media' tag pair. The fieldtype will store a media_id from Instagram. The field type assists getting the desired media_id by using a photo browser interface that displays the logged in user's photos.
 
@@ -380,7 +397,12 @@ The fieldtype requires javascript.
 
 The fieldtype is compatible with Matrix.
 
-There is a single option for the fieldtype. You can use the default instructional language that the fieldtype will automatically include or you may turn it off. 
+There is a multiple options for the fieldtype. All options default to "on".
+
+Option 1: You can use the default instructional language that the fieldtype will automatically include or you may turn it off. 
+Option 2: You may choose to hide the Instagram browser that allows a user to choose from the logged in user's photo stream.
+Option 3: You may choose to hide the Instagram browser that allows a user to search and choose photos from all of Instagram's public images.
+
 
 -----
 
