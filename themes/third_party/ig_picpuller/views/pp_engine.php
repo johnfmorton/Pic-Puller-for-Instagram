@@ -78,6 +78,11 @@
 
 
 	switch ($method) {
+		// The media case is used by the fieldtype to display image previews.
+		// It returns JSON instead of the full HTML that the other functions display
+		// in future releases, I will probably switch to all these methods returning
+		// JSON and have the HTML creation does in whereever the data ends up.
+		// You learn by doing, right?
 		case 'media':
 		$media_id = $_GET["media_id"];
 		$theURL = "https://api.instagram.com/v1/media/$media_id?";
@@ -90,32 +95,43 @@
 				$ch = curl_init();
 				curl_setopt($ch, CURLOPT_URL, $jsonurl);
 				// 1 to prevent the response from being outputted
-				// 0 to DO the output of the curl operation (which is what we want in this case)
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 				// don't verify the SSL cert
 				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 				$json = curl_exec($ch);
 				curl_close($ch);
 
+				$json_output = json_decode($json);
 				// Need to debug? Uncomment out the following.
 				// echo "<pre>";
 				// print_r($json);
 				// echo "</pre>";
-				header('Content-Type: application/json');
-				$json_output = json_decode($json);
-				if (is_array($json_output->data)) {
-
-				}
-				$imageTitle =  $json_output->data->caption->text;
-				$imageURL = $json_output->data->images->low_resolution->url;
-				echo json_encode( array(
-					'imageTitle' => $imageTitle,
-					'imageURL' => $imageURL
+				
+				if ($json_output->meta->code === 200 ) {
+					header('Content-Type: application/json');
+					$success = '1';
+					$imageTitle =  $json_output->data->caption->text;
+					$imageURL = $json_output->data->images->low_resolution->url;
+					$theUsername = $json_output->data->user->username;
+					echo json_encode( array(
+						'success' => $success,
+						'code' => $json_output->meta->code,
+						'imageTitle' => $imageTitle,
+						'imageURL' => $imageURL,
+						'theUsername' => $theUsername
 					) );
-				// echo "<pre>";
-				// print_r($json_output->data);
-				// echo "</pre>";
-		
+				} else {
+					header('Content-Type: application/json');
+					$success = '0';
+					$error_message =  $json_output->meta->error_message;
+					$imageURL = '';
+					echo json_encode( array(
+						'success' => $success,
+						'code' => $json_output->meta->code,
+						'error_type' => $json_output->meta->error_type,
+						'error_message' => $error_message
+					) );
+				}	
 
 		break;
 
@@ -143,8 +159,6 @@
 				// print_r($json);
 				// echo "</pre>";
 
-
-
 				$json_output = json_decode($json);
 				
 
@@ -157,18 +171,14 @@
 					foreach ( $json_output->data as $images )
 					{
 						$theCount ++;
-
-						
-
 						$theImage = $images->images->thumbnail->url;
 						$theId = $images->id;
-						$theCaption = isset($images->caption) ? $images->caption->text : '';
-						if (!isset($theCaption)) {
-							$theCaption = '<em>untitled</em>';
-						}
+						$theLink = $images->link;
+						$theUsername = $images->user->username;
+						$theCaption = isset($images->caption) ? $images->caption->text : '<em>untitled</em>';
 						echo "<div class='thumbnail' >
-								<img src='$theImage' alt='Instagram image id: $theId' width='100' height='100' border=0 >
-								<div class='headline' >$theCaption</div>
+								<img src='$theImage' alt='Instagram image id: $theId' width='100' height='100' border=0 data-link='$theLink'>
+								<div class='headline' >$theCaption <em>by $theUsername</em></div>
 								<a href='#' class='selectbtn' data-id='$theId'>Select this image</a>
 							</div>";
 						if ($theCount == $fullCount && isset($new_next_max_id) ) {
@@ -240,10 +250,9 @@
 					$theCount ++;
 					$theImage = $images->images->thumbnail->url;
 					$theId = $images->id;
-					$theCaption = $images->caption->text;
-					if (!isset($theCaption)) {
-						$theCaption = '<em>untitled</em>';
-					}
+					$theLink = $images->link;
+					$theUsername = $images->user->username;
+					$theCaption = isset($images->caption) ? $images->caption->text : '<em>untitled</em>';
 					echo "<div class='thumbnail' >
 							<img src='$theImage' alt='Instagram image id: $theId' width='100' height='100' border=0 >
 							<div class='headline' >$theCaption</div>

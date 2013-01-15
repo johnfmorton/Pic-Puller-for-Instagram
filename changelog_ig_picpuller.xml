@@ -5,6 +5,20 @@
 		<link>http://static.supergeekery.com/nsm_addon_updater/changelog_ig_picpuller.xml</link>
 		<description>Build an Instagram app with built in image browsing into ExpressionEngine</description>
 		<item>
+			<title>Version 1.4.4</title>
+			<!-- Additional tag required for NSM Addon Updater -->
+			<ee_addon:version>1.4.4</ee_addon:version>
+			<link>http://devot-ee.com/add-ons/pic-puller-for-instagram</link>
+			<pubDate>Tues, 15 January 2013 16:35:00 +0500</pubDate>
+			<description><![CDATA[
+				<ul>
+					<li>Fieldtype gets more love. Now preview your images within the control panel for each entry.</li>
+					<li>Fieldtype now shows the username of the photographer. Useful since you can now search all of Instagram, not just your own photos.</li>
+					<li>The loading indicator, which disappeared in the 1.2.0 version update, comes back from a long vacation.</li>
+				</ul>
+			]]></description>
+		</item>
+		<item>
 			<title>Version 1.4.3</title>
 			<!-- Additional tag required for NSM Addon Updater -->
 			<ee_addon:version>1.4.3</ee_addon:version>

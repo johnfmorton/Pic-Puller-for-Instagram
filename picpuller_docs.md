@@ -1,5 +1,13 @@
 # Change log
 
+1.4.5 - 2013JAN15
+- Fieldtype gets more love. Now preview your images within the control panel for each entry.
+- Fieldtype now shows the username of the photographer. Useful since you can now search all of Instagram, not just your own photos.
+- The loading indicator, which disappeared in the 1.2.0 version update, comes back from a long vacation.
+
+1.4.4 - 2013JAN14
+- Unreleased private beta.
+
 1.4.3 - 2013JAN09
 - Fixed some PHP warnings showing up in the Pic Puller fieldtype. Thanks Alex G!
 - CSS update for fieldtype updated to prevent scrolling when there weren't enough images to justify scrolling.

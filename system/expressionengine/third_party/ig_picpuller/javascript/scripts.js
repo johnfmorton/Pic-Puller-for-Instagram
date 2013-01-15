@@ -3,6 +3,7 @@ $(function() {
 
 	// The Field Type's photo viewer won't work properly without JS, so it's hidden until the JS has loaded.
 
+	// If using the Instagram Search Browser turn it on (it won't be generated if it's not supposed to be here)
 	$('.igbrowserbt').show();
 
 	$('.igbrowserbt').ppcolorbox({width:"830px", height:"525px", title: 'Choose a photo from your Instagram feed',
@@ -12,13 +13,16 @@ $(function() {
 				onCleanup: function() {
 						// check to see if the field actually had an ID input, if so
 						// we turn on the search button
-						checkForTextValue($('#activePPtarget'));
+						if (checkForTextValue($('#activePPtarget')) ){
+							var myLookupBt = $(this).parent().find($('.ig_preview_bt'));
+							myLookupBt.trigger('click');
+						}
 						$('#activePPtarget').removeAttr('id');
 					} });
 
-	// If using the Instagram Search Browser
-	
+	// If using the Instagram Search Browser turn it on (it won't be generated if it's not supposed to be here)	
 	$('.igsearchbt').show();
+
 	$('.igsearchbt').ppcolorbox({width:"830px", height:"525px", title: '<input type="text" id="ig_search_field" name="ig_tag" placeholder="Search for a single tag"><input type="submit" id="ig_search_button" value="Search">',
 				onOpen: function() {
 						$(this).parent().find('input').attr('id', 'activePPtarget');
@@ -27,8 +31,7 @@ $(function() {
 					$("#ig_search_button").attr("disabled", true);
 
 					$("#ig_search_field").keyup(function(event) {
-						//console.log('testing search field : ' + $("#ig_search_field").val());
-						if($("#ig_search_field").val() != '') {
+						if($("#ig_search_field").val() !== '') {
 							$("#ig_search_button").attr("disabled", false);
 						} else {
 							$("#ig_search_button").attr("disabled", true);
@@ -39,7 +42,10 @@ $(function() {
 				onCleanup: function() {
 						// check to see if the field actually had an ID input, if so
 						// we turn on the search button
-						checkForTextValue($('#activePPtarget'));
+						if (checkForTextValue($('#activePPtarget')) ){
+							var myLookupBt = $(this).parent().find($('.ig_preview_bt'));
+							myLookupBt.trigger('click');
+						}
 						$('#activePPtarget').removeAttr('id');
 					} });
 
@@ -47,27 +53,12 @@ $(function() {
 	Make the Preview button work
 	 */
 	
-	// preview button is hidden until there is something to look up
-	// first check all PP fields to see if they contain something...
-	$('.ig_media_id_field').each(function(e){
-		checkForTextValue($(this));
-	});
-	// and watch for someone entering a media ID manually
-	$('.ig_media_id_field').keyup(function(e){
-		checkForTextValue($(this));
-	});
+	//
+	// Since the click event might be triggered in the $('.ig_media_id_field').each loop,
+	// I need to define the listener before doing that each loop
+	//
 
-	function checkForTextValue(theTarget) {
-		var myValue= theTarget.val();
-		var myLookupBt = theTarget.parent().find($('.ig_preview_bt'));
-		if(myValue !== '') {
-			myLookupBt.removeClass('hidden');
-		} else {
-			myLookupBt.addClass('hidden');
-		}
-	}
-
-	$('.ig_preview_bt').on('click', function(e) {
+	 $('.ig_preview_bt').on('click', function(e) {
 		var myPreviewFrame = $(this).parent().find($('.ig_preview_frame'));
 		myPreviewFrame.slideDown();
 		var media_id = $(this).parent().find($('.ig_media_id_field')).val();
@@ -80,12 +71,18 @@ $(function() {
 			url: theURL,
 			dataType: 'json',
 			success: function(data) {
-				console.log('SUCCESS');
-				console.log(data);
+				console.log('Data received from Instagram.');
+				console.log('code: ' + data.code);
 				ig_pp_loader_gr.addClass('hidden');
+				if (data.code === 200 ){
+					theImage.removeClass('hidden');
 				theImage.attr("src",data.imageURL);
-				theHeadline.text(data.imageTitle);
-
+				//theHeadline.text(data.imageTitle);
+				theHeadline.html(data.imageTitle + " <em>by" + data.theUsername + "</em>");
+				} else {
+					theImage.addClass('hidden');
+					theHeadline.html("<strong>"+data.error_type+": </strong>" + data.error_message);
+				}
 			},
 			error: function(data) {
 				console.log('ERROR');
@@ -96,6 +93,34 @@ $(function() {
 		e.preventDefault();
 	});
 
+	// preview button is hidden until there is something to look up
+	// first check all PP fields to see if they contain something...
+	$('.ig_media_id_field').each(function(e){
+		//console.log('checking to see if I need to turn on that magnifying glass');
+		if (checkForTextValue($(this)) ){
+			//console.log('trigger a click');
+			var myLookupBt = $(this).parent().find($('.ig_preview_bt'));
+			myLookupBt.trigger('click');
+		} else {
+			//console.log('i guess i dont need to trigger');
+		};
+	});
+	// and watch for someone entering a media ID manually
+	$('.ig_media_id_field').keyup(function(e){
+		checkForTextValue($(this));
+	});
+
+	function checkForTextValue(theTarget) {
+		var myValue= theTarget.val();
+		var myLookupBt = theTarget.parent().find($('.ig_preview_bt'));
+		if(myValue !== '') {
+			myLookupBt.removeClass('hidden');
+			return true;
+		} else {
+			myLookupBt.addClass('hidden');
+			return false;
+		}
+	}
 
 	if (typeof Matrix == 'function'){
 		Matrix.bind('ig_picpuller', 'display', function(cell){
@@ -111,7 +136,13 @@ $(function() {
 							$(this).parent().find('input').attr('id', 'activePPtarget');
 						},
 					onCleanup: function() {
-							$('#activePPtarget').removeAttr('id');
+						// Look up whatever image might have chosen
+						if (checkForTextValue($('#activePPtarget')) ){
+							var myLookupBt = $(this).parent().find($('.ig_preview_bt'));
+							myLookupBt.trigger('click');
+						}
+						// then remove the target ID from the text input box
+						$('#activePPtarget').removeAttr('id');
 						}
 					});
 
@@ -137,7 +168,13 @@ $(function() {
 						}
 					});
 				},
-					onCleanup: function() {
+						onCleanup: function() {
+							// Look up whatever image might have chosen
+							if (checkForTextValue($('#activePPtarget')) ){
+								var myLookupBt = $(this).parent().find($('.ig_preview_bt'));
+								myLookupBt.trigger('click');
+							}
+							// then remove the target ID from the text input box
 							$('#activePPtarget').removeAttr('id');
 						}
 					});

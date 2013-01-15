@@ -45,15 +45,12 @@ input.ig_media_id_field.matrix_version {
     height: 170%; }
 
 .ig_preview_bt {
-	display: block;
     overflow: hidden;
     background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB9ElEQVQ4EY2Tz0tUURTHz4wzjiPG1IzQoqwWjYU7BcXFzOSv2kkkTeCyVYusXfMXuJpFxIggI7hQUWhaSKtwEYKM+CNkolqVC3mkQzCRMeFTnzy/39vcx6UUPPC593u+53Lm3sMbn+u6kslkxIin0A9BCFTAJHgL/otsNiv+f9xR5C9BO7gM+sEsYMNTI2C4r6HTqcRXaW/7XB9t/haprF2RlWKXfLBvFlB7DsaM80rqGzxGlr73wJbbrWVxnDrZtq5KKHAoPY2fJBEo8XAO3KAwQzfINVzrkMYmV9XKP6IyNTPsnYv7Lak/tJm/8sya0A1C4XhSWUvLrVJcb1N6odQnq/u3lI5Vyty7VGIsegaOP9gQpL+7G5GDg7+29RNz9AUkDt9/fMyy/kFqFdoI29ZHZQw/2pCBO5tKP+ubl/tNa0rvRWLcv6vEWHSD/J8v7zy7ObYnPckVL6+6YaleuMj8hWfWhG7wBPmvhZnwlm0H5VKkKr3Jojqy40SlcDRAvQjeK9NY9AxotYD16blu6lWwAzhBjsAC1wG/yCHgABX6BkyqgONPA46cj+YAOkAKsNkg4Nt8QIV5A+29gSBmBJGMA/5POgFveBf8Nm+A/Mw4QmUEsAmD38MSxXkb8CyDTWaVEslzP+0JtfqZ2ygqW2CCJ04AVyF12vwxyOAAAAAASUVORK5CYII=) no-repeat left top;
 	width:16px;
 	height:16px;
-	margin: 1px;
 	position: absolute;
-	top: 9px;
-	left: 241px;
+	margin: 10px 0 0 -20px;
 }
 
 .ig_preview_bt.matrix_version {
