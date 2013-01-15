@@ -1,7 +1,3 @@
-<!-- 
-jQuery is here for debugging purposes only.
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
--->
 <?php 
 
 	/**
@@ -82,6 +78,47 @@ jQuery is here for debugging purposes only.
 
 
 	switch ($method) {
+		case 'media':
+		$media_id = $_GET["media_id"];
+		$theURL = "https://api.instagram.com/v1/media/$media_id?";
+		$jsonurl = $theURL."access_token=".$oauthkey;
+		
+		// the @ symbol will make this fail silently, so we'll need to check that $json actually is parsable and show alternate images instead
+				
+			// $json = @file_get_contents($jsonurl,0,null,null);
+				
+				$ch = curl_init();
+				curl_setopt($ch, CURLOPT_URL, $jsonurl);
+				// 1 to prevent the response from being outputted
+				// 0 to DO the output of the curl operation (which is what we want in this case)
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+				// don't verify the SSL cert
+				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+				$json = curl_exec($ch);
+				curl_close($ch);
+
+				// Need to debug? Uncomment out the following.
+				// echo "<pre>";
+				// print_r($json);
+				// echo "</pre>";
+				header('Content-Type: application/json');
+				$json_output = json_decode($json);
+				if (is_array($json_output->data)) {
+
+				}
+				$imageTitle =  $json_output->data->caption->text;
+				$imageURL = $json_output->data->images->low_resolution->url;
+				echo json_encode( array(
+					'imageTitle' => $imageTitle,
+					'imageURL' => $imageURL
+					) );
+				// echo "<pre>";
+				// print_r($json_output->data);
+				// echo "</pre>";
+		
+
+		break;
+
 		case 'tagsearch':
 			$next_max_tag_id = isset($_GET["next_max_tag_id"]) ? $_GET["next_max_tag_id"] : null;
 			$searchTerm = $_GET['tag'];
@@ -230,8 +267,4 @@ jQuery is here for debugging purposes only.
 
 			break;
 	}
-
-
-	
-
 ?>

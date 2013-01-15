@@ -4,7 +4,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 	
 	var $info = array(
 		'name'		=> 'Pic Puller for Instagram Browser',
-		'version'	=> '1.4.3'
+		'version'	=> '1.4.4'
 	);
 
 	static $counter = 0;
@@ -31,7 +31,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 
 		$pp_theme_views = URL_THIRD_THEMES.'ig_picpuller/views/';
 
-		$this->EE->cp->add_to_head('<style>#cboxLoadingGraphic{background:url('.$pp_theme_views.'images/loading.gif) no-repeat center center;};</style>');
+		$this->EE->cp->add_to_head('<style>#ppcboxLoadingGraphic{background:url('.$pp_theme_views.'images/loading.gif) no-repeat center center;};</style>');
 
 		////////////////
 		// Get oAuth  //
@@ -40,9 +40,11 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 		$user_id = $this->EE->session->userdata('member_id');
 		$oauth = $this->getAuthCredsForUser($user_id);
 		
+		$pp_engine_url = $pp_theme_views.'pp_engine.php';
+
 		if ($oauth != '') {
-			$pp_select = $pp_theme_views.'pp_select.php?access_token='.$oauth; //.'&target_field='.$this->field_name;
-			$pp_search = $pp_theme_views.'pp_search.php?access_token='.$oauth; //.'&target_field='.$this->field_name;
+			$pp_select = $pp_theme_views.'pp_select.php?access_token='.$oauth;
+			$pp_search = $pp_theme_views.'pp_search.php?access_token='.$oauth;
 
 			if ($this->settings['display_pp_instructions'] === 'yes') {
 				$instructions = '<div class="instruction_text"><p style="margin-left: 1px;">'.lang('default_instructions').'</p></div>';
@@ -50,7 +52,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 				$instructions = '';
 			}
 
-			// Check to see if particular field has settings for this particular instance
+			// Check to see if this particular field has settings for this instance
 
 			if(isset($this->settings['display_pp_stream'])) {
 				$display_pp_stream = $this->settings['display_pp_stream'];
@@ -65,7 +67,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 				$stream_button = '';
 			}
 
-			// Check to see if particular field has settings for this particular instance
+			// Check to see if this particular field has settings for this instance
 
 			if(isset($this->settings['display_pp_search'])) {
 				$display_pp_search = $this->settings['display_pp_search'];
@@ -80,11 +82,14 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 				$search_button = '';
 			}
 
-			$input = $instructions . '<br>' .
+			$input = '<div class="ig_pp_fieldset">'.$instructions . '' .
 				form_input(array(
 				'name'  => $this->field_name,
+				'class' => 'ig_media_id_field',
 				'value' => $data
-			))."<br><br>$stream_button$search_button";
+			))."<a href='$pp_engine_url?method=media&access_token=$oauth&media_id=' class='ig_preview_bt hidden'>Preview</a><div class='ig_preview_frame'><img src='".$pp_theme_views."images/loading.gif' class='ig_pp_loader_gr'>	<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAABlBMVEXd4uUAAAC4cpOLAAAARElEQVRoBe3QgQAAAADDoPlTX+EAhVBhwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMPAMDJ3QAAViTWAEAAAAASUVORK5CYII=' width=100 height=100 border=0 class='theImage'><div class='theHeadline'>Caption</div></div><br>$stream_button$search_button".'</div>';
+
+				// /v1/media/368715424533973737_1500897?access_token=1500897.1fb234f.2f8ff3b7ca7543d68543061cd2854f82 
 
 			return $input;
 		} 
@@ -114,6 +119,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 		$this->EE->lang->loadfile('ig_picpuller');
 
 		$pp_theme_views = URL_THIRD_THEMES.'ig_picpuller/views/';
+		$pp_engine_url = $pp_theme_views.'pp_engine.php';
 
 		$this->EE->cp->add_to_head('<style>#cboxLoadingGraphic{background:url('.$pp_theme_views.'images/loading.gif) no-repeat center center;};</style>');
 
@@ -164,7 +170,10 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 			} else {
 				$search_button = '';
 			}
-			$html = $instructions.'<input value="'.$data.'" name="'.$this->cell_name.'" style="width: 90%; padding: 2px; margin: 5px 0;"><br>'.$stream_button.$search_button;
+			//$html = $instructions.'<a href="#">SHOW</a><input value="'.$data.'" name="'.$this->cell_name.'" style="width: 90%; padding: 2px; margin: 5px 0;"><br>'.$stream_button.$search_button;
+
+			$html ='<div class="ig_pp_fieldset">'.$instructions . '<input value="'.$data.'" name="'.$this->cell_name.'"  class="ig_media_id_field matrix_version">'."<a href='$pp_engine_url?method=media&access_token=$oauth&media_id=' class='ig_preview_bt hidden matrix_version'>Preview</a><div class='ig_preview_frame'><img src='".$pp_theme_views."images/loading.gif' class='ig_pp_loader_gr'><img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAABlBMVEXd4uUAAAC4cpOLAAAARElEQVRoBe3QgQAAAADDoPlTX+EAhVBhwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMPAMDJ3QAAViTWAEAAAAASUVORK5CYII=' width=100 height=100 border=0 class='theImage'><div class='theHeadline'>Caption</div></div><br>$stream_button$search_button".'</div>';
+
 			return $html;
 		} 
 		else 

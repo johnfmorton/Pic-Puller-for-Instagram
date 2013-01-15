@@ -3,6 +3,88 @@
 	font-weight: normal;
 	font-style: normal;
 }
+.ig_pp_fieldset {
+	position: relative;
+}
+
+.ig_pp_fieldset .ig_pp_loader_gr {
+	position: absolute;
+	margin: 38px 15px 15px 15px;
+}
+.ig_pp_fieldset .theImage {
+	float: left;
+	margin-right: 5px;
+}
+.ig_pp_fieldset .theHeadline {
+	color: #1e2a32;
+	font-size: 12px;
+	margin-bottom: 10px;
+	height: 70px;
+	overflow: hidden;
+}
+
+input.ig_media_id_field {
+	width: 262px;
+	margin: 5px 0;
+	padding: 4px 24px 4px 4px;
+}
+
+input.ig_media_id_field.matrix_version {
+	font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+	font-size: 13px;
+	color: #5f6c74;
+	border: 1px solid #8195a0;
+	border-radius: 3px;
+	width: 232px;
+}
+
+.ig_preview_bt:before {
+    content: "";
+    display: block;
+    width: 0;
+    height: 170%; }
+
+.ig_preview_bt {
+	display: block;
+    overflow: hidden;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB9ElEQVQ4EY2Tz0tUURTHz4wzjiPG1IzQoqwWjYU7BcXFzOSv2kkkTeCyVYusXfMXuJpFxIggI7hQUWhaSKtwEYKM+CNkolqVC3mkQzCRMeFTnzy/39vcx6UUPPC593u+53Lm3sMbn+u6kslkxIin0A9BCFTAJHgL/otsNiv+f9xR5C9BO7gM+sEsYMNTI2C4r6HTqcRXaW/7XB9t/haprF2RlWKXfLBvFlB7DsaM80rqGzxGlr73wJbbrWVxnDrZtq5KKHAoPY2fJBEo8XAO3KAwQzfINVzrkMYmV9XKP6IyNTPsnYv7Lak/tJm/8sya0A1C4XhSWUvLrVJcb1N6odQnq/u3lI5Vyty7VGIsegaOP9gQpL+7G5GDg7+29RNz9AUkDt9/fMyy/kFqFdoI29ZHZQw/2pCBO5tKP+ubl/tNa0rvRWLcv6vEWHSD/J8v7zy7ObYnPckVL6+6YaleuMj8hWfWhG7wBPmvhZnwlm0H5VKkKr3Jojqy40SlcDRAvQjeK9NY9AxotYD16blu6lWwAzhBjsAC1wG/yCHgABX6BkyqgONPA46cj+YAOkAKsNkg4Nt8QIV5A+29gSBmBJGMA/5POgFveBf8Nm+A/Mw4QmUEsAmD38MSxXkb8CyDTWaVEslzP+0JtfqZ2ygqW2CCJ04AVyF12vwxyOAAAAAASUVORK5CYII=) no-repeat left top;
+	width:16px;
+	height:16px;
+	margin: 1px;
+	position: absolute;
+	top: 9px;
+	left: 241px;
+}
+
+.ig_preview_bt.matrix_version {
+	top: 20px;
+}
+
+.hidden {
+    display: none !important;
+    visibility: hidden;
+}
+
+/* Generated using CSS Image Encoder 1.2.2 by WriteIt! Studios */
+/* http://www.writeitstudios.com */
+
+#lookup_16x16
+{
+     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAB9ElEQVQ4EY2Tz0tUURTHz4wzjiPG1IzQoqwWjYU7BcXFzOSv2kkkTeCyVYusXfMXuJpFxIggI7hQUWhaSKtwEYKM+CNkolqVC3mkQzCRMeFTnzy/39vcx6UUPPC593u+53Lm3sMbn+u6kslkxIin0A9BCFTAJHgL/otsNiv+f9xR5C9BO7gM+sEsYMNTI2C4r6HTqcRXaW/7XB9t/haprF2RlWKXfLBvFlB7DsaM80rqGzxGlr73wJbbrWVxnDrZtq5KKHAoPY2fJBEo8XAO3KAwQzfINVzrkMYmV9XKP6IyNTPsnYv7Lak/tJm/8sya0A1C4XhSWUvLrVJcb1N6odQnq/u3lI5Vyty7VGIsegaOP9gQpL+7G5GDg7+29RNz9AUkDt9/fMyy/kFqFdoI29ZHZQw/2pCBO5tKP+ubl/tNa0rvRWLcv6vEWHSD/J8v7zy7ObYnPckVL6+6YaleuMj8hWfWhG7wBPmvhZnwlm0H5VKkKr3Jojqy40SlcDRAvQjeK9NY9AxotYD16blu6lWwAzhBjsAC1wG/yCHgABX6BkyqgONPA46cj+YAOkAKsNkg4Nt8QIV5A+29gSBmBJGMA/5POgFveBf8Nm+A/Mw4QmUEsAmD38MSxXkb8CyDTWaVEslzP+0JtfqZ2ygqW2CCJ04AVyF12vwxyOAAAAAASUVORK5CYII=);
+width:16px;
+height:16px;
+}
+
+.ig_preview_frame {
+	border: 1px solid #8195a0;
+	width: 250px;
+	height: 100px;
+	padding: 5px;
+	margin: 10px 0 0 0;
+	border-radius: 3px;
+	background-color: #ffffff;
+	display: none;
+}
 
 .publish_field  a.igbrowserbt, .publish_field a.igsearchbt,  .publish_field a.igbrowserbtmatrix, .publish_field a.igsearchbtmatrix{
 	display: inline-block;
