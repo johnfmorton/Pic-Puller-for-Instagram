@@ -53,10 +53,6 @@ input.ig_media_id_field.matrix_version {
 	margin: 10px 0 0 -20px;
 }
 
-.ig_preview_bt.matrix_version {
-	top: 20px;
-}
-
 .hidden {
     display: none !important;
     visibility: hidden;

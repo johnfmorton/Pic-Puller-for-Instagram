@@ -132,7 +132,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 		
 		if ($oauth != '') {
 			
-			$pp_select = $pp_theme_views.'pp_select.php?access_token='.$oauth; //.'&target_field='.'id_'.$this->field_id.'_col_'.$this->col_id;
+			$pp_select = $pp_theme_views.'pp_select.php?access_token='.$oauth;
 			$pp_search = $pp_theme_views.'pp_search.php?access_token='.$oauth; 
 
 			if ($this->settings['display_pp_instructions'] === 'yes') {
@@ -141,7 +141,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 				$instructions = '';
 			}
 
-			// Check to see if particular Matrix field has settings for this particular instance
+			// Check to see if the Matrix field has settings for this particular instance
 			 
 			if(isset($this->settings['display_pp_stream'])) {
 				$display_pp_stream = $this->settings['display_pp_stream'];
@@ -156,7 +156,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 				$stream_button = '';
 			}
 
-			// Check to see if particular Matrix field has settings for this particular instance
+			// Check to see if the Matrix field has settings for this particular instance
 
 			if(isset($this->settings['display_pp_search'])) {
 				$display_pp_search = $this->settings['display_pp_search'];
@@ -172,7 +172,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 			}
 			//$html = $instructions.'<a href="#">SHOW</a><input value="'.$data.'" name="'.$this->cell_name.'" style="width: 90%; padding: 2px; margin: 5px 0;"><br>'.$stream_button.$search_button;
 
-			$html ='<div class="ig_pp_fieldset">'.$instructions . '<input value="'.$data.'" name="'.$this->cell_name.'"  class="ig_media_id_field matrix_version">'."<a href='$pp_engine_url?method=media&access_token=$oauth&media_id=' class='ig_preview_bt hidden matrix_version'>Preview</a><div class='ig_preview_frame'><img src='".$pp_theme_views."images/loading.gif' class='ig_pp_loader_gr'><img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAABlBMVEXd4uUAAAC4cpOLAAAARElEQVRoBe3QgQAAAADDoPlTX+EAhVBhwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMPAMDJ3QAAViTWAEAAAAASUVORK5CYII=' width=100 height=100 border=0 class='theImage'><div class='theHeadline'>Caption</div></div><br>$stream_button$search_button".'</div>';
+			$html =$instructions . '<div class="ig_pp_fieldset"><input value="'.$data.'" name="'.$this->cell_name.'"  class="ig_media_id_field matrix_version">'."<a href='$pp_engine_url?method=media&access_token=$oauth&media_id=' class='ig_preview_bt hidden'>Preview</a><div class='ig_preview_frame'><img src='".$pp_theme_views."images/loading.gif' class='ig_pp_loader_gr'><img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAABlBMVEXd4uUAAAC4cpOLAAAARElEQVRoBe3QgQAAAADDoPlTX+EAhVBhwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMPAMDJ3QAAViTWAEAAAAASUVORK5CYII=' width=100 height=100 border=0 class='theImage'><div class='theHeadline'>Caption</div></div><br>$stream_button$search_button".'</div>';
 
 			return $html;
 		} 
