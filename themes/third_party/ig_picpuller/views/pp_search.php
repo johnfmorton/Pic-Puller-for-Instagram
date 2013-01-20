@@ -158,6 +158,7 @@ if(!isset($access_token)){
 	<script>
 	$(function() {
 		var search_field = $("#ig_search_field");
+		var PPsearchterm = '';
 
 		// prevent IE errors when using console
 		if (typeof console == "undefined") {
@@ -212,6 +213,7 @@ if(!isset($access_token)){
 
 		function executeSearch(tag_to_search) {
 			console.log('executeSearch fired');
+			PPsearchterm = tag_to_search;
 
 			var theURL = "<?=$third_party_theme_dir;?>pp_engine.php?access_token=<?=$access_token;?>&method=tagsearch&tag="+ tag_to_search;
 
@@ -223,7 +225,7 @@ if(!isset($access_token)){
 			// if getPics isn't being used for pagination it will not be given a URL for the next set of images so just use the default URL.
 			//console.log('what was passed in: ' + urlToCall);
 
-			urlToCall = typeof urlToCall !== 'undefined' ? urlToCall : "<?=$third_party_theme_dir;?>pp_engine.php?access_token=<?=$access_token;?>&method=tagsearch&tag=" + tag_to_search;
+			urlToCall = typeof urlToCall !== 'undefined' ? urlToCall : "<?=$third_party_theme_dir;?>pp_engine.php?access_token=<?=$access_token;?>&method=tagsearch&tag=" + PPsearchterm;
 
 			// urlToCall = typeof urlToCall !== 'undefined' ? urlToCall : "<?=$third_party_theme_dir;?>pp_engine.php?access_token=<?=$access_token;?>";
 			
@@ -231,21 +233,49 @@ if(!isset($access_token)){
 
 			$.ajax({
 				url: urlToCall,
-				success: function(data, textStatus, jqXHR) {
+				dataType: 'json',
+				success: function(data) {
+					//console.log('SEARCH Data received from Instagram.');
+					var theImages = data.data;
+					var next_max_tag_id = data.pagination.next_max_tag_id;
+					//console.log(theImages.length);
 					$('.getmore').remove();
 					var prevTotal = $('.scroll-content .thumbnail').length;
-					$('.scroll-content').append(data).each(function() {
-						var newTotal = $('.scroll-content .thumbnail').length;
-						var sliderValue = Math.floor(Math.abs((prevTotal/newTotal * 100) -100 ) );
 
-						// using 'each' to allow a callback to reset slider value
-						$( ".scroll-bar" ).slider({ value: sliderValue });
+					for (var i = 0; i < theImages.length; i++) {
+						console.log('adding a thumbnail ' + i);
+						//console.log(theImages[i]);
+						//console.log(theImages[i].filter);
+						// $imageURL = $json_output->data->images->low_resolution->url;
+						// $imageTitle =  $json_output->data->caption->text;
+						var caption = '<em>untitled</em>';
+						if (!!theImages[i].caption){
+							caption = theImages[i].caption.text;
+						}			
+						var newThumbnail = $('<div class="thumbnail" data-id="'+ theImages[i].id +'" data-username="'+ theImages[i].id +'" data-fullurl="'+ theImages[i].link +'"><img src="' + theImages[i].images.low_resolution.url + '" alt="Instagram image id: '+ theImages[i].id +'" width="100" height="100" border="0"><div class="headline">'+ caption +'</div><a href="#" class="selectbtn">Select this image</a></div>');
+						$('.scroll-content').append(newThumbnail);
 
-						var maxDepth = $('.scroll-content').height() - $('.scroll-area').height() + 10 ;
-						var newTop = -((.01 * Math.abs(sliderValue-100)) * maxDepth);
-						newTop +=10;
-						$('.scroll-content').css('top', newTop+'px');
-					});
+						PicPullerIG.callback('afterThumbnailGeneration', newThumbnail);
+						if( i === (theImages.length-1) ){
+							console.log('last one');
+							//console.log(next_max_tag_id);
+							if(next_max_tag_id != '' ){
+								var nextURL = "<?php echo $third_party_theme_dir;?>pp_engine.php?access_token=<?php echo $access_token;?>&method=tagsearch&tag="+ PPsearchterm +"&count=29&next_max_tag_id="+next_max_tag_id;
+								$('.scroll-content').append("<div class='thumbnail getmore'><div class='headline'>Need more to choose from?</div><a href='" + nextURL + "' class='pp_morebt'>Load more images</a></div>");
+							}
+							// Need to reset the position of the scrollbar slider to accommodate the updated image set
+							var newTotal = $('.scroll-content .thumbnail').length;
+							var sliderValue = Math.floor(Math.abs((prevTotal/newTotal * 100) -100 ) );
+
+							// reset slider value
+							$( ".scroll-bar" ).slider({ value: sliderValue });
+
+							var maxDepth = $('.scroll-content').height() - $('.scroll-area').height() + 10 ;
+							var newTop = -((.01 * Math.abs(sliderValue-100)) * maxDepth);
+							newTop +=10;
+							$('.scroll-content').css('top', newTop+'px');
+						}
+					};
 
 					// Turn the Search button back on.
 					// 
@@ -259,7 +289,6 @@ if(!isset($access_token)){
 					} else {
 						$("#ig_search_button").attr("disabled", true);
 					}
-					
 				},
 				statusCode: {
 					404: function() {
@@ -267,15 +296,7 @@ if(!isset($access_token)){
 					}
 				}
 			})
-		}
-
-
-		//////////////////////////////////////////
-		// Let's get this party started. Right? //
-		//////////////////////////////////////////
-
-		//getPics();
-		
+		}	
 	});
 	</script>
 </head>

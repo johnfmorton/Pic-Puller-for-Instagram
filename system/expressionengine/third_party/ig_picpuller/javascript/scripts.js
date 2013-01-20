@@ -1,22 +1,19 @@
 var PicPullerIG;
 
-(function($) {
+$(function() {
 	// Handler for .ready() called.
 
-	var callbacks = {
-		afterThumbnailGeneration: {}
-	};
-
 	PicPullerIG = {
+		callbacks: {
+			afterThumbnailGeneration: {}
+		}, 
 		init: function() {
 			console.log('init fired for PicPullerIG');
 			// The Field Type's photo viewer won't work properly without JS, so it's hidden until the JS has loaded. Attempt to show both the User Stream Browser and the Search Browser. If they aren't present based on the preferences, they won't be able to be shown.
-			// $('.igbrowserbt').show();
-			// $('.igsearchbt').show();
 			$('.igbrowserbt').show();
 			$('.igsearchbt').show();
 
-			// Attache ColorBox listeners to both buttons
+			// Attach ColorBox listeners to both buttons
 			$('.igbrowserbt').ppcolorbox({width:"830px", height:"525px", title: 'Choose a photo from your Instagram feed',
 				onOpen: function() {
 						$(this).parent().find('input').attr('id', 'activePPtarget');
@@ -69,30 +66,30 @@ var PicPullerIG;
 			//
 			function addClickEventToPPPreview() {
 				$('.ig_preview_bt').on('click', function(e) {
-					var myPreviewFrame = $(this).parent().find($('.ig_preview_frame'));
+					var myPreviewFrame = $(this).parent().find($('.thumbnail'));
 					myPreviewFrame.slideDown();
 					var media_id = $(this).parent().find($('.ig_media_id_field')).val();
 					var theURL = $(this).attr('href')+media_id;
 					var theImage = $(this).parent().find($('.theImage'));
 					var theHeadline = $(this).parent().find($('.theHeadline'));
 					var ig_pp_loader_gr = $(this).parent().find($('.ig_pp_loader_gr'));
-					var theSource = $(this).parent().find($('.ig_media_id_field'));
-					console.log("theSource");
-					console.log(theSource);
+					//var theSource = $(this).parent().find($('.ig_pp_fieldset'));
 					$.ajax({
 						url: theURL,
 						dataType: 'json',
 						success: function(data) {
-							console.log('Data received from Instagram.');
-							console.log('code: ' + data.code);
+							//console.log('Data received from Instagram.');
+							//console.log('code: ' + data.code);
 							ig_pp_loader_gr.addClass('hidden');
 							if (data.code === 200 ){
 								theImage.removeClass('hidden');
 								theImage.attr("src",data.imageURL);
-								//theHeadline.text(data.imageTitle);
 								theHeadline.html(data.imageTitle + " <em>by " + data.theUsername + "</em>");
-								// TO DO: make this work!
-								PicPullerIG.callback('afterThumbnailGeneration', theSource);
+								myPreviewFrame.attr('data-id', data.imageID);
+								myPreviewFrame.attr('data-username', data.theUsername);
+								myPreviewFrame.attr('data-fullurl', data.theLink);
+								// call the callback function and pass in the previewframe that was created
+								PicPullerIG.callback('afterThumbnailGeneration', myPreviewFrame);
 							} else {
 								theImage.addClass('hidden');
 								theHeadline.html("<strong>"+data.error_type+": </strong>" + data.error_message);
@@ -141,29 +138,6 @@ var PicPullerIG;
 			if (typeof Matrix == 'function'){
 				console.log("PP detected a Matrix field.");
 
-				// for compatibility with Better Workflow
-				// check for the presence of Bwf, and if present
-				// readd the click event to the PP preview button
-				// since it disappears after closing a preview window
-				// when Matix fields are used.
-				if (typeof Bwf) {
-					Bwf.bind('ig_picpuller', 'previewClose', function(){
-						console.log("BWF is present & the preview window was just closed.");
-						addClickEventToPPPreview();
-
-						$('.ig_media_id_field').each(function(e){
-							//console.log('checking to see if I need to turn on that magnifying glass');
-							if (checkForValueinPPfield($(this)) ){
-								console.log('There was a value in the checked PP field, so trigger an automated lookup.');
-								var myLookupBt = $(this).parent().find($('.ig_preview_bt'));
-								myLookupBt.trigger('click');
-							} else {
-								console.log('No need for an automated look up.');
-							}
-						});
-					});
-				}
-
 				// Bind the PicPuller preparation events to the Matrix display event
 				Matrix.bind('ig_picpuller', 'display', function(cell){
 					// Upon the display of each new PP browser row within a Matrix field, this JS is fired
@@ -195,7 +169,6 @@ var PicPullerIG;
 							height:"525px",
 							title: '<input type="text" id="ig_search_field" name="ig_tag" placeholder="Search for a single tag"><input type="submit" id="ig_search_button" value="Search">',
 							onOpen: function() {
-									//$(this).prev().attr('id', 'activePPtarget');
 									$(this).parent().find('input').attr('id', 'activePPtarget');
 								},
 							onComplete: function() {
@@ -220,46 +193,81 @@ var PicPullerIG;
 									$('#activePPtarget').removeAttr('id');
 							}
 						});
+
+				// for compatibility with Better Workflow
+				// check for the presence of Bwf, and if present
+				// readd the click event to the PP preview button
+				// since it disappears after closing a preview window
+				// when Matix fields are used.
+				if (typeof Bwf) {
+					Bwf.bind('ig_picpuller', 'previewClose', function(){
+						console.log("BWF is present & the preview window was just closed.");
+						addClickEventToPPPreview();
+
+						$('.ig_media_id_field').each(function(e){
+							//console.log('checking to see if I need to turn on that magnifying glass');
+							if (checkForValueinPPfield($(this)) ){
+								console.log('There was a value in the checked PP field, so trigger an automated lookup.');
+								var myLookupBt = $(this).parent().find($('.ig_preview_bt'));
+								myLookupBt.trigger('click');
+							} else {
+								console.log('No need for an automated look up.');
+							}
+						});
+					});
+				}
+
 				}); // end Matrix.bind
 			}
 		}, // end init
 		bind : function(myUniqueIdentifier, event, callback) {
 			console.log('binding');
-			if (typeof callbacks[event] == 'undefined') return;
-			callbacks[event][myUniqueIdentifier] = callback;
+			if (typeof PicPullerIG.callbacks[event] == 'undefined') return;
+			PicPullerIG.callbacks[event][myUniqueIdentifier] = callback;
 			console.log('bound it!');
 		},
 		unbind : function(myUniqueIdentifier, event) {
 			
 			// is this a legit event?
-			if (typeof callbacks[event] == 'undefined') return;
+			if (typeof PicPullerIG.callbacks[event] == 'undefined') return;
 
 			// is the celltype even listening?
-			if (typeof callbacks[event][myUniqueIdentifier] == 'undefined') return;
+			if (typeof PicPullerIG.callbacks[event][myUniqueIdentifier] == 'undefined') return;
 
-			delete callbacks[event][myUniqueIdentifier];
+			delete PicPullerIG.callbacks[event][myUniqueIdentifier];
 			console.log('unbinding ' + myUniqueIdentifier);
 		},
-		callback: function(callback, theSource){
-			// theSource is the currentTarget field that generated the event, ie the field with the media_id
-			for (var myIdentifier in callbacks[callback]) {
-				if (typeof callbacks[callback][myIdentifier] == 'function') {
+		callback: function(callback, that){
+			// 'that' is the ig_preview_frame that was just generated
+			for (var myIdentifier in PicPullerIG.callbacks[callback]) {
+				if (typeof PicPullerIG.callbacks[callback][myIdentifier] == 'function') {
 					console.log(myIdentifier + ' has a function.');
-					callbacks[callback][myIdentifier].call(theSource, callbacks[callback]);
+					PicPullerIG.callbacks[callback][myIdentifier].call(that, PicPullerIG.callbacks[callback]);
 				}
 			}
 		}
-	}.init();
+	};
 
-	// Attach and event stored with the uniqueID of myUniqueIdentifier1234 which allows its removal if needed.
-	PicPullerIG.bind('myUniqueIdentifier1234', 'afterThumbnailGeneration', function() { 
-		// 'this' will hold a reference to the field that triggered the image generation
-		// Just to show it works, let's turn the background color of the field to green
-		this.css('backgroundColor', '#66ff33');
-	});
+	PicPullerIG.init();
 
-	// The event stored at myUniqueIdentifier1234 is now removed
-	PicPullerIG.unbind('myUniqueIdentifier1234', 'afterThumbnailGeneration');
+	/* ******************************** /
+	/ Example Code for adding callbacks /
+	/ ******************************** */
 
-})(jQuery);
+	// Attach an event stored with the uniqueID of myUniqueIdentifier1234 which allows its removal if needed.
+	// PicPullerIG.bind('myUniqueIdentifier1234', 'afterThumbnailGeneration', function() {
+	//	console.log('call back fired');
+	//	console.log(this);
+	//	// 'this' will hold a reference to newly generated thumbnail box
+	//	// Just to show it works, let's turn the background color of the field to green
+	//	this.css('backgroundColor', '#66ff33');
+	// });
+
+	// The event stored at myUniqueIdentifier1234 is now removed using unbind
+	// PicPullerIG.unbind('myUniqueIdentifier1234', 'afterThumbnailGeneration');
+
+
+
+
+});
 
