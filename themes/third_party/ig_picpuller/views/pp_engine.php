@@ -160,7 +160,6 @@
 				// echo "</pre>";
 
 				$json_output = json_decode($json);
-				
 
 				// does the $json_output->data array actually exist? ie, Was there an error getting the data from Instagram?
 				if (is_array($json_output->data)) {

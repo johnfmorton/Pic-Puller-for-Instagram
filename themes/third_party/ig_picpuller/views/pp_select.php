@@ -190,6 +190,7 @@ if(!isset($access_token)){
 					$('.getmore').remove();
 					var prevTotal = $('.scroll-content .thumbnail').length;
 					$('.scroll-content').append(data).each(function() {
+						console.log("Made an image");
 						var newTotal = $('.scroll-content .thumbnail').length;
 						var sliderValue = Math.floor(Math.abs((prevTotal/newTotal * 100) -100 ) );
 

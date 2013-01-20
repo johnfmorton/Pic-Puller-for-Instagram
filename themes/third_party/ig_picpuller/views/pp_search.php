@@ -166,15 +166,12 @@ if(!isset($access_token)){
 				};
 		}
 
-
-		
-
 		// make search button work, but check to be sure the listener isn't already bound to the ppcboxTitle from
 		// a previous search instance
 		if ($("#ppcboxTitle").data('events') == null){
 			$('#ppcboxTitle').delegate('#ig_search_button', "click", function(event) {
-				console.log(event);
-				console.log('You clicked the search button: ' + $('#ig_search_field').val());
+				//console.log(event);
+				console.log('You clicked the search button to search for the tag: ' + $('#ig_search_field').val());
 				event.preventDefault();
 				$("#ig_search_button").attr("disabled", true);
 				executeSearch($('#ig_search_field').val());
