@@ -8,7 +8,6 @@ $(function() {
 			afterThumbnailGeneration: {}
 		}, 
 		init: function() {
-			console.log('init fired for PicPullerIG');
 			// The Field Type's photo viewer won't work properly without JS, so it's hidden until the JS has loaded. Attempt to show both the User Stream Browser and the Search Browser. If they aren't present based on the preferences, they won't be able to be shown.
 			$('.igbrowserbt').show();
 			$('.igsearchbt').show();
@@ -73,13 +72,12 @@ $(function() {
 					var theImage = $(this).parent().find($('.theImage'));
 					var theHeadline = $(this).parent().find($('.theHeadline'));
 					var ig_pp_loader_gr = $(this).parent().find($('.ig_pp_loader_gr'));
-					//var theSource = $(this).parent().find($('.ig_pp_fieldset'));
+					ig_pp_loader_gr.removeClass('hidden');
 					$.ajax({
 						url: theURL,
 						dataType: 'json',
 						success: function(data) {
 							//console.log('Data received from Instagram.');
-							//console.log('code: ' + data.code);
 							ig_pp_loader_gr.addClass('hidden');
 							if (data.code === 200 ){
 								theImage.removeClass('hidden');
@@ -87,6 +85,7 @@ $(function() {
 								theHeadline.html(data.imageTitle + " <em>by " + data.theUsername + "</em>");
 								myPreviewFrame.attr('data-id', data.imageID);
 								myPreviewFrame.attr('data-username', data.theUsername);
+								myPreviewFrame.attr('data-profile_picture', data.theProfilePicture);
 								myPreviewFrame.attr('data-fullurl', data.theLink);
 								// call the callback function and pass in the previewframe that was created
 								PicPullerIG.callback('afterThumbnailGeneration', myPreviewFrame);
@@ -144,21 +143,23 @@ $(function() {
 					// Show the matrix PP buttons
 					$('.igbrowserbtmatrix').show();
 					$('.igsearchbtmatrix').show();
+					addClickEventToPPPreview();
 					// attach the ColorBox to them
 					$('.igbrowserbtmatrix').ppcolorbox({
 						width:"830px",
 						height:"525px",
 						title: 'Choose a photo from your Instagram feed',
 						onOpen: function() {
-								//$(this).prev().attr('id', 'activePPtarget');
 								$(this).parent().find('input').attr('id', 'activePPtarget');
 							},
 						onCleanup: function() {
 							// Look up whatever image might have chosen
 							if (checkForValueinPPfield($('#activePPtarget')) ){
+								console.log('trying to trigger a lookup in Matrix personal stream update');
 								var myLookupBt = $(this).parent().find($('.ig_preview_bt'));
 								myLookupBt.trigger('click');
 							}
+
 							// then remove the target ID from the text input box
 							$('#activePPtarget').removeAttr('id');
 						}
@@ -186,6 +187,7 @@ $(function() {
 							onCleanup: function() {
 									// Look up whatever image might have chosen
 									if (checkForValueinPPfield($('#activePPtarget')) ){
+										console.log('trying to trigger a lookup in Matrix search update');
 										var myLookupBt = $(this).parent().find($('.ig_preview_bt'));
 										myLookupBt.trigger('click');
 									}
@@ -199,9 +201,9 @@ $(function() {
 				// readd the click event to the PP preview button
 				// since it disappears after closing a preview window
 				// when Matix fields are used.
-				if (typeof Bwf) {
+				if (typeof Bwf == 'object') {
 					Bwf.bind('ig_picpuller', 'previewClose', function(){
-						console.log("BWF is present & the preview window was just closed.");
+						//console.log("BWF is present & the preview window was just closed.");
 						addClickEventToPPPreview();
 
 						$('.ig_media_id_field').each(function(e){
@@ -221,10 +223,10 @@ $(function() {
 			}
 		}, // end init
 		bind : function(myUniqueIdentifier, event, callback) {
-			console.log('binding');
+			//console.log('binding');
 			if (typeof PicPullerIG.callbacks[event] == 'undefined') return;
 			PicPullerIG.callbacks[event][myUniqueIdentifier] = callback;
-			console.log('bound it!');
+			console.log('The "' +event+ '" event with the identifer of "' + myUniqueIdentifier + '" has been bound.');
 		},
 		unbind : function(myUniqueIdentifier, event) {
 			
@@ -235,13 +237,13 @@ $(function() {
 			if (typeof PicPullerIG.callbacks[event][myUniqueIdentifier] == 'undefined') return;
 
 			delete PicPullerIG.callbacks[event][myUniqueIdentifier];
-			console.log('unbinding ' + myUniqueIdentifier);
+			console.log('The "' +event+ '" event with the identifer of "' + myUniqueIdentifier + '" has been unbound.');
 		},
 		callback: function(callback, that){
 			// 'that' is the ig_preview_frame that was just generated
 			for (var myIdentifier in PicPullerIG.callbacks[callback]) {
 				if (typeof PicPullerIG.callbacks[callback][myIdentifier] == 'function') {
-					console.log(myIdentifier + ' has a function.');
+					//console.log(myIdentifier + ' has a function.');
 					PicPullerIG.callbacks[callback][myIdentifier].call(that, PicPullerIG.callbacks[callback]);
 				}
 			}
@@ -254,16 +256,16 @@ $(function() {
 	/ Example Code for adding callbacks /
 	/ ******************************** */
 
-	// Attach an event stored with the uniqueID of myUniqueIdentifier1234 which allows its removal if needed.
+	// // Attach an event stored with the uniqueID of myUniqueIdentifier1234 which allows its removal if needed.
 	// PicPullerIG.bind('myUniqueIdentifier1234', 'afterThumbnailGeneration', function() {
 	//	console.log('call back fired');
 	//	console.log(this);
 	//	// 'this' will hold a reference to newly generated thumbnail box
 	//	// Just to show it works, let's turn the background color of the field to green
-	//	this.css('backgroundColor', '#66ff33');
+	// this.css('backgroundColor', '#66ff33');
 	// });
 
-	// The event stored at myUniqueIdentifier1234 is now removed using unbind
+	// // The event stored at myUniqueIdentifier1234 is now removed using unbind
 	// PicPullerIG.unbind('myUniqueIdentifier1234', 'afterThumbnailGeneration');
 
 

@@ -108,6 +108,7 @@
 					$imageTitle =  $json_output->data->caption->text;
 					$imageURL = $json_output->data->images->low_resolution->url;
 					$theUsername = $json_output->data->user->username;
+					$theProfilePicture = $json_output->data->user->profile_picture;
 					$theLink = $json_output->data->link;
 					echo json_encode( array(
 						'success' => $success,
@@ -116,6 +117,7 @@
 						'imageID' => $json_output->data->id,
 						'imageURL' => $imageURL,
 						'theUsername' => $theUsername,
+						'theProfilePicture' => $theProfilePicture,
 						'theLink' => $theLink
 					) );
 				} else {

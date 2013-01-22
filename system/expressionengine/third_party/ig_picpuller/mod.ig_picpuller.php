@@ -84,7 +84,7 @@ class Ig_picpuller {
 	 * Create a new channel for Pic Puller
 	 *
 	 * This function should be called by the advanced menu instead of this current method which
-	 * requires adding tags to a template to execute them.
+	 * requires adding tags to a template to execute them. IT IS CURRENTLY NOT IN USE.
 	 *
 	 * @access	private
 	 * @param	none

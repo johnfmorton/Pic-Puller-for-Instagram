@@ -252,12 +252,12 @@ if(!isset($access_token)){
 						if (!!theImages[i].caption){
 							caption = theImages[i].caption.text;
 						}			
-						var newThumbnail = $('<div class="thumbnail" data-id="'+ theImages[i].id +'" data-username="'+ theImages[i].id +'" data-fullurl="'+ theImages[i].link +'"><img src="' + theImages[i].images.low_resolution.url + '" alt="Instagram image id: '+ theImages[i].id +'" width="100" height="100" border="0"><div class="headline">'+ caption +'</div><a href="#" class="selectbtn">Select this image</a></div>');
+						var newThumbnail = $('<div class="thumbnail" data-id="'+ theImages[i].id +'" data-username="'+ theImages[i].user.username +'" data-profile_picture="'+ theImages[i].user.profile_picture +'" data-fullurl="'+ theImages[i].link +'"><img src="' + theImages[i].images.low_resolution.url + '" alt="Instagram image id: '+ theImages[i].id +'" width="100" height="100" border="0"><div class="headline">'+ caption +' by<em>'+theImages[i].user.username+'</em></div><a href="#" class="selectbtn" data-id="'+ theImages[i].id +'">Select this image</a></div>');
 						$('.scroll-content').append(newThumbnail);
 
 						PicPullerIG.callback('afterThumbnailGeneration', newThumbnail);
 						if( i === (theImages.length-1) ){
-							console.log('last one');
+							//console.log('last one');
 							//console.log(next_max_tag_id);
 							if(next_max_tag_id != '' ){
 								var nextURL = "<?php echo $third_party_theme_dir;?>pp_engine.php?access_token=<?php echo $access_token;?>&method=tagsearch&tag="+ PPsearchterm +"&count=29&next_max_tag_id="+next_max_tag_id;

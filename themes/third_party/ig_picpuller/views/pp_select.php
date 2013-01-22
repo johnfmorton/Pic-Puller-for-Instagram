@@ -175,6 +175,7 @@ if(!isset($access_token)){
 		});
 
 		$('.scroll-content').delegate('.selectbtn', 'click', function(event) {
+			console.log('click heard');
 			$('#activePPtarget').val($(this).attr('data-id'));
 			$.ppcolorbox.close();
 			return false;
@@ -205,7 +206,7 @@ if(!isset($access_token)){
 						if (!!theImages[i].caption){
 							caption = theImages[i].caption.text;
 						}			
-						var newThumbnail = $('<div class="thumbnail" data-id="'+ theImages[i].id +'" data-username="'+ theImages[i].id +'" data-fullurl="'+ theImages[i].link +'"><img src="' + theImages[i].images.low_resolution.url + '" alt="Instagram image id: '+ theImages[i].id +'" width="100" height="100" border="0"><div class="headline">'+ caption +'</div><a href="#" class="selectbtn">Select this image</a></div>');
+						var newThumbnail = $('<div class="thumbnail" data-id="'+ theImages[i].id +'" data-username="'+ theImages[i].user.username +'" data-profile_picture="'+ theImages[i].user.profile_picture +'" data-fullurl="'+ theImages[i].link +'"><img src="' + theImages[i].images.low_resolution.url + '" alt="Instagram image id: '+ theImages[i].id +'" width="100" height="100" border="0"><div class="headline">'+ caption +'</div><a href="#" class="selectbtn" data-id="'+ theImages[i].id +'">Select this image</a></div>');
 						$('.scroll-content').append(newThumbnail);
 
 						PicPullerIG.callback('afterThumbnailGeneration', newThumbnail);
