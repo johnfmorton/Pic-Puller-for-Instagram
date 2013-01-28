@@ -1061,9 +1061,9 @@ class Ig_picpuller {
 			$message =  "Success! Your Instagram app now has access to your photostream.";
 
 			$response = "success";	
-		} elseif (isset($_GET['error_description'])) {
+		} elseif (isset($user_data->{'code'})) {
 			$response =  "definedError";
-			$message = $_GET['error_description'];
+			$message = 'Instagram returned an error in the authorization process.<br><br>Error code: ' . $user_data->{'code'} . '<br><br>Error Type: ' . $user_data->{'error_type'} . '<br><br>Error Message: ' . $user_data->{'error_message'};
 		} else {
 			$response =  "error";
 			$message = '';
@@ -1077,11 +1077,7 @@ class Ig_picpuller {
 			case 'definedError':
 			$this->showResult("Error", $message);
 			break;
-
 			case 'error':
-			// echo "<pre>";
-			// print_r($_GET);
-			// echo "</pre>";
 			$this->showResult("Error", "An error occurred in the authorization process with Instagram. No oAuth code was returned.<br><br>One cause of this type of error is the password not being identical in ExpressionEngine to the Instagram secret.<br><br>Another cause can be the Instagram API not responding as expected. Is the API operating normally? You can check at, <a href=\"http://api-status.com/6404/174981/Instagram-API\" target='_blank'>API Status</a>");
 			break;
 			
@@ -1138,7 +1134,12 @@ class Ig_picpuller {
 		
 		$returndata = curl_exec($ch);
 		
-		
+		// echo "<pre>";
+		// print_r(json_decode($returndata));
+		// echo "</pre>";
+
+		//die();
+
 		if ($returndata === FALSE) {  
 
 			//echo "cURL Error: " . curl_error($ch);  
@@ -1151,6 +1152,13 @@ class Ig_picpuller {
 		curl_close($ch);
 		
 		$json = json_decode($returndata);
+
+
+		// echo "<pre>";
+		// print_r($json);
+		// echo "</pre>";
+
+		// die();
 
 		return $json;
 	}
