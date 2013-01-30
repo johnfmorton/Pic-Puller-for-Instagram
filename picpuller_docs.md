@@ -1,9 +1,17 @@
 # Change log
 
-1.4.5 - 2013JAN15
+1.4.5 - 2013JAN29
 - Fieldtype gets more love. Now preview your images within the control panel for each entry.
+- Compatibility with Better Work Flow added, http://betterworkflow.electricputty.co.uk/
 - Fieldtype now shows the username of the photographer. Useful since you can now search all of Instagram, not just your own photos.
 - The loading indicator, which disappeared in the 1.2.0 version update, comes back from a long vacation.
+- Fieldtype written to allow for JS callbacks. PicPullerIG.bind and PicPullerIG.unbind allow you access each preview frame in the control panel.
+- Sample: PicPullerIG.bind('myUniqueIdentifier1234', 'afterThumbnailGeneration', function() {this.css('backgroundColor', '#66ff33');});
+- Each fieldtype preview frame includes new data elements that can be useful for your callback functions.
+- data-id: the Instagram ID of the image 
+- data-username: the Instagram username of the photo creator
+- data-profile_picture: the URL of to the profile image of the creator
+- data-fullurl: the link to the photo page on Instagram
 
 1.4.4 - 2013JAN14
 - Unreleased private beta.
@@ -403,13 +411,46 @@ Since only users who have authorized Pic Puller can show the media browser, user
 
 The fieldtype requires javascript. 
 
-The fieldtype is compatible with Matrix.
+The fieldtype is compatible with Matrix and Better Work Flow.
 
 There is a multiple options for the fieldtype. All options default to "on".
 
 Option 1: You can use the default instructional language that the fieldtype will automatically include or you may turn it off. 
 Option 2: You may choose to hide the Instagram browser that allows a user to choose from the logged in user's photo stream.
 Option 3: You may choose to hide the Instagram browser that allows a user to search and choose photos from all of Instagram's public images.
+
+-----
+
+# Javascript callbacks for 'Pic Puller for Instagram Browser' Fieldtype
+
+The fieldtype now shows a preview of the selected image in the control panel. This preview and all the preview frames in the image browser can have a callback after their creation. The event name is "afterThumbnailGeneration". 
+
+There are also a series of data attributes attached to the returned preview frame, accessible by the keyword "this". Those data attributes are: 
+
+data-id: the Instagram ID of the image 
+data-username: the Instagram username of the photo creator
+data-profile_picture: the URL of to the profile image of the creator
+data-fullurl: the link to the photo page on Instagram
+
+Here is some sample Javascript that shows you how to bind a callback to the event. The event is bound with an identifier so you can remove it easily . As the code shows, the bound event is unbound easily this way.
+
+/* ******************************** /
+/ Example Code for adding callbacks /
+/ ******************************** */
+
+// Attach an event stored with the uniqueID of myUniqueIdentifier1234 which allows its removal if needed.
+PicPullerIG.bind('myUniqueIdentifier1234', 'afterThumbnailGeneration', function() {
+	console.log('call back fired');
+	console.log(this);
+	// 'this' will hold a reference to newly generated thumbnail box
+	// Just to show it works, let's turn the background color of the field to green
+this.css('backgroundColor', '#66ff33');
+});
+
+// The event stored at myUniqueIdentifier1234 is now removed using unbind
+PicPullerIG.unbind('myUniqueIdentifier1234', 'afterThumbnailGeneration');
+
+// End of code example.
 
 
 -----
@@ -427,3 +468,4 @@ The module addresses this issue by using the front-end authorization feature of 
 If you manage siteB.com from the same domain, for example siteB.com/admin.php, you will not run into this problem. 
 
 There is an optional authorization method you may try in this situation.The alternate authorization method is intended to get around some stubborn servers that won't allow the normal authorization process, but it has proven useful in this situation as well. This option is available to SuperAdmin level users only under the "Advanced" tab.
+

@@ -5,6 +5,28 @@
 		<link>http://static.supergeekery.com/nsm_addon_updater/changelog_ig_picpuller.xml</link>
 		<description>Build an Instagram app with built in image browsing into ExpressionEngine</description>
 		<item>
+			<title>Version 1.4.5</title>
+			<!-- Additional tag required for NSM Addon Updater -->
+			<ee_addon:version>1.4.5</ee_addon:version>
+			<link>http://devot-ee.com/add-ons/pic-puller-for-instagram</link>
+			<pubDate>Tues, 29 January 2013 16:35:00 +0500</pubDate>
+			<description><![CDATA[
+				<ul>
+					<li>Fieldtype gets more love. Now preview your images within the control panel for each entry.</li>
+					<li>Compatibility with Better Work Flow added, http://betterworkflow.electricputty.co.uk/</li>
+					<li>Fieldtype now shows the username of the photographer. Useful since you can now search all of Instagram, not just your own photos.</li>
+					<li>The loading indicator, which disappeared in the 1.2.0 version update, comes back from a long vacation.</li>
+					<li>Fieldtype written to allow for JS callbacks. PicPullerIG.bind and PicPullerIG.unbind allow you access each preview frame in the control panel.</li>
+					<li>Sample: PicPullerIG.bind('myUniqueIdentifier1234', 'afterThumbnailGeneration', function() {this.css('backgroundColor', '#66ff33');});</li>
+					<li>Each fieldtype preview frame includes new data elements that can be useful for your callback functions.</li>
+					<li>data-id: the Instagram ID of the image </li>
+					<li>data-username: the Instagram username of the photo creator</li>
+					<li>data-profile_picture: the URL of to the profile image of the creator</li>
+					<li>data-fullurl: the link to the photo page on Instagram</li>
+				</ul>
+			]]></description>
+		</item>
+		<item>
 			<title>Version 1.4.4</title>
 			<!-- Additional tag required for NSM Addon Updater -->
 			<ee_addon:version>1.4.4</ee_addon:version>
@@ -12,9 +34,7 @@
 			<pubDate>Tues, 15 January 2013 16:35:00 +0500</pubDate>
 			<description><![CDATA[
 				<ul>
-					<li>Fieldtype gets more love. Now preview your images within the control panel for each entry.</li>
-					<li>Fieldtype now shows the username of the photographer. Useful since you can now search all of Instagram, not just your own photos.</li>
-					<li>The loading indicator, which disappeared in the 1.2.0 version update, comes back from a long vacation.</li>
+					<li>Privated unreleased version.</li>
 				</ul>
 			]]></description>
 		</item>
