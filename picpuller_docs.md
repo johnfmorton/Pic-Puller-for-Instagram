@@ -1,5 +1,10 @@
 # Change log
 
+1.4.6 - 2013MAY25
+- Added check for the URL_THIRD_THEMES constant being set.
+- Replaced "cp->set_variable" method marked as deprecated for as of EE 2.6.0 in control panel file
+- Added check for valid "meta" object when parsing data received from Instagram
+
 1.4.5 - 2013JAN29
 - Fieldtype gets more love. Now preview your images within the control panel for each entry.
 - Compatibility with Better Work Flow added, http://betterworkflow.electricputty.co.uk/

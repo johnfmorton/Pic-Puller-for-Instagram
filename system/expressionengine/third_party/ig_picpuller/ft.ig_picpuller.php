@@ -1,16 +1,19 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+// include config file
+include (PATH_THIRD.'ig_picpuller/config.php');
+
 class Ig_picpuller_ft extends EE_Fieldtype {
-	
+
 	var $info = array(
 		'name'		=> 'Pic Puller for Instagram Browser',
-		'version'	=> '1.4.5'
+		'version'	=> PP_IG_VERSION
 	);
 
 	static $counter = 0;
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Display Field on Publish
 	 *
@@ -29,7 +32,9 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 
 		$this->EE->lang->loadfile('ig_picpuller');
 
-		$pp_theme_views = URL_THIRD_THEMES.'ig_picpuller/views/';
+		$pp_theme_views = ((defined('URL_THIRD_THEMES'))
+		           ? URL_THIRD_THEMES.'ig_picpuller/views/'
+		           : $this->EE->config->item('url_third_themes') .'ig_picpuller/views/');
 
 		$this->EE->cp->add_to_head('<style>#ppcboxLoadingGraphic{background:url('.$pp_theme_views.'images/loading.gif) no-repeat center center;};</style>');
 
@@ -39,7 +44,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 
 		$user_id = $this->EE->session->userdata('member_id');
 		$oauth = $this->getAuthCredsForUser($user_id);
-		
+
 		$pp_engine_url = $pp_theme_views.'pp_engine.php';
 
 		if ($oauth != '') {
@@ -89,18 +94,18 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 				'value' => $data
 			))."<a href='$pp_engine_url?method=media&access_token=$oauth&media_id=' class='ig_preview_bt hidden'>Preview</a><div class='thumbnail preview'><img src='".$pp_theme_views."images/loading.gif' class='ig_pp_loader_gr'>	<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAABlBMVEXd4uUAAAC4cpOLAAAARElEQVRoBe3QgQAAAADDoPlTX+EAhVBhwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMPAMDJ3QAAViTWAEAAAAASUVORK5CYII=' width=100 height=100 border=0 class='theImage'><div class='theHeadline'><em>looking up</em></div></div><br>$stream_button$search_button".'</div>';
 
-				// /v1/media/368715424533973737_1500897?access_token=1500897.1fb234f.2f8ff3b7ca7543d68543061cd2854f82 
+				// /v1/media/368715424533973737_1500897?access_token=1500897.1fb234f.2f8ff3b7ca7543d68543061cd2854f82
 
 			return $input;
-		} 
-		else 
+		}
+		else
 		{
 			////////////////////////////////////////////////////////////////
 			// no oauth means the user has not authorized with Instagram. //
 			////////////////////////////////////////////////////////////////
 
 			return lang('unauthorized_field_type_access');
-		}	
+		}
 	}
 
 	/**
@@ -118,7 +123,9 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 
 		$this->EE->lang->loadfile('ig_picpuller');
 
-		$pp_theme_views = URL_THIRD_THEMES.'ig_picpuller/views/';
+		$pp_theme_views = defined( 'URL_THIRD_THEMES' )
+			? URL_THIRD_THEMES.'ig_picpuller/views/'
+			: $this->EE->config->item('theme_folder_url') . 'third_party/ig_picpuller/views/';
 		$pp_engine_url = $pp_theme_views.'pp_engine.php';
 
 		$this->EE->cp->add_to_head('<style>#cboxLoadingGraphic{background:url('.$pp_theme_views.'images/loading.gif) no-repeat center center;};</style>');
@@ -129,11 +136,11 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 
 		$user_id = $this->EE->session->userdata('member_id');
 		$oauth = $this->getAuthCredsForUser($user_id);
-		
+
 		if ($oauth != '') {
-			
+
 			$pp_select = $pp_theme_views.'pp_select.php?access_token='.$oauth;
-			$pp_search = $pp_theme_views.'pp_search.php?access_token='.$oauth; 
+			$pp_search = $pp_theme_views.'pp_search.php?access_token='.$oauth;
 
 			if ($this->settings['display_pp_instructions'] === 'yes') {
 				$instructions = '<div class="instruction_text"><p style="margin-left: 0px;">'.lang('default_instructions').'</p></div>';
@@ -142,7 +149,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 			}
 
 			// Check to see if the Matrix field has settings for this particular instance
-			 
+
 			if(isset($this->settings['display_pp_stream'])) {
 				$display_pp_stream = $this->settings['display_pp_stream'];
 			} else {
@@ -175,15 +182,15 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 			$html =$instructions . '<div class="ig_pp_fieldset"><input value="'.$data.'" name="'.$this->cell_name.'"  class="ig_media_id_field matrix_version">'."<a href='$pp_engine_url?method=media&access_token=$oauth&media_id=' class='ig_preview_bt hidden'>Preview</a><div class='thumbnail preview'><img src='".$pp_theme_views."images/loading.gif' class='ig_pp_loader_gr'><img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAABlBMVEXd4uUAAAC4cpOLAAAARElEQVRoBe3QgQAAAADDoPlTX+EAhVBhwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMPAMDJ3QAAViTWAEAAAAASUVORK5CYII=' width=100 height=100 border=0 class='theImage'><div class='theHeadline'><em>looking up</em></div></div><br>$stream_button$search_button".'</div>';
 
 			return $html;
-		} 
-		else 
+		}
+		else
 		{
 			////////////////////////////////////////////////////////////////
 			// no oauth means the user has not authorized with Instagram. //
 			////////////////////////////////////////////////////////////////
 
 			return lang('unauthorized_field_type_access');
-		}	
+		}
 	}
 
 	/**
@@ -204,7 +211,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 		// See if there are global setting set for this option, if not, default to "yes"
 		$display_pp_instructions = isset($val['display_pp_instructions']) ? $val['display_pp_instructions'] : 'yes';
 
-		$checked_instr = TRUE; 
+		$checked_instr = TRUE;
 
 		if ($display_pp_instructions === 'no') {
 			$checked_instr = FALSE;
@@ -222,12 +229,12 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 			'checked' => !$checked_instr
 		);
 
-		// Get the personal stream browser prefs 
+		// Get the personal stream browser prefs
 		// See if there are global setting set for this option, if not, default to "yes"
 		$display_pp_stream = isset($val['display_pp_stream']) ? $val['display_pp_stream'] : 'yes';
 
-		$checked_stream = TRUE; 
-		
+		$checked_stream = TRUE;
+
 		if ($display_pp_stream === 'no') {
 			$checked_stream = FALSE;
 		}
@@ -248,8 +255,8 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 		// See if there are global setting set for this option, if not, default to "yes"
 		$display_pp_search = isset($val['display_pp_search']) ? $val['display_pp_search'] : 'yes';
 
-		$checked_search = TRUE; 
-		
+		$checked_search = TRUE;
+
 		if ($display_pp_search === 'no') {
 			$checked_search = FALSE;
 		}
@@ -313,11 +320,11 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 
 		// Get the instructions prefs
 		// Check to see if particular field has settings for this particular instance
-		
+
 		// echo '<pre>';
 		// print_r($data['display_pp_instructions']);
 		// echo '</pre>';
-		
+
 		if(isset($data['display_pp_instructions'])) {
 			$display_pp_instructions = $data['display_pp_instructions'];
 		} else {
@@ -325,7 +332,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 			$display_pp_instructions = isset($this->settings['display_pp_instructions']) ? $this->settings['display_pp_instructions'] : 'yes';
 		}
 
-		$checked_instr = TRUE; 
+		$checked_instr = TRUE;
 
 		if ($display_pp_instructions === 'no') {
 			$checked_instr = FALSE;
@@ -343,11 +350,11 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 			'checked' => !$checked_instr
 		);
 
-		
 
-		// Get the personal stream browser prefs 
+
+		// Get the personal stream browser prefs
 		// Check to see if particular field has settings for this particular instance
-		
+
 		if(isset($data['display_pp_stream'])) {
 			$display_pp_stream = $data['display_pp_stream'];
 		} else {
@@ -355,7 +362,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 			$display_pp_stream = isset($this->settings['display_pp_stream']) ? $this->settings['display_pp_stream'] : 'yes';
 		}
 
-		$checked_stream = TRUE; 
+		$checked_stream = TRUE;
 
 		if ($display_pp_stream === 'no') {
 			$checked_stream = FALSE;
@@ -376,7 +383,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 
 		// Get the search browser prefs
 		// Check to see if particular field has settings for this particular instance
-		
+
 		if(isset($data['display_pp_search'])) {
 			$display_pp_search = $data['display_pp_search'];
 		} else {
@@ -384,7 +391,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 			$display_pp_search = isset($this->settings['display_pp_search']) ? $this->settings['display_pp_search'] : 'yes';
 		}
 
-		$checked_search = TRUE; 
+		$checked_search = TRUE;
 
 		if ($display_pp_search === 'no') {
 			$checked_search = FALSE;
@@ -426,7 +433,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 	function display_cell_settings( $data )
 	{
 		$this->EE->lang->loadfile('ig_picpuller');
-		
+
 		// Get the instructions prefs
 		// Check to see if particular field has settings for this particular instance
 		if(isset($data['display_pp_instructions'])) {
@@ -435,8 +442,8 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 			// if no settings are found, try to use the global settings, if those are not present, default to "yes"
 			$display_pp_instructions = isset($this->settings['display_pp_instructions']) ? $this->settings['display_pp_instructions'] : 'yes';
 		}
-		
-		$checked_instr = TRUE; 
+
+		$checked_instr = TRUE;
 
 		if ($display_pp_instructions === 'no') {
 			$checked_instr = FALSE;
@@ -454,7 +461,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 			'checked' => !$checked_instr
 		);
 
-		// Get the personal stream browser prefs 
+		// Get the personal stream browser prefs
 		// Check to see if particular field has settings for this particular instance
 		if(isset($data['display_pp_stream'])) {
 			$display_pp_stream = $data['display_pp_stream'];
@@ -463,7 +470,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 			$display_pp_stream = isset($this->settings['display_pp_stream']) ? $this->settings['display_pp_stream'] : 'yes';
 		}
 
-		$checked_stream = TRUE; 
+		$checked_stream = TRUE;
 
 		if ($display_pp_stream === 'no') {
 			$checked_stream = FALSE;
@@ -490,7 +497,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 			$display_pp_search = isset($this->settings['display_pp_search']) ? $this->settings['display_pp_search'] : 'yes';
 		}
 
-		$checked_search = TRUE; 
+		$checked_search = TRUE;
 
 		if ($display_pp_search === 'no') {
 			$checked_search = FALSE;
@@ -509,7 +516,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 		);
 
 		return array(
-		array (  
+		array (
 			lang('display_instructions_option_text', 'display_instructions_option_text') ,
 			'Yes: '.form_radio($radio1).NBS.NBS.' No: '.form_radio($radio2)
 			 ),
@@ -542,7 +549,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 		$ret = '';
 		return $data;
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -562,9 +569,9 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 			'the_function' => 'media_recent'
 		);
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Install Fieldtype
 	 *
@@ -573,7 +580,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 	 *
 	 */
 	function install()
-	{	
+	{
 		return array(
 			'ig_media_id'	=> '',
 			'display_pp_instructions' => 'yes',
@@ -582,9 +589,9 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 			'the_function' => 'media_recent'
 		);
 	}
-	
+
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Get Authorization Credentials for an EE user
 	 *
@@ -594,7 +601,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 	 * @param	string - User ID number for an EE member
 	 * @return	mixed - returns Instagram oAuth credentials for a user if available in DB, or FALSE if unavailable
 	 */
-	
+
 	private function getAuthCredsForUser($user_id)
 	{
 		$appID = $this->getCurrentAppId();
@@ -615,7 +622,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 	}
 
 	// --------------------------------------------------------------------
-	
+
 	/**
 	 * Get the Current PP App ID for this Instagram App
 	 *

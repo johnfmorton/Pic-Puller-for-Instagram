@@ -5,6 +5,20 @@
 		<link>http://static.supergeekery.com/nsm_addon_updater/changelog_ig_picpuller.xml</link>
 		<description>Build an Instagram app with built in image browsing into ExpressionEngine</description>
 		<item>
+			<title>Version 1.4.6</title>
+			<!-- Additional tag required for NSM Addon Updater -->
+			<ee_addon:version>1.4.6</ee_addon:version>
+			<link>http://devot-ee.com/add-ons/pic-puller-for-instagram</link>
+			<pubDate>Tues, 16 April 2013 17:11:00 +0500</pubDate>
+			<description><![CDATA[
+				<ul>
+					<li>Added check for the URL_THIRD_THEMES constant being set.</li>
+					<li>Replaced "cp->set_variable" method marked as deprecated for as of EE 2.6.0 in control panel file</li>
+					<li>Added check for valid "meta" object when parsing data received from Instagram</li>
+				</ul>
+			]]></description>
+		</item>
+		<item>
 			<title>Version 1.4.5</title>
 			<!-- Additional tag required for NSM Addon Updater -->
 			<ee_addon:version>1.4.5</ee_addon:version>
@@ -197,7 +211,7 @@
 			<pubDate>Sat, 04 Feb 2012 13:16:00 +0500</pubDate>
 			<description><![CDATA[
 				<ul>
-					<li>Added support for authorizing logged in members from the front end of ExpressionEngine site.</li> 
+					<li>Added support for authorizing logged in members from the front end of ExpressionEngine site.</li>
 				</ul>
 			]]></description>
 		</item>
@@ -210,7 +224,7 @@
 			<pubDate>Wed, 28 Jan 2012 00:00:00 +0500</pubDate>
 			<description><![CDATA[
 				<ul>
-					<li>Added 'media' tag to retrieve individual media by Instagram ID.</li> 
+					<li>Added 'media' tag to retrieve individual media by Instagram ID.</li>
 				</ul>
 			]]></description>
 		</item>
@@ -223,7 +237,7 @@
 			<pubDate>Wed, 24 Jan 2012 18:32:00 +0500</pubDate>
 			<description><![CDATA[
 				<ul>
-					<li>Initial release.</li> 
+					<li>Initial release.</li>
 				</ul>
 			]]></description>
 		</item>

@@ -1,5 +1,8 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+// include config file
+include (PATH_THIRD.'ig_picpuller/config.php');
+
 /**
  * ExpressionEngine - by EllisLab
  *
@@ -11,7 +14,7 @@
  * @since		Version 2.0
  * @filesource
  */
- 
+
 // ------------------------------------------------------------------------
 
 /**
@@ -25,34 +28,33 @@
  */
 
 class Ig_picpuller_mcp {
-	
+
 	public $return_data;
-	
+
 	private $_base_url;
 
 	// $_currentSite will identify whatever is the current site in the control panel for use in cases where MSM is being used.
 	private $_currentSite;
-	
+
 	/**
 	 * Constructor
 	 */
 	public function __construct()
 	{
 		$this->EE =& get_instance();
-		
+
 		$this->_currentSite = $this->EE->config->config['site_id'];
-		//echo($this->_currentSite);
 
 		$this->_currentAppId = $this->getCurrentAppId();
 
 		$this->_the_server = $_SERVER['HTTP_HOST'];
 
 		$this->_base_url = BASE.AMP.'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=ig_picpuller';
-		
+
 		$this->EE->load->library('session');
-		
+
 		if ( $this->isSuperAdmin() ) {
-		
+
 		$this->EE->cp->set_right_nav(array(
 			'ig_set_up'	=> $this->_base_url,
 			'ig_info' => $this->_base_url.AMP.'method=ig_info',
@@ -62,23 +64,26 @@ class Ig_picpuller_mcp {
 			// Add more right nav items here in needed
 		));
 		} else {
-			
+
 			// ==============================================================
 			// = A non-SuperAdmin doesn't get to see the rest of the module =
 			// = so only the link to the home page of the module is here.   =
 			// ==============================================================
-			
+
 			$this->EE->cp->set_right_nav(array(
 				'ig_set_up'	=> $this->_base_url
 				// Add more right nav items here in needed
 			));
 		}
-		
+
 		// set the name of the CP title
-		$this->EE->cp->set_variable('cp_page_title', lang('ig_picpuller_module_name'));
-		
+		if (function_exists('ee')) {
+			$this->EE->view->cp_page_title = lang('ig_picpuller_module_name');
+		} else {
+			$this->EE->cp->set_variable('cp_page_title', lang('ig_picpuller_module_name'));
+		}
 	}
-	
+
 	// ----------------------------------------------------------------
 
 	/**
@@ -88,7 +93,7 @@ class Ig_picpuller_mcp {
 	 */
 	public function index()
 	{
-		
+
 		$vars['moduleTitle'] = lang('ig_picpuller_module_name');
 		$vars['moduleShortTitle'] = lang('ig_picpuller_short_module_name');
 		$vars['site_label'] = $this->getSiteLabel();
@@ -99,7 +104,7 @@ class Ig_picpuller_mcp {
 		$vars['adv_user_url'] = $this->_base_url.'&method=adv_user_admin';
 
 		$baseURLpattern = '/(?:https?:\/\/)?(?:www\.)?([a-zA-Z0-9\.\-]*\/)/';;
-		
+
 		preg_match($baseURLpattern, $this->EE->config->config['base_url'], $current_base_url);
 		$current_base_url = $current_base_url[1];
 
@@ -110,7 +115,7 @@ class Ig_picpuller_mcp {
 			//$vars['debugger'] = $this->EE->config->config['base_url'] . ' ??? ' . $current_base_url[0];//$this->_currentSite;
 			$vars['debugger'] = 'Yes, you can validate successfully here.';
 		} else {
-			// 
+			//
 			$vars['debugger'] =  'No, you can\'t validate successfully here. ' . $current_base_url;
 		}
 		*/
@@ -119,62 +124,62 @@ class Ig_picpuller_mcp {
 
 		if ($this->appAuthorized()) {
 			$vars['delete_method'] = $string = $this->_base_url.'&method=removeAuthorization';
-			
+
 			return $this->EE->load->view('authorized', $vars, TRUE);
 		}
-		
+
 		$this->EE->load->library('javascript');
-		$this->EE->load->library('table');	
+		$this->EE->load->library('table');
 		$this->EE->load->helper('form');
-			
+
 		// Help the user figure out the oAuth redirect URL
-		
+
 		$vars['full_auth_url'] = $this->getRedirectURL();
-		
+
 		$vars['redirect_url'] = $this->getRedirectURL(true);
 
 		$action_id = $this->EE->functions->fetch_site_index(0, 0).QUERY_MARKER.'ACT='.$this->EE->cp->fetch_action_id('ig_picpuller', 'authorization');
-		
+
 		$vars['action_id'] = $action_id;
-		
+
 		/*
 		FUTURE:
-		Use JS to help user construct EE code for each tag pair.		
-		
+		Use JS to help user construct EE code for each tag pair.
+
 		$this->EE->javascript->output(array(
 				'// add my own jQuery here.'
 				)
 		);
 		$this->EE->javascript->compile();
-		*/	
-		
+		*/
+
 		$vars['form_hidden'] = NULL;
 		$vars['options'] = array(
 						'edit'  => lang('edit_selected'),
 						'delete'    => lang('delete_selected')
 						);
-		
+
 		if ( $this->appExistsInDb() )
 		{
 			// app exists in DB so the Action URL is the Redirect URL for authroizing an app
-			
+
 			$vars['preexisting_app'] = TRUE;
 			$vars['action_url'] = $this->getRedirectURL();
 			$vars['clientID'] = $this->getClientID();
-			
-		} 
-		else 
+
+		}
+		else
 		{
 			// no app exists in DB so the Action URL is to save setting to the DB
-			
+
 			$vars['preexisting_app'] = FALSE;
 			$vars['action_url'] = 'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=ig_picpuller'.AMP.'method=save_settings';
 		}
-		
+
 		if ( $this->isSuperAdmin() ) {
 			return $this->EE->load->view('index', $vars, TRUE);
-		} 
-		else 
+		}
+		else
 		{
 			return $this->EE->load->view('index_nonsuperadmin', $vars, TRUE);
 		}
@@ -184,7 +189,7 @@ class Ig_picpuller_mcp {
 	 * Display info within the control panel about the **current** Instagram app in Pic Puller
 	 * @return a view "ig_about"
 	 */
-	public function ig_info() 
+	public function ig_info()
 	{
 		$vars['moduleTitle'] = lang('ig_picpuller_module_name');
 		$vars['moduleShortTitle'] = lang('ig_picpuller_short_module_name');
@@ -197,8 +202,8 @@ class Ig_picpuller_mcp {
 		$vars['delete_method'] = $this->_base_url.'&method=preview_delete_app';
 		$vars['edit_secret'] = $this->_base_url.'&method=edit_secret';
 		$vars['edit_prefix'] = $this->_base_url.'&method=edit_prefix';
-		$vars['edit_frontend_url'] = $this->_base_url.'&method=edit_frontend_url';		
-		return $this->EE->load->view('ig_about', $vars, TRUE);	
+		$vars['edit_frontend_url'] = $this->_base_url.'&method=edit_frontend_url';
+		return $this->EE->load->view('ig_about', $vars, TRUE);
 	}
 
 	/**
@@ -216,14 +221,14 @@ class Ig_picpuller_mcp {
 		// echo "<pre>";
 		// print_r( $query->result() );
 		// echo "</pre>";
-		
+
 		$site_ids = array();
 		$app_ids = array();
 		$site_labels = array();
 		$client_ids = array();
 		$client_secrets = array();
 		$ig_picpuller_prefixs = array();
-		
+
 		foreach ($query->result() as $row)
 		{
 			array_push($site_ids, $row->site_id);
@@ -247,14 +252,14 @@ class Ig_picpuller_mcp {
 		$vars['ig_info_name'] =  $this->EE->lang->line('ig_info');
 		$vars['current_site_id'] = $this->_currentSite;
 
-		return $this->EE->load->view('ig_about_all_apps', $vars, TRUE);	
+		return $this->EE->load->view('ig_about_all_apps', $vars, TRUE);
 	}
 
 	/**
-	 * Display the ADVANCED menu 
+	 * Display the ADVANCED menu
 	 * @return   a view "ig_advanced"
 	 */
-	
+
 	public function ig_advanced_menu()
 	{
 		$vars['site_label'] = $this->getSiteLabel();
@@ -267,10 +272,10 @@ class Ig_picpuller_mcp {
 		$vars['ig_adv_user_auth'] = lang('ig_adv_user_auth');
 
 
-		return $this->EE->load->view('ig_advanced', $vars, TRUE);	
+		return $this->EE->load->view('ig_advanced', $vars, TRUE);
 	}
 
-	
+
 	/**
 	 * Display users within the control panel of users who have authorized Pic Puller to talk to their Instagram account
 	 * @return a view "ig_users"
@@ -293,15 +298,15 @@ class Ig_picpuller_mcp {
 
 			$this->EE->db->join('members', 'ig_picpuller_oauths.member_id = members.member_id');
 			$query = $this->EE->db->get();
-			
-			
+
+
 			foreach ($query->result() as $row)
 			{
 				array_push($member_ids, $row->member_id);
 				array_push($screen_names, $row->screen_name);
 				array_push($oauths, $row->oauth);
 			}
-		
+
 		} else {
 			$vars['appexists'] =  FALSE;
 		}
@@ -309,10 +314,10 @@ class Ig_picpuller_mcp {
 		$vars['member_ids'] = $member_ids;
 		$vars['screen_names'] = $screen_names;
 		$vars['oauths']	= $oauths;
-		
+
 		return $this->EE->load->view('ig_users', $vars, TRUE);
 	}
-	
+
 	/**
 	 * Display a view that will let user update the secret (aka password) of their Instram App
 	 * @return a view "ig_secret_update"
@@ -326,8 +331,8 @@ class Ig_picpuller_mcp {
 		$vars['update_secret_url'] = 'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=ig_picpuller'.AMP.'method=edit_secret_step2';
 		$vars['ig_info_name'] =  $this->EE->lang->line('ig_info');
 		$vars['cancel_url'] = $this->_base_url.'&method=ig_info';
-		
-		return $this->EE->load->view('ig_secret_update', $vars, TRUE); 
+
+		return $this->EE->load->view('ig_secret_update', $vars, TRUE);
 	}
 
 	/**
@@ -374,8 +379,8 @@ class Ig_picpuller_mcp {
 		$vars['update_secret_url'] = 'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=ig_picpuller'.AMP.'method=edit_prefix_step2';
 		$vars['ig_info_name'] =  $this->EE->lang->line('ig_info');
 		$vars['cancel_url'] = $this->_base_url.'&method=ig_info';
-		
-		return $this->EE->load->view('ig_prefix_update', $vars, TRUE); 
+
+		return $this->EE->load->view('ig_prefix_update', $vars, TRUE);
 	}
 
 	/**
@@ -421,8 +426,8 @@ class Ig_picpuller_mcp {
 		$vars['update_frontend_url'] = 'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module=ig_picpuller'.AMP.'method=edit_frontend_url_step2';
 		$vars['ig_info_name'] =  $this->EE->lang->line('ig_info');
 		$vars['cancel_url'] = $this->_base_url.'&method=ig_info';
-		
-		return $this->EE->load->view('ig_frontedurl_update', $vars, TRUE); 
+
+		return $this->EE->load->view('ig_frontedurl_update', $vars, TRUE);
 	}
 
 	//ig_frontedurl_update
@@ -464,11 +469,11 @@ class Ig_picpuller_mcp {
 	public function save_settings()
 	{
 		// in this function save the client ID and the client secret for the user created application
-		
-		// NOTES: 
-		// 
+
+		// NOTES:
+		//
 		// table: ig_picpuller_credentials
-		// 
+		//
 		// fields:
 		//  ig_client_id
 		//  ig_client_secret
@@ -480,36 +485,36 @@ class Ig_picpuller_mcp {
 		$vars['moduleShortTitle'] = lang('ig_picpuller_short_module_name');
 		$vars['app_info_link'] = $this->_base_url.'&method=ig_info';
 		$vars['edit_tab_name'] =  $this->EE->lang->line('ig_info');
-		
+
 		$this->EE->cp->set_variable('cp_page_title', lang('ig_picpuller_module_name'));
 		$ig_client_id = $this->EE->input->post('ig_client_id', TRUE);
 		$ig_client_secret = $this->EE->input->post('ig_client_secret', TRUE);
-		
+
 		// Update new settings
-		// NO - cant empty table now $this->EE->db->empty_table('ig_picpuller_credentials'); 
+		// NO - cant empty table now $this->EE->db->empty_table('ig_picpuller_credentials');
 		$this->EE->db->set('ig_client_id', $ig_client_id);
 		$this->EE->db->set('ig_client_secret', $ig_client_secret);
 		$this->EE->db->set('ig_picpuller_prefix', $default_prefix);
 		$this->EE->db->set('ig_site_id', $this->_currentSite);
 		$this->EE->db->set('auth_url', $this->getRedirectURL() );
-		$this->EE->db->insert('ig_picpuller_credentials'); 
+		$this->EE->db->insert('ig_picpuller_credentials');
 
 		$vars['client_id'] = $ig_client_id;
 		$vars['client_secret'] = $ig_client_secret;
-		
+
 		$vars['homeurl'] = $this->_base_url;
-		return $this->EE->load->view('save_settings', $vars, TRUE);	
+		return $this->EE->load->view('save_settings', $vars, TRUE);
 	}
-	
+
 	/**
 	 * First step, a warning, when a user attempts to delete their Instagram App
 	 * @return a view "ig_about_delete_confirmation"
 	 */
-	public function preview_delete_app() 
+	public function preview_delete_app()
 	{
 		$vars['moduleTitle'] = lang('ig_picpuller_module_name');
 		$vars['moduleShortTitle'] = lang('ig_picpuller_short_module_name');
-		
+
 		$vars['client_id'] = $this->getClientID();
 
 		$vars['delete_method'] = $this->_base_url.'&method=delete_app';
@@ -518,9 +523,9 @@ class Ig_picpuller_mcp {
 
 		$vars['site_label'] = $this->getSiteLabel();
 
-		return $this->EE->load->view('ig_about_delete_confirmation', $vars, TRUE);	
+		return $this->EE->load->view('ig_about_delete_confirmation', $vars, TRUE);
 	}
-	
+
 	/**
 	 * Second step when a user attempts to delete their Instagram App. This DOES the actual deletion
 	 * @return a view - the index , aka, the home set up page for Pic Puller
@@ -531,14 +536,14 @@ class Ig_picpuller_mcp {
 		if ( $this->isSuperAdmin() ) {
 			$appID = $this->getCurrentAppId();
 
-			$this->EE->db->delete('ig_picpuller_credentials', array('app_id' => $appID)); 
-			$this->EE->db->delete('ig_picpuller_oauths', array('app_id' => $appID)); 
-			
+			$this->EE->db->delete('ig_picpuller_credentials', array('app_id' => $appID));
+			$this->EE->db->delete('ig_picpuller_oauths', array('app_id' => $appID));
+
 			// return to the top level of Pic Puller
 			return $this->index();
 		}
 	}
-	
+
 	/**
 	 * Remove a single user's authorization from the EE database for the Instagram App
 	 * @return a view "authorized_removed"
@@ -549,20 +554,20 @@ class Ig_picpuller_mcp {
 
 		$vars['moduleTitle'] = lang('ig_picpuller_module_name');
 		$vars['moduleShortTitle'] = lang('ig_picpuller_short_module_name');
-		
+
 		$this->EE->db->select('*');
 		$this->EE->db->limit('1');
 		$this->EE->db->where('member_id', $this->getLoggedInUserId() );
 		$this->EE->db->where('app_id', $appID );
-		$this->EE->db->delete('ig_picpuller_oauths'); 
+		$this->EE->db->delete('ig_picpuller_oauths');
 		return $this->EE->load->view('authorized_removed', $vars, TRUE);
 	}
-		
+
 	/**
 	 * ADVANCED: User Admin
 	 */
 
-	public function adv_user_admin() 
+	public function adv_user_admin()
 	{
 		$vars['app_id'] = $this->_currentAppId;
 		$vars['site_label'] = $this->getSiteLabel();
@@ -589,13 +594,13 @@ class Ig_picpuller_mcp {
 		 // 4echo "<pre>";
 		 // 4print_r( $query->result() );
 		 // 4echo "</pre>";
-		
+
 		foreach ($query->result() as $row)
 		{
 			$vars['ig_user_id'] = $row->instagram_id;
 			$vars['ig_user_oauth'] = $row->oauth;
 		}
-		
+
 		if (!isset($vars['ig_user_id'])){
 			$vars['ig_user_id'] ='';
 		}
@@ -609,7 +614,7 @@ class Ig_picpuller_mcp {
 
 	public function save_user_info_adv() {
 
-		
+
 		$ig_user_id = $this->EE->input->post('ig_user_id', TRUE);
 		$ig_user_oauth = $this->EE->input->post('ig_user_oauth', TRUE);
 
@@ -635,7 +640,7 @@ class Ig_picpuller_mcp {
 	 * @access	private
 	 * @return	NULL
 	 */
-	
+
 	private function remove_auth_logged_in_user()
 	{
 		// TO DO : remove the select * - not needed, but want to test first, so I've left it in for this version.
@@ -644,13 +649,13 @@ class Ig_picpuller_mcp {
 		$this->EE->db->limit('1');
 		$this->EE->db->where('member_id', $this->getLoggedInUserId() );
 		$this->EE->db->where('app_id', $this->_currentAppId);
-		$this->EE->db->delete('ig_picpuller_oauths'); 
+		$this->EE->db->delete('ig_picpuller_oauths');
 	}
 
 	// HELPER FUNCTIONS BELOW
 
 	private function getClientID()
-	{		
+	{
 		$this->EE->db->select('ig_client_id');
 		$this->EE->db->where('ig_site_id', $this->_currentSite);
 		$this->EE->db->limit(1);
@@ -676,7 +681,7 @@ class Ig_picpuller_mcp {
 	 * @access	private
 	 * @return	mixed - returns a string, the prefix, if available in DB, or an empty string if unavailable
 	 */
-	
+
 	private function get_ig_picpuller_prefix()
 	{
 		$this->EE->db->select('ig_picpuller_prefix');
@@ -693,7 +698,7 @@ class Ig_picpuller_mcp {
 		} else {
 			return '';
 		}
-	}	
+	}
 
 	private function getSecret()
 	{
@@ -731,10 +736,10 @@ class Ig_picpuller_mcp {
 		}
 	}
 
-	private function getRedirectURL($urlEncoded = false) 
+	private function getRedirectURL($urlEncoded = false)
 	{
 		return $this->EE->functions->fetch_site_index(0, 0).QUERY_MARKER.'ACT='.$this->EE->cp->fetch_action_id('ig_picpuller', 'authorization');
-		
+
 	}
 
 	private function getCurrentAppId()
@@ -798,7 +803,7 @@ class Ig_picpuller_mcp {
 		$this->EE->db->limit('1');
 		$this->EE->db->from('ig_picpuller_oauths');
 		$query = $this->EE->db->get();
-		
+
 		if ($query->num_rows() == 1)
 		{
 			return true;
@@ -806,17 +811,17 @@ class Ig_picpuller_mcp {
 			return false;
 		}
 	}
-	
+
 	private function appExistsInDb()
 	{
-	
+
 		// is there an application already defined in the database?
 		$this->EE->db->select('*');
 		$this->EE->db->where('ig_site_id', $this->_currentSite );
 		$this->EE->db->limit('1');
 		$this->EE->db->from('ig_picpuller_credentials');
 		$query = $this->EE->db->get();
-		
+
 		if ($query->num_rows() == 0)
 		{
 			return false;
@@ -824,26 +829,26 @@ class Ig_picpuller_mcp {
 			return true;
 		}
 	}
-	
+
 	private function getLoggedInUserId()
 	{
-		$this->EE->load->library('session');	
-		return $this->EE->session->userdata('member_id');	
+		$this->EE->load->library('session');
+		return $this->EE->session->userdata('member_id');
 	}
-	
+
 	private function isSuperAdmin()
 	{
-		if ($this->EE->session->userdata['group_id'] === '1' ) 
+		if ($this->EE->session->userdata['group_id'] === '1' )
 		{
 			return TRUE;
-		} 
-		else 
+		}
+		else
 		{
 			return FALSE;
 		}
-		
+
 	}
-	
+
 }
 /* End of file mcp.ig_picpuller.php */
 /* Location: /system/expressionengine/third_party/ig_picpuller/mcp.ig_picpuller.php */
