@@ -441,7 +441,7 @@ class Ig_picpuller_mcp {
 		$vars['site_label'] = $this->getSiteLabel();
 		$vars['moduleTitle'] = lang('ig_picpuller_module_name');
 		$vars['moduleShortTitle'] = lang('ig_picpuller_short_module_name');
-		$this->EE->cp->set_variable('cp_page_title', lang('ig_picpuller_module_name'));
+		$this->EE->view->cp_page_title = lang('ig_picpuller_module_name');
 		$ig_client_id = $this->getClientID();
 
 		$frontend_auth_url = $this->EE->input->post('frontend_auth_url', TRUE);

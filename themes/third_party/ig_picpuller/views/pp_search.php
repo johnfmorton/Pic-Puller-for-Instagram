@@ -1,4 +1,4 @@
-<?php 
+<?php
 class VirtualDirectory
 {
     var $protocol;
@@ -55,11 +55,11 @@ if(!isset($access_token)){
 	<meta charset="utf-8">
 	<title>Pic Puller photo picker</title>
 	<!--
-	Looking for some Javascript? 
-	It's loaded from within the system/third_party/ig_picpuller 
+	Looking for some Javascript?
+	It's loaded from within the system/third_party/ig_picpuller
 	directly into the control panel.
 
-	Search uses, lock submit: 
+	Search uses, lock submit:
 	http://blog.leenix.co.uk/2009/09/jquery-plugin-locksubmit-stop-submit.html
 
 	-->
@@ -86,6 +86,7 @@ if(!isset($access_token)){
 	}
 
 	#ig_pp .thumbnail {
+		position: relative;
 		border: 1px solid #8195a0;
 		width: 250px;
 		height: 100px;
@@ -123,7 +124,7 @@ if(!isset($access_token)){
 
 	#ig_pp .thumbnail .selectbtn:hover {
 		text-decoration: none;
-		
+
 
 		color: #ffffff;
 		background-color: #f72a58;
@@ -151,7 +152,7 @@ if(!isset($access_token)){
 	}
 
 	#ig_search_button:disabled {
-		
+
 	}
 	</style>
 
@@ -177,7 +178,7 @@ if(!isset($access_token)){
 				$("#ig_search_button").attr("disabled", true);
 				executeSearch($('#ig_search_field').val());
 			});
-			
+
 		}
 
 		// Make the scroll bar work using jQuery UI
@@ -198,7 +199,7 @@ if(!isset($access_token)){
 			newTop +=10;
 			$('.scroll-content').css('top', newTop+'px');
 		});
-		
+
 		$('.scroll-content').delegate('.pp_morebt', 'click', function(event) {
 			getPics( $(this).attr('href') );
 			return false;
@@ -209,7 +210,7 @@ if(!isset($access_token)){
 			$.ppcolorbox.close();
 			return false;
 		});
-		
+
 
 		function executeSearch(tag_to_search) {
 			console.log('executeSearch fired');
@@ -228,7 +229,7 @@ if(!isset($access_token)){
 			urlToCall = typeof urlToCall !== 'undefined' ? urlToCall : "<?=$third_party_theme_dir;?>pp_engine.php?access_token=<?=$access_token;?>&method=tagsearch&tag=" + PPsearchterm;
 
 			// urlToCall = typeof urlToCall !== 'undefined' ? urlToCall : "<?=$third_party_theme_dir;?>pp_engine.php?access_token=<?=$access_token;?>";
-			
+
 			//console.log('calling: ' + urlToCall);
 
 			$.ajax({
@@ -251,8 +252,9 @@ if(!isset($access_token)){
 						var caption = '<em>untitled</em>';
 						if (!!theImages[i].caption){
 							caption = theImages[i].caption.text;
-						}			
-						var newThumbnail = $('<div class="thumbnail" data-id="'+ theImages[i].id +'" data-username="'+ theImages[i].user.username +'" data-profile_picture="'+ theImages[i].user.profile_picture +'" data-fullurl="'+ theImages[i].link +'"><img src="' + theImages[i].images.low_resolution.url + '" alt="Instagram image id: '+ theImages[i].id +'" width="100" height="100" border="0"><div class="headline">'+ caption +' by<em>'+theImages[i].user.username+'</em></div><a href="#" class="selectbtn" data-id="'+ theImages[i].id +'">Select this image</a></div>');
+						}
+						// var newThumbnail = $('<div class="thumbnail" data-id="'+ theImages[i].id +'" data-username="'+ theImages[i].user.username +'" data-profile_picture="'+ theImages[i].user.profile_picture +'" data-fullurl="'+ theImages[i].link +'"><img src="' + theImages[i].images.low_resolution.url + '" alt="Instagram image id: '+ theImages[i].id +'" width="100" height="100" border="0"><div class="headline">'+ caption +' by<em>'+theImages[i].user.username+'</em></div><a href="#" class="selectbtn" data-id="'+ theImages[i].id +'">Select this image</a></div>');
+						var newThumbnail = $('<div class="thumbnail" data-id="'+ theImages[i].id +'" data-username="'+ theImages[i].user.username +'" data-profile_picture="'+ theImages[i].user.profile_picture +'" data-fullurl="'+ theImages[i].link +'"><img src="' + theImages[i].images.low_resolution.url + '" alt="Instagram image id: '+ theImages[i].id +'" width="100" height="100" border="0"><a href="'+ theImages[i].link +'" target="_blank" title="Preview this '+ theImages[i].type +' in a new window" class="mediatype '+ theImages[i].type +'">'+ theImages[i].type +'</a><div class="headline">'+ caption +'</div><a href="#" class="selectbtn" data-id="'+ theImages[i].id +'">Select this image</a></div>');
 						$('.scroll-content').append(newThumbnail);
 
 						PicPullerIG.callback('afterThumbnailGeneration', newThumbnail);
@@ -278,7 +280,7 @@ if(!isset($access_token)){
 					};
 
 					// Turn the Search button back on.
-					// 
+					//
 					// May need to clear the search field of text b/c UX is wonky
 					// if you hit search again.. you get the first page of results.
 
@@ -296,7 +298,7 @@ if(!isset($access_token)){
 					}
 				}
 			})
-		}	
+		}
 	});
 	</script>
 </head>
@@ -307,7 +309,7 @@ if(!isset($access_token)){
 
 	<div class="scroll-content">
 		<div id='ig_search_feedback'></div>
-		
+
 	</div>
 	<div class="scroll-bar-wrap">
 		<div class="scroll-bar"></div>

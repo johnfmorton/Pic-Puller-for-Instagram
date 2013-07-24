@@ -1,5 +1,13 @@
 # Change log
 
+1.5.0 - 2013JUNE22
+- Add-on wide support for Instagram video
+- Fieldtype supports video
+- Fieldtype now includes ability to preview full size image or video
+- New module tag, "type", returns "video" or "image" to indicate type of media
+- New module tag, "ig_video_low_resolution" provide URL of video 480x480 video assets
+- New module tag, "ig_video_standard_resolution" provide URL of 640x640 video assets
+
 1.4.6 - 2013MAY25
 - Added check for the URL_THIRD_THEMES constant being set.
 - Replaced "cp->set_variable" method marked as deprecated for as of EE 2.6.0 in control panel file
@@ -13,7 +21,7 @@
 - Fieldtype written to allow for JS callbacks. PicPullerIG.bind and PicPullerIG.unbind allow you access each preview frame in the control panel.
 - Sample: PicPullerIG.bind('myUniqueIdentifier1234', 'afterThumbnailGeneration', function() {this.css('backgroundColor', '#66ff33');});
 - Each fieldtype preview frame includes new data elements that can be useful for your callback functions.
-- data-id: the Instagram ID of the image 
+- data-id: the Instagram ID of the image
 - data-username: the Instagram username of the photo creator
 - data-profile_picture: the URL of to the profile image of the creator
 - data-fullurl: the link to the photo page on Instagram
@@ -26,7 +34,7 @@
 - CSS update for fieldtype updated to prevent scrolling when there weren't enough images to justify scrolling.
 
 1.4.2 - 2013JAN02
-- Fixed a PHP warning showing up on authorization confirmation screen. 
+- Fixed a PHP warning showing up on authorization confirmation screen.
 
 1.4.1 - 2012DEC27
 -Fixed an issue where pre-existing field type, made prior to version 1.4.0 of Pic Puller, would display global preference instead of local preference in the edit screen.
@@ -58,7 +66,7 @@
 - Updated link to Instagram site for removal of user applications after user has removed authorization from within ExpressionEngine.
 - Introduction of "Advanced" tab to module.
 - First "Advanced" option: alternate method of validating with Instagram.
-- In "Pic Puller for Instagram Browser", changed from "file_get_contents" method to "cURL" method for retrieving images in the  fieldtype display. 
+- In "Pic Puller for Instagram Browser", changed from "file_get_contents" method to "cURL" method for retrieving images in the  fieldtype display.
 - In "Pic Puller for Instagram Browser", Colorbox javascript updated to isolate it from other modules' use of the same library. (For example, the add-on Channel Images had CSS that would conflict with Pic Puller CSS files.)
 - Removed extraneous CSS files from "Pic Puller for Instagram Browser" theme.
 
@@ -76,7 +84,7 @@
 - Fixed incorrect longitude reporting in some functions.
 
 1.0.0 - 29FEB2012
-- New fieldtype, Pic Puller for Instagram Browser, added to browse a user's Instagram feed. 
+- New fieldtype, Pic Puller for Instagram Browser, added to browse a user's Instagram feed.
 - Fieldtype compatible with Matrix.
 - Module update to help manage cache files created. Pic Puller will now only keep the 25 most recently created cache files.
 - CSS updates in module for visual consistency
@@ -110,14 +118,17 @@ limit: an integer for how many images to request from Instagram. Instagram may r
 use_stale_cache: either ‘yes’ or ‘no’ (defaults to ‘yes’ if undefined)
 
 Tags returned in a successful Expression Engine loop:
-status: a string of “true” is returned when data is returned
-ig_media_id: the Instagram unique media ID for the image
+ig_status: a string of “true” is returned when data is returned
+ig_type: returns "image" or "video"
+ig_media_id: the Instagram unique media ID for the image or video
 ig_created_time: time stamp of image creation time, Unix timestamp formatted
 ig_link: URL of the images homepage on Instagram
 ig_caption: The caption provided by the author. Note, it may be left untitled which will return an empty string.
 ig_thumbnail: URL to image, sized 150x150
 ig_low_resolution: URL to image, sized 306x306
 ig_standard_resolution: URL to image, sized 612x612
+ig_video_low_resolution: URL to video, sized 480x480
+ig_video_standard_resolution: URL to video, sized 640x640
 ig_latitude: latitude data, if available
 ig_longitude: longitude data, if available
 ig_username: the Instagram username of the user whose account the image is from
@@ -182,13 +193,16 @@ max_id: an integer used to determine pagination of results. (See next_max_id in 
 
 Tags returned in a successful Expression Engine loop:
 ig_status: “true” or “false” — “true” when valid results returned
-ig_media_id: the Instagram unique media ID for the image
+ig_type: returns "image" or "video"
+ig_media_id: the Instagram unique media ID for the image or video
 ig_created_time: time stamp of image creation time, Unix timestamp formatted
 ig_link: URL of the images homepage on Instagram
 ig_caption: The caption provided by the author. Note, it may be ig_left untitled which will return an empty string.
 ig_thumbnail: URL to image, sized 150x150
 ig_low_resolution: URL to image, sized 306x306
 ig_standard_resolution: URL to image, sized 612x612
+ig_video_low_resolution: URL to video, sized 480x480
+ig_video_standard_resolution: URL to video, sized 640x640
 ig_latitude: latitude data, if available
 ig_longitude: longitude data, if available
 ig_next_max_id: an integer, provided by Instagram, used to return the next set in the same series of images. Pass this value into the max_id parameter of the loop to get the next page of results.
@@ -223,13 +237,16 @@ max_id: an integer used to determine pagination of results. (See next_max_id in 
 
 Tags returned in a successful Expression Engine loop:
 ig_status: a string of “true” is returned when data is returned
-ig_media_id: the Instagram unique media ID for the image
+ig_type: returns "image" or "video"
+ig_media_id: the Instagram unique media ID for the image or video
 ig_created_time: time stamp of image creation time, Unix timestamp formatted
 ig_link: URL of the images homepage on Instagram
 ig_caption: The caption provided by the author. Note, it may be left untitled which will return an empty string.
 ig_thumbnail: URL to image, sized 150x150
 ig_low_resolution: URL to image, sized 306x306
 ig_standard_resolution: URL to image, sized 612x612
+ig_video_low_resolution: URL to video, sized 480x480
+ig_video_standard_resolution: URL to video, sized 640x640
 ig_latitude: latitude data, if available
 ig_longitude: longitude data, if available
 ig_next_max_id: an integer, provided by Instagram, used to return the next set in the same series of images. Pass this value into the max_id parameter of the loop to get the next page of results.
@@ -259,13 +276,16 @@ max_id: an integer used to determine pagination of results. (See next_max_id in 
 
 Tags returned in a successful Expression Engine loop:
 ig_status: a string of “true” is returned when data is returned
-ig_media_id: the Instagram unique media ID for the image
+ig_type: returns "image" or "video"
+ig_media_id: the Instagram unique media ID for the image or video
 ig_created_time: time stamp of image creation time, Unix timestamp formatted
 ig_link: URL of the images homepage on Instagram
 ig_caption: The caption provided by the author. Note, it may be left untitled which will return an empty string.
 ig_thumbnail: URL to image, sized 150x150
 ig_low_resolution: URL to image, sized 306x306
 ig_standard_resolution: URL to image, sized 612x612
+ig_video_low_resolution: URL to video, sized 480x480
+ig_video_standard_resolution: URL to video, sized 640x640
 ig_latitude: latitude data, if available
 ig_longitude: longitude data, if available
 ig_next_max_id: an integer, provided by Instagram, used to return the next set in the same series of images. Pass this value into the max_id parameter of the loop to get the next page of results.
@@ -286,7 +306,7 @@ ig_error_message: a string describing the error
 ## exp:ig_picpuller:tagged_media
 
 Description:
-Get a list of recently tagged media. Note that this media is ordered by when the media was tagged with this tag, rather than the order it was posted. 
+Get a list of recently tagged media. Note that this media is ordered by when the media was tagged with this tag, rather than the order it was posted.
 
 For consistency amongst the tags used in Pic Puller, the ExpressionEngine tags use ‘ig_next_max_id’ for pagination. If you refer to the Instagram documentation, you will see references ‘max_tag_id’ is used for pagination. That does not apply to Pic Puller. Those tags are rewritten by the module to be ‘ig_next_max_id’.
 
@@ -303,13 +323,16 @@ max_id: an integer used to determine pagination of results. (See next_max_id in 
 
 Tags returned in a successful Expression Engine loop:
 ig_status: “true” or “false” — “true” when valid results returned
-ig_media_id: the Instagram unique media ID for the image
+ig_type: returns "image" or "video"
+ig_media_id: the Instagram unique media ID for the image or video
 created_time: time stamp of image creation time, Unix timestamp formatted
 ig_link: URL of the images homepage on Instagram
 ig_caption: The caption provided by the author. Note, it may be left untitled which will return an empty string.
 ig_thumbnail: URL to image, sized 150x150
 ig_low_resolution: URL to image, sized 306x306
 ig_standard_resolution: URL to image, sized 612x612
+ig_video_low_resolution: URL to video, sized 480x480
+ig_video_standard_resolution: URL to video, sized 640x640
 ig_latitude: latitude data, if available
 ig_longitude: longitude data, if available
 ig_next_max_id: an integer, provided by Instagram, used to return the next set in the same series of images. Pass this value into the max_id parameter of the loop to get the next page of results.
@@ -351,6 +374,8 @@ ig_caption: The caption provided by the author. Note, it may be left untitled wh
 ig_thumbnail: URL to image, sized 150x150
 ig_low_resolution: URL to image, sized 306x306
 ig_standard_resolution: URL to image, sized 612x612
+ig_video_low_resolution: URL to video, sized 480x480
+ig_video_standard_resolution: URL to video, sized 640x640
 ig_latitude: latitude data, if available
 ig_longitude: longitude data, if available
 ig_username: the Instagram username of the user whose account the image is from
@@ -412,15 +437,15 @@ The 'Pic Puller for Instagram Browser' fieldtype is part of Pic Puller. It will 
 
 The media_id is intended use is to be used in conjunction with the Pic Puller 'media' tag pair. The fieldtype will store a media_id from Instagram. The field type assists getting the desired media_id by using a photo browser interface that displays the logged in user's photos.
 
-Since only users who have authorized Pic Puller can show the media browser, users who have not authorized are shown a message indicating they need to authorize before using the media browser. 
+Since only users who have authorized Pic Puller can show the media browser, users who have not authorized are shown a message indicating they need to authorize before using the media browser.
 
-The fieldtype requires javascript. 
+The fieldtype requires javascript.
 
 The fieldtype is compatible with Matrix and Better Work Flow.
 
 There is a multiple options for the fieldtype. All options default to "on".
 
-Option 1: You can use the default instructional language that the fieldtype will automatically include or you may turn it off. 
+Option 1: You can use the default instructional language that the fieldtype will automatically include or you may turn it off.
 Option 2: You may choose to hide the Instagram browser that allows a user to choose from the logged in user's photo stream.
 Option 3: You may choose to hide the Instagram browser that allows a user to search and choose photos from all of Instagram's public images.
 
@@ -428,11 +453,11 @@ Option 3: You may choose to hide the Instagram browser that allows a user to sea
 
 # Javascript callbacks for 'Pic Puller for Instagram Browser' Fieldtype
 
-The fieldtype now shows a preview of the selected image in the control panel. This preview and all the preview frames in the image browser can have a callback after their creation. The event name is "afterThumbnailGeneration". 
+The fieldtype now shows a preview of the selected image in the control panel. This preview and all the preview frames in the image browser can have a callback after their creation. The event name is "afterThumbnailGeneration".
 
-There are also a series of data attributes attached to the returned preview frame, accessible by the keyword "this". Those data attributes are: 
+There are also a series of data attributes attached to the returned preview frame, accessible by the keyword "this". Those data attributes are:
 
-data-id: the Instagram ID of the image 
+data-id: the Instagram ID of the image
 data-username: the Instagram username of the photo creator
 data-profile_picture: the URL of to the profile image of the creator
 data-fullurl: the link to the photo page on Instagram
@@ -462,15 +487,15 @@ PicPullerIG.unbind('myUniqueIdentifier1234', 'afterThumbnailGeneration');
 
 # Pic Puller compatibility with ExpressionEngine Multiple Site Manager
 
-As of version 1.1.0, Pic Puller will allow you to manage multiple Instagram applications in Expression Engine when you have the Multiple Site Manage installed. Each site you manage can have an Instagram application associated with it. 
+As of version 1.1.0, Pic Puller will allow you to manage multiple Instagram applications in Expression Engine when you have the Multiple Site Manage installed. Each site you manage can have an Instagram application associated with it.
 
 Each site will have it's own authorization credentials with Instagram. Each site's users will have separate credentials stored in EE for each site.
 
-One potential issue you may have with authorizing apps comes up in the scenario where your control panel is at one domain, for example siteA.com/admin.php and the site you wish to authorize with Instagram is at siteB.com. You will need to authorize with Instagram from siteB.com and be logged into siteB.com with ExpressionEngine. 
+One potential issue you may have with authorizing apps comes up in the scenario where your control panel is at one domain, for example siteA.com/admin.php and the site you wish to authorize with Instagram is at siteB.com. You will need to authorize with Instagram from siteB.com and be logged into siteB.com with ExpressionEngine.
 
 The module addresses this issue by using the front-end authorization feature of Pic Puller. See the front-end authorization documentation for more information. Also see the included front-end authorization template, "sample_frontend_auth_template.html", included with the module to get your front-end authorization template started.
 
-If you manage siteB.com from the same domain, for example siteB.com/admin.php, you will not run into this problem. 
+If you manage siteB.com from the same domain, for example siteB.com/admin.php, you will not run into this problem.
 
 There is an optional authorization method you may try in this situation.The alternate authorization method is intended to get around some stubborn servers that won't allow the normal authorization process, but it has proven useful in this situation as well. This option is available to SuperAdmin level users only under the "Advanced" tab.
 

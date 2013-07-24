@@ -24,28 +24,43 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 	 */
 	function display_field($data)
 	{
-		$this->EE->cp->load_package_css('colorbox');
-		$this->EE->cp->load_package_css('style');
-		$this->EE->cp->load_package_js('jquery.ppcolorbox-min');
-		$this->EE->cp->load_package_js('jquery-ui-1.8.17.custom.min');
-		$this->EE->cp->load_package_js('scripts');
-
-		$this->EE->lang->loadfile('ig_picpuller');
+		$pp_themes_cp = ((defined('URL_THIRD_THEMES'))
+		           ? URL_THIRD_THEMES.'ig_picpuller/cp/'
+		           : ee()->config->item('url_third_themes') .'ig_picpuller/cp/');
 
 		$pp_theme_views = ((defined('URL_THIRD_THEMES'))
 		           ? URL_THIRD_THEMES.'ig_picpuller/views/'
-		           : $this->EE->config->item('url_third_themes') .'ig_picpuller/views/');
+		           : ee()->config->item('url_third_themes') .'ig_picpuller/views/');
 
-		$this->EE->cp->add_to_head('<style>#ppcboxLoadingGraphic{background:url('.$pp_theme_views.'images/loading.gif) no-repeat center center;};</style>');
+		// ee()->cp->load_package_css('colorbox');
+		// ee()->cp->load_package_css('style');
+		// ee()->cp->load_package_js('jquery.ppcolorbox-min');
+		// ee()->cp->load_package_js('jquery-ui-1.8.17.custom.min');
+		// ee()->cp->load_package_js('scripts');
+
+		ee()->cp->add_to_head('<link rel="stylesheet" type="text/css" href="'. $pp_themes_cp.'css/colorbox.css'.'">');
+		ee()->cp->add_to_head('<link rel="stylesheet" type="text/css" href="'. $pp_themes_cp.'css/style.css'.'">');
+		ee()->cp->add_to_head('<script type="text/javascript" src="'.$pp_themes_cp.'js/jquery.ppcolorbox-min.js'.'"></script>');
+		ee()->cp->add_to_head('<script type="text/javascript" src="'.$pp_themes_cp.'js/jquery-ui-1.8.17.custom.min.js'.'"></script>');
+		ee()->cp->add_to_head('<script type="text/javascript" src="'.$pp_themes_cp.'js/scripts.js'.'"></script>');
+
+		ee()->lang->loadfile('ig_picpuller');
+
+		ee()->cp->add_to_head('<style>#ppcboxLoadingGraphic{background:url('.$pp_theme_views.'images/loading.gif) no-repeat center center;};</style>');
+		//ee()->cp->add_to_head('<style>#ppcboxLoadingGraphic{background:url('.$pp_theme_views.'images/loading.gif) no-repeat center center;};</style>');
+
 
 		////////////////
 		// Get oAuth  //
 		////////////////
 
-		$user_id = $this->EE->session->userdata('member_id');
+		$user_id = ee()->session->userdata('member_id');
 		$oauth = $this->getAuthCredsForUser($user_id);
 
 		$pp_engine_url = $pp_theme_views.'pp_engine.php';
+
+		//return "I'm at line 52";
+
 
 		if ($oauth != '') {
 			$pp_select = $pp_theme_views.'pp_select.php?access_token='.$oauth;
@@ -115,26 +130,26 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 	 */
 	function display_cell( $data )
 	{
-		$this->EE->cp->load_package_css('colorbox');
-		$this->EE->cp->load_package_js('jquery.ppcolorbox-min');
-		$this->EE->cp->load_package_js('jquery-ui-1.8.17.custom.min');
-		$this->EE->cp->load_package_css('style');
-		$this->EE->cp->load_package_js('scripts');
+		ee()->cp->load_package_css('colorbox');
+		ee()->cp->load_package_js('jquery.ppcolorbox-min');
+		ee()->cp->load_package_js('jquery-ui-1.8.17.custom.min');
+		ee()->cp->load_package_css('style');
+		ee()->cp->load_package_js('scripts');
 
-		$this->EE->lang->loadfile('ig_picpuller');
+		ee()->lang->loadfile('ig_picpuller');
 
 		$pp_theme_views = defined( 'URL_THIRD_THEMES' )
 			? URL_THIRD_THEMES.'ig_picpuller/views/'
-			: $this->EE->config->item('theme_folder_url') . 'third_party/ig_picpuller/views/';
+			: ee()->config->item('theme_folder_url') . 'third_party/ig_picpuller/views/';
 		$pp_engine_url = $pp_theme_views.'pp_engine.php';
 
-		$this->EE->cp->add_to_head('<style>#cboxLoadingGraphic{background:url('.$pp_theme_views.'images/loading.gif) no-repeat center center;};</style>');
+		ee()->cp->add_to_head('<style>#cboxLoadingGraphic{background:url('.$pp_theme_views.'images/loading.gif) no-repeat center center;};</style>');
 
 		////////////////
 		// Get oAuth  //
 		////////////////
 
-		$user_id = $this->EE->session->userdata('member_id');
+		$user_id = ee()->session->userdata('member_id');
 		$oauth = $this->getAuthCredsForUser($user_id);
 
 		if ($oauth != '') {
@@ -200,10 +215,10 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 	function display_global_settings()
 	{
 		// load the language file
-		$this->EE->lang->loadfile('ig_picpuller');
+		ee()->lang->loadfile('ig_picpuller');
 
 		// load the table library
-		$this->EE->load->library('table');
+		ee()->load->library('table');
 
 		$val = array_merge($this->settings, $_POST);
 
@@ -273,30 +288,30 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 			'checked' => !$checked_search
 		);
 
-		$this->EE->table->set_template(array(
+		ee()->table->set_template(array(
 			'table_open'    => '<table class="mainTable padTable" border="0" cellspacing="0" cellpadding="0">',
 			'row_start'     => '<tr class="even">',
 			'row_alt_start' => '<tr class="odd">'
 		));
 
-		$this->EE->table->set_heading(array('data' => lang('preference'), 'style' => 'width: 50%'), lang('setting'));
+		ee()->table->set_heading(array('data' => lang('preference'), 'style' => 'width: 50%'), lang('setting'));
 
-		$this->EE->table->add_row(
+		ee()->table->add_row(
 			lang('display_instructions_option_text', 'display_instructions_option_text'),
 			 'Yes: '.form_radio($radio1).NBS.NBS.' No: '.form_radio($radio2)
 		);
 
-		$this->EE->table->add_row(
+		ee()->table->add_row(
 			lang('display_personal_stream_option_text', 'display_personal_stream_option_text'),
 			 'Yes: '.form_radio($radio3).NBS.NBS.' No: '.form_radio($radio4)
 		);
 
-		$this->EE->table->add_row(
+		ee()->table->add_row(
 			lang('display_search_option_text', 'display_search_option_text'),
 			 'Yes: '.form_radio($radio5).NBS.NBS.' No: '.form_radio($radio6)
 		);
 
-		return $this->EE->table->generate();
+		return ee()->table->generate();
 
 	}
 
@@ -316,7 +331,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 	 */
 	function display_settings($data)
 	{
-		$this->EE->lang->loadfile('ig_picpuller');
+		ee()->lang->loadfile('ig_picpuller');
 
 		// Get the instructions prefs
 		// Check to see if particular field has settings for this particular instance
@@ -409,17 +424,17 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 			'checked' => !$checked_search
 		);
 
-		$this->EE->table->add_row(
+		ee()->table->add_row(
 			lang('display_instructions_option_text', 'display_instructions_option_text'),
 			'Yes: '.form_radio($radio1).NBS.NBS.' No: '.form_radio($radio2)
 		);
 
-		$this->EE->table->add_row(
+		ee()->table->add_row(
 			lang('display_personal_stream_option_text', 'display_personal_stream_option_text'),
 			 'Yes: '.form_radio($radio3).NBS.NBS.' No: '.form_radio($radio4)
 		);
 
-		$this->EE->table->add_row(
+		ee()->table->add_row(
 			lang('display_search_option_text', 'display_search_option_text'),
 			 'Yes: '.form_radio($radio5).NBS.NBS.' No: '.form_radio($radio6)
 		);
@@ -432,7 +447,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 	 */
 	function display_cell_settings( $data )
 	{
-		$this->EE->lang->loadfile('ig_picpuller');
+		ee()->lang->loadfile('ig_picpuller');
 
 		// Get the instructions prefs
 		// Check to see if particular field has settings for this particular instance
@@ -563,9 +578,9 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 	{
 		return array(
 			'ig_media_id' => '',
-			'display_pp_instructions'  => $this->EE->input->post('display_pp_instructions'),
-			'display_pp_stream'  => $this->EE->input->post('display_pp_stream'),
-			'display_pp_search'  => $this->EE->input->post('display_pp_search'),
+			'display_pp_instructions'  => ee()->input->post('display_pp_instructions'),
+			'display_pp_stream'  => ee()->input->post('display_pp_stream'),
+			'display_pp_search'  => ee()->input->post('display_pp_search'),
 			'the_function' => 'media_recent'
 		);
 	}
@@ -605,11 +620,11 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 	private function getAuthCredsForUser($user_id)
 	{
 		$appID = $this->getCurrentAppId();
-		$this->EE->db->select('oauth');
-		$this->EE->db->where("member_id = " . $user_id );
-		$this->EE->db->where("app_id",  $appID);
-		$this->EE->db->limit(1);
-		$query = $this->EE->db->get('ig_picpuller_oauths');
+		ee()->db->select('oauth');
+		ee()->db->where("member_id = " . $user_id );
+		ee()->db->where("app_id",  $appID);
+		ee()->db->limit(1);
+		$query = ee()->db->get('ig_picpuller_oauths');
 		foreach ($query->result() as $row)
 		{
 			$oauth = $row->oauth;
@@ -635,12 +650,12 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 
 	private function getCurrentAppId()
 	{
-		$this->EE->db->select('app_id');
-		$this->EE->db->where('ig_site_id', $this->EE->config->config['site_id']);
-		$this->EE->db->limit(1);
-		$this->EE->db->from('ig_picpuller_credentials');
+		ee()->db->select('app_id');
+		ee()->db->where('ig_site_id', ee()->config->config['site_id']);
+		ee()->db->limit(1);
+		ee()->db->from('ig_picpuller_credentials');
 
-		$query = $this->EE->db->get();
+		$query = ee()->db->get();
 
 		foreach ($query->result() as $row)
 		{

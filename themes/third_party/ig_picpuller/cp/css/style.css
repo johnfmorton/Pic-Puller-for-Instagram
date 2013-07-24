@@ -68,6 +68,32 @@ width:16px;
 height:16px;
 }
 
+.mediatype.video
+{
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAQCAMAAAAhxq8pAAAAPFBMVEWzs7NrbGzh4eH////y8vIrKyyqqqsCAgPOz8+Jioro6Ojc3NzDw8NJSUpbW1z5+fkUFRbR0dELDA0QERIsj8VqAAAAhUlEQVQYGX2Q4Q7DIAiEUYqntmsdvv+7DrXrusSUH5B8gdwdxJMi5hzfZ0U/NoizaK0KtF5ip8RRDcnuxDDCBVXT4dcjFDW4BM9tE2l5AbKSQRJsHUpjRm24qtohdt8YsCW4Uh+g3s/LeX4XoktoWGIalih39Wbe/Zv/xrRAv5jTh0xe9wHGCwotj0o4pgAAAABJRU5ErkJggg==);
+	width:20px;
+	height:16px;
+	position: absolute;
+	overflow: hidden;
+	text-indent: -500px;
+	top: 4px;
+	left: 4px;
+	margin: 3px 0 0 3px;
+}
+
+.mediatype.image
+{
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAPFBMVEXKysrr6+sNDg8jJCVLTEzl5eXR0dH6+vr19fXFxcXw8PBlZmbW1tZ3d3c0NTb////e3t5ZWVorLCwvMDFoAA3VAAAAgUlEQVQYGV2PWQ7DIAwFjR0CmIQXyP3vWrOkVfM+kBgvGhNeIcDvK0QOIHjhFZHmDNDz39TL/geA9gNig3Xj4+k4Vc8+OoFwC0AQ6+ogNXfcBmK55tJ0AzWr5ow4liYru1pKVegCXd6bJMIEvMcYQ7Ancfcw9bbCQx2evhnHvc7/AH52CSnO2wdfAAAAAElFTkSuQmCC);
+	width:16px;
+	height:16px;
+	position: absolute;
+	overflow: hidden;
+	text-indent: -500px;
+	top: 4px;
+	left: 4px;
+	margin: 3px 0 0 3px;
+}
+
 .thumbnail.preview {
 	border: 1px solid #8195a0;
 	width: 250px;
@@ -79,9 +105,9 @@ height:16px;
 	display: none;
 }
 
-.publish_field  a.igbrowserbt, .publish_field a.igsearchbt,  .publish_field a.igbrowserbtmatrix, .publish_field a.igsearchbtmatrix{
+ a.igbrowserbt, a.igsearchbt, a.igbrowserbtmatrix, a.igsearchbtmatrix{
 	display: inline-block;
-	text-decoration: none;
+	text-decoration: none !important;
 	padding: 5px 9px 5px 26px;
 	border: 1px solid rgb(153, 153, 153);
 	margin-right: 5px;
@@ -101,6 +127,6 @@ height:16px;
   background-position: 4px center, 0px;
 }
 
-.publish_field  a.igbrowserbt:hover, .publish_field a.igsearchbt:hover,  .publish_field a.igbrowserbtmatrix:hover, .publish_field a.igsearchbtmatrix:hover {
+a.igbrowserbt:hover, a.igsearchbt:hover, a.igbrowserbtmatrix:hover, a.igsearchbtmatrix:hover {
 	color: #D91350;
 }

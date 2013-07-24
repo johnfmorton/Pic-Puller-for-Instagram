@@ -5,11 +5,41 @@
 		<link>http://static.supergeekery.com/nsm_addon_updater/changelog_ig_picpuller.xml</link>
 		<description>Build an Instagram app with built in image browsing into ExpressionEngine</description>
 		<item>
+			<title>Version 1.5.1</title>
+			<!-- Additional tag required for NSM Addon Updater -->
+			<ee_addon:version>1.5.1</ee_addon:version>
+			<link>http://devot-ee.com/add-ons/pic-puller-for-instagram</link>
+			<pubDate>Wed, 24 July 2013 18:18:00 +0500</pubDate>
+			<description><![CDATA[
+				<ul>
+					<li>Pic Puller Image browser now works with Safe Cracker</li>
+					<li>New tag, exp:ig_picpuller:userauthorized, returns "1" when logged in user has authorized Pic Puller app with Instagram.</li>
+				</ul>
+			]]></description>
+		</item>
+		<item>
+			<title>Version 1.5.0</title>
+			<!-- Additional tag required for NSM Addon Updater -->
+			<ee_addon:version>1.5.0</ee_addon:version>
+			<link>http://devot-ee.com/add-ons/pic-puller-for-instagram</link>
+			<pubDate>Sat, 22 June 2013 10:15:00 +0500</pubDate>
+			<description><![CDATA[
+				<ul>
+					<li>Add-on wide support for Instagram video</li>
+					<li>Fieldtype supports video</li>
+					<li>Fieldtype now includes ability to preview full size image or video.</li>
+					<li>New module tag, "type", returns "video" or "image" to indicate type of media</li>
+					<li>New module tag, "ig_video_low_resolution" provide URL of video 480x480 video assets</li>
+					<li>New module tag, "ig_video_standard_resolution" provide URL of 640x640 video assets</li>
+				</ul>
+			]]></description>
+		</item>
+		<item>
 			<title>Version 1.4.6</title>
 			<!-- Additional tag required for NSM Addon Updater -->
 			<ee_addon:version>1.4.6</ee_addon:version>
 			<link>http://devot-ee.com/add-ons/pic-puller-for-instagram</link>
-			<pubDate>Tues, 16 April 2013 17:11:00 +0500</pubDate>
+			<pubDate>Sat, 25 May 2013 10:00:00 +0500</pubDate>
 			<description><![CDATA[
 				<ul>
 					<li>Added check for the URL_THIRD_THEMES constant being set.</li>

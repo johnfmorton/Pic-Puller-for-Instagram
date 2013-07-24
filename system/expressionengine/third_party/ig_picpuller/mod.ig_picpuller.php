@@ -60,7 +60,7 @@ class Ig_picpuller {
 	 *
 	 * Testing function only, to see that module is working.
 	 *
-	 * @access	private
+	 * @access	public
 	 * @param	none
 	 * @return	string - beeps
 	 */
@@ -81,6 +81,33 @@ class Ig_picpuller {
 
 		$this->EE->TMPL->log_item('Pic Puller for Instagram: is installed an returning data. Beep.');
 		return "Beep. Beep beep beep beep. Beep beep.";
+	 }
+
+	/**
+	 * userauthorized
+	 *
+	 * Testing function only, to see that module is working.
+	 *
+	 * @access	public
+	 * @param	none
+	 * @return	string - 1 or 0
+	 */
+
+	 public function userauthorized()
+	 {
+		if (!$this->applicationExists() ) {
+			$this->EE->TMPL->log_item( 'ERROR: There is no Instagram application in the system to authorize.');
+			return false;
+		};
+
+		if (! $this->EE->session->userdata('member_id')){
+			$this->EE->TMPL->log_item( 'ERROR: Only logged in users can authorize this application.' );
+			return false;
+		}
+
+		$loggedInUser = $this->getInstagramId ($this->get_logged_in_user_id());
+		return $this->getInstagramId ($this->get_logged_in_user_id()) ? true : false;
+
 	 }
 
 	/**
@@ -319,6 +346,9 @@ class Ig_picpuller {
 		foreach($data['data'] as $node)
 		{
 			$variables[] = array(
+				$this->_ig_picpuller_prefix.'type' => $node['type'],
+				$this->_ig_picpuller_prefix.'video_low_resolution' => isset($node['videos']['low_resolution']['url']) ? $node['videos']['low_resolution']['url'] : "No video URL available.",
+				$this->_ig_picpuller_prefix.'video_standard_resolution' => isset($node['videos']['standard_resolution']['url']) ? $node['videos']['standard_resolution']['url'] : "No video URL available.",
 				$this->_ig_picpuller_prefix.'username' => $node['user']['username'],
 				$this->_ig_picpuller_prefix.'full_name' => $node['user']['full_name'],
 				$this->_ig_picpuller_prefix.'profile_picture' => $node['user']['profile_picture']['url'],
@@ -511,6 +541,9 @@ class Ig_picpuller {
 		$node = $data['data'];
 
 		$variables[] = array(
+			$this->_ig_picpuller_prefix.'type' => $node['type'],
+			$this->_ig_picpuller_prefix.'video_low_resolution' => isset($node['videos']['low_resolution']['url']) ? $node['videos']['low_resolution']['url'] : "No video URL available.",
+			$this->_ig_picpuller_prefix.'video_standard_resolution' => isset($node['videos']['standard_resolution']['url']) ? $node['videos']['standard_resolution']['url'] : "No video URL available.",
 			$this->_ig_picpuller_prefix.'username' => $node['user']['username'],
 			$this->_ig_picpuller_prefix.'user_id' => $node['user']['id'],
 			$this->_ig_picpuller_prefix.'full_name' => $node['user']['full_name'],
@@ -640,6 +673,9 @@ class Ig_picpuller {
 		foreach($data['data'] as $node)
 		{
 			$variables[] = array(
+				$this->_ig_picpuller_prefix.'type' => $node['type'],
+				$this->_ig_picpuller_prefix.'video_low_resolution' => isset($node['videos']['low_resolution']['url']) ? $node['videos']['low_resolution']['url'] : "No video URL available.",
+				$this->_ig_picpuller_prefix.'video_standard_resolution' => isset($node['videos']['standard_resolution']['url']) ? $node['videos']['standard_resolution']['url'] : "No video URL available.",
 				$this->_ig_picpuller_prefix.'created_time' => $node['created_time'],
 				$this->_ig_picpuller_prefix.'link' => $node['link'],
 				$this->_ig_picpuller_prefix.'caption' => $node['caption']['text'],
@@ -766,6 +802,9 @@ class Ig_picpuller {
 		foreach($data['data'] as $node)
 		{
 			$variables[] = array(
+				$this->_ig_picpuller_prefix.'type' => $node['type'],
+				$this->_ig_picpuller_prefix.'video_low_resolution' => isset($node['videos']['low_resolution']['url']) ? $node['videos']['low_resolution']['url'] : "No video URL available.",
+				$this->_ig_picpuller_prefix.'video_standard_resolution' => isset($node['videos']['standard_resolution']['url']) ? $node['videos']['standard_resolution']['url'] : "No video URL available.",
 				$this->_ig_picpuller_prefix.'created_time' => $node['created_time'],
 				$this->_ig_picpuller_prefix.'link' => $node['link'],
 				$this->_ig_picpuller_prefix.'caption' => $node['caption']['text'],
@@ -883,6 +922,9 @@ class Ig_picpuller {
 		foreach($data['data'] as $node)
 		{
 			$variables[] = array(
+				$this->_ig_picpuller_prefix.'type' => $node['type'],
+				$this->_ig_picpuller_prefix.'video_low_resolution' => isset($node['videos']['low_resolution']['url']) ? $node['videos']['low_resolution']['url'] : "No video URL available.",
+				$this->_ig_picpuller_prefix.'video_standard_resolution' => isset($node['videos']['standard_resolution']['url']) ? $node['videos']['standard_resolution']['url'] : "No video URL available.",
 				$this->_ig_picpuller_prefix.'created_time' => $node['created_time'],
 				$this->_ig_picpuller_prefix.'link' => $node['link'],
 				$this->_ig_picpuller_prefix.'caption' => $node['caption']['text'],
@@ -1009,6 +1051,9 @@ class Ig_picpuller {
 		foreach($data['data'] as $node)
 		{
 			$variables[] = array(
+				$this->_ig_picpuller_prefix.'type' => $node['type'],
+				$this->_ig_picpuller_prefix.'video_low_resolution' => isset($node['videos']['low_resolution']['url']) ? $node['videos']['low_resolution']['url'] : "No video URL available.",
+				$this->_ig_picpuller_prefix.'video_standard_resolution' => isset($node['videos']['standard_resolution']['url']) ? $node['videos']['standard_resolution']['url'] : "No video URL available.",
 				$this->_ig_picpuller_prefix.'created_time' => $node['created_time'],
 				$this->_ig_picpuller_prefix.'link' => $node['link'],
 				$this->_ig_picpuller_prefix.'caption' => $node['caption']['text'],
@@ -1347,7 +1392,6 @@ class Ig_picpuller {
 	{
 		$this->EE->load->library('session');
 		return $this->EE->session->userdata['member_id'];
-		//return $this->EE->session;
 	}
 
 	/**

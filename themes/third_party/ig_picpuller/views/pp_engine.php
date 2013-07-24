@@ -1,9 +1,9 @@
-<?php 
+<?php
 
 	/**
 	 *  BEGIN: Helper Functions
 	 */
-	
+
 	class VirtualDirectory
 	{
 		var $protocol = 'http';
@@ -48,7 +48,7 @@
 			return $cleaned_array;
 		}
 	}
-		
+
 	/**
 	 *  END: Helper Functions
 	 */
@@ -58,7 +58,7 @@
 
 	// The oAuth key to retreive photos for a user
 	$oauthkey = isset($_GET["access_token"]) ? $_GET["access_token"] : null;
-	
+
 	// How many photos should be retrieved? If not set, set to 29 because that makes for a full set.
 	$count = isset($_GET["count"]) ? $_GET["count"] : null;
 	if (!isset($count)) {
@@ -68,9 +68,6 @@
 	// If multiple methods are supported, branch the method URL here
 	$method = isset($_GET['method']) ? $_GET['method'] : false;
 	//print_r($method);
-	
-
-
 
 	switch ($method) {
 		// The media case is used by the fieldtype to display image previews.
@@ -82,11 +79,11 @@
 		$media_id = $_GET["media_id"];
 		$theURL = "https://api.instagram.com/v1/media/$media_id?";
 		$jsonurl = $theURL."access_token=".$oauthkey;
-		
+
 		// the @ symbol will make this fail silently, so we'll need to check that $json actually is parsable and show alternate images instead
-				
+
 			// $json = @file_get_contents($jsonurl,0,null,null);
-				
+
 				$ch = curl_init();
 				curl_setopt($ch, CURLOPT_URL, $jsonurl);
 				// 1 to prevent the response from being outputted
@@ -101,7 +98,7 @@
 				// echo "<pre>";
 				// print_r($json);
 				// echo "</pre>";
-				
+
 				if ($json_output->meta->code === 200 ) {
 					header('Content-Type: application/json');
 					$success = '1';
@@ -110,9 +107,11 @@
 					$theUsername = $json_output->data->user->username;
 					$theProfilePicture = $json_output->data->user->profile_picture;
 					$theLink = $json_output->data->link;
+					$theType = $json_output->data->type;
 					echo json_encode( array(
 						'success' => $success,
 						'code' => $json_output->meta->code,
+						'type' => $theType,
 						'imageTitle' => $imageTitle,
 						'imageID' => $json_output->data->id,
 						'imageURL' => $imageURL,
@@ -131,7 +130,7 @@
 						'error_type' => $json_output->meta->error_type,
 						'error_message' => $error_message
 					) );
-				}	
+				}
 
 		break;
 
@@ -198,7 +197,7 @@
 				// 			echo "<div class='thumbnail getmore'>
 				// 				<div class='headline'>Need more to choose from?</div>
 				// 				<a href='$nextURL' class='pp_morebt'>Load more images</a></div>";
-							
+
 				// 			break;
 				// 		}
 				// 	}
@@ -206,7 +205,7 @@
 				// 	echo "<div class='thumbnail'>
 				// 				<div class='headline'>No results for <em>$searchTerm</em>.</div>
 				// 				</div>";
-							
+
 				// 			break;
 				// }
 
@@ -215,7 +214,7 @@
 				// 	echo "<div class='thumbnail'>
 				// 				<div class='headline'>No results for <em>$searchTerm</em>.</div>
 				// 				</div>";
-							
+
 				// 			break;
 				// 	//echo "Error: Unable to communicate with Instagram to retreive images.";
 				// }
@@ -223,16 +222,16 @@
 
 
 			break;
-		
+
 		default:
 			$theURL = 'https://api.instagram.com/v1/users/self/media/recent/?';
 			$next_max_id = isset($_GET["max_id"]) ? $_GET["max_id"] : null;
 			$jsonurl = $theURL."access_token=".$oauthkey."&count=".$count."&max_id=".$next_max_id;
 
 			// the @ symbol will make this fail silently, so we'll need to check that $json actually is parsable and show alternate images instead
-	
+
 			// $json = @file_get_contents($jsonurl,0,null,null);
-			
+
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, $jsonurl);
 			// to prevent the response from being outputted
@@ -249,7 +248,7 @@
 
 
 			$json_output = json_decode($json);
-			
+
 			if ($json_output->meta->code === 200 ) {
 				header('Content-Type: application/json');
 				echo $json;
