@@ -1,5 +1,9 @@
 # Change log
 
+1.5.1 - 2013JULY30
+- Pic Puller Image browser now works with Safe Cracker
+- New tag, exp:ig_picpuller:userauthorized, returns "1" when logged in user has authorized Pic Puller app with Instagram.
+
 1.5.0 - 2013JUNE22
 - Add-on wide support for Instagram video
 - Fieldtype supports video
