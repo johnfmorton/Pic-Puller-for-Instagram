@@ -95,6 +95,7 @@ class Ig_picpuller {
 
 	 public function userauthorized()
 	 {
+
 		if (!$this->applicationExists() ) {
 			$this->EE->TMPL->log_item( 'ERROR: There is no Instagram application in the system to authorize.');
 			return false;

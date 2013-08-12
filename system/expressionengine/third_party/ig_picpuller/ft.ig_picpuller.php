@@ -32,12 +32,6 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 		           ? URL_THIRD_THEMES.'ig_picpuller/views/'
 		           : ee()->config->item('url_third_themes') .'ig_picpuller/views/');
 
-		// ee()->cp->load_package_css('colorbox');
-		// ee()->cp->load_package_css('style');
-		// ee()->cp->load_package_js('jquery.ppcolorbox-min');
-		// ee()->cp->load_package_js('jquery-ui-1.8.17.custom.min');
-		// ee()->cp->load_package_js('scripts');
-
 		ee()->cp->add_to_head('<link rel="stylesheet" type="text/css" href="'. $pp_themes_cp.'css/colorbox.css'.'">');
 		ee()->cp->add_to_head('<link rel="stylesheet" type="text/css" href="'. $pp_themes_cp.'css/style.css'.'">');
 		ee()->cp->add_to_head('<script type="text/javascript" src="'.$pp_themes_cp.'js/jquery.ppcolorbox-min.js'.'"></script>');
@@ -47,8 +41,6 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 		ee()->lang->loadfile('ig_picpuller');
 
 		ee()->cp->add_to_head('<style>#ppcboxLoadingGraphic{background:url('.$pp_theme_views.'images/loading.gif) no-repeat center center;};</style>');
-		//ee()->cp->add_to_head('<style>#ppcboxLoadingGraphic{background:url('.$pp_theme_views.'images/loading.gif) no-repeat center center;};</style>');
-
 
 		////////////////
 		// Get oAuth  //
@@ -130,17 +122,23 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 	 */
 	function display_cell( $data )
 	{
-		ee()->cp->load_package_css('colorbox');
-		ee()->cp->load_package_js('jquery.ppcolorbox-min');
-		ee()->cp->load_package_js('jquery-ui-1.8.17.custom.min');
-		ee()->cp->load_package_css('style');
-		ee()->cp->load_package_js('scripts');
+		$pp_themes_cp = ((defined('URL_THIRD_THEMES'))
+		           ? URL_THIRD_THEMES.'ig_picpuller/cp/'
+		           : ee()->config->item('url_third_themes') .'ig_picpuller/cp/');
+
+		$pp_theme_views = ((defined('URL_THIRD_THEMES'))
+		           ? URL_THIRD_THEMES.'ig_picpuller/views/'
+		           : ee()->config->item('url_third_themes') .'ig_picpuller/views/');
+
+		ee()->cp->add_to_head('<link rel="stylesheet" type="text/css" href="'. $pp_themes_cp.'css/colorbox.css'.'">');
+		ee()->cp->add_to_head('<link rel="stylesheet" type="text/css" href="'. $pp_themes_cp.'css/style.css'.'">');
+		ee()->cp->add_to_head('<script type="text/javascript" src="'.$pp_themes_cp.'js/jquery.ppcolorbox-min.js'.'"></script>');
+		ee()->cp->add_to_head('<script type="text/javascript" src="'.$pp_themes_cp.'js/jquery-ui-1.8.17.custom.min.js'.'"></script>');
+		ee()->cp->add_to_head('<script type="text/javascript" src="'.$pp_themes_cp.'js/scripts.js'.'"></script>');
+
 
 		ee()->lang->loadfile('ig_picpuller');
 
-		$pp_theme_views = defined( 'URL_THIRD_THEMES' )
-			? URL_THIRD_THEMES.'ig_picpuller/views/'
-			: ee()->config->item('theme_folder_url') . 'third_party/ig_picpuller/views/';
 		$pp_engine_url = $pp_theme_views.'pp_engine.php';
 
 		ee()->cp->add_to_head('<style>#cboxLoadingGraphic{background:url('.$pp_theme_views.'images/loading.gif) no-repeat center center;};</style>');
@@ -192,7 +190,6 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 			} else {
 				$search_button = '';
 			}
-			//$html = $instructions.'<a href="#">SHOW</a><input value="'.$data.'" name="'.$this->cell_name.'" style="width: 90%; padding: 2px; margin: 5px 0;"><br>'.$stream_button.$search_button;
 
 			$html =$instructions . '<div class="ig_pp_fieldset"><input value="'.$data.'" name="'.$this->cell_name.'"  class="ig_media_id_field matrix_version">'."<a href='$pp_engine_url?method=media&access_token=$oauth&media_id=' class='ig_preview_bt hidden'>Preview</a><div class='thumbnail preview'><img src='".$pp_theme_views."images/loading.gif' class='ig_pp_loader_gr'><img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAABlBMVEXd4uUAAAC4cpOLAAAARElEQVRoBe3QgQAAAADDoPlTX+EAhVBhwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMPAMDJ3QAAViTWAEAAAAASUVORK5CYII=' width=100 height=100 border=0 class='theImage'><div class='theHeadline'><em>looking up</em></div></div><br>$stream_button$search_button".'</div>';
 
