@@ -352,7 +352,7 @@ class Ig_picpuller {
 				$this->_ig_picpuller_prefix.'video_standard_resolution' => isset($node['videos']['standard_resolution']['url']) ? $node['videos']['standard_resolution']['url'] : "No video URL available.",
 				$this->_ig_picpuller_prefix.'username' => $node['user']['username'],
 				$this->_ig_picpuller_prefix.'full_name' => $node['user']['full_name'],
-				$this->_ig_picpuller_prefix.'profile_picture' => $node['user']['profile_picture']['url'],
+				$this->_ig_picpuller_prefix.'profile_picture' => isset($node['user']['profile_picture']['url']) ? $node['user']['profile_picture']['url'] : '',
 				$this->_ig_picpuller_prefix.'created_time' => $node['created_time'],
 				$this->_ig_picpuller_prefix.'link' => $node['link'],
 				$this->_ig_picpuller_prefix.'caption' => $node['caption']['text'],
