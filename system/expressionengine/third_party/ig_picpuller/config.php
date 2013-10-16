@@ -12,7 +12,7 @@
 if ( ! defined('PP_IG_NAME')) {
 	define('PP_IG_NAME', 'Pic Puller for Instagram');
 	define('PP_IG_PACKAGE', 'ig_picpuller');
-	define('PP_IG_VERSION', '1.5.1');
+	define('PP_IG_VERSION', '1.5.2');
 	define('PP_IG_DOCS', 'http://picpuller.com');
 }
 

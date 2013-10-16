@@ -29,6 +29,14 @@ input.ig_media_id_field {
 	padding: 4px 24px 4px 4px;
 }
 
+.ig_media_id_field.hide {
+display: none;
+}
+
+.ig_media_id_field.hide + a {
+display: none;
+}
+
 input.ig_media_id_field.matrix_version {
 	font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
 	font-size: 13px;

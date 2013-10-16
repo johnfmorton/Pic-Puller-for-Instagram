@@ -1,8 +1,12 @@
 # Change log
 
-1.5.1 - 2013JULY30
-- Pic Puller Image browser now works with Safe Cracker
+	1.5.2. - 2013OCT14
+- Pic Puller Image browser now works with Safe Cracker. Your Instagram Image browser can now be used on the front end of your site to allow site members to access Instagram.
 - New tag, exp:ig_picpuller:userauthorized, returns "1" when logged in user has authorized Pic Puller app with Instagram.
+- Pic Puller Image Browser field type option added to turn off the "media id" field. 
+
+1.5.1 - 2013JULY30 (not released publicly)
+- Unreleased private beta.
 
 1.5.0 - 2013JUNE22
 - Add-on wide support for Instagram video
@@ -445,13 +449,34 @@ Since only users who have authorized Pic Puller can show the media browser, user
 
 The fieldtype requires javascript.
 
-The fieldtype is compatible with Matrix and Better Work Flow.
+The fieldtype is compatible with Matrix, Better Work Flow and SafeCracker. 
 
 There is a multiple options for the fieldtype. All options default to "on".
 
 Option 1: You can use the default instructional language that the fieldtype will automatically include or you may turn it off.
 Option 2: You may choose to hide the Instagram browser that allows a user to choose from the logged in user's photo stream.
 Option 3: You may choose to hide the Instagram browser that allows a user to search and choose photos from all of Instagram's public images.
+Option 4: You may choose to hide the input field that shows the Media ID that identifies the image with Instagram.
+
+-----
+
+# SafeCracker example
+
+The following code sample shows an example of how you might set up a front end Pic Puller field type. Notice that it's also using the front-end authorization link.
+
+<div class="content">
+		<h1>Pic Puller Safe Cracker Test</h1>
+		<p>exp:ig_picpuller:userauthorized : {exp:ig_picpuller:userauthorized}</p>
+		<hr>
+		{exp:channel:form channel="safecracker_pp_example" return="site/safecracker/ENTRY_ID" entry_id="{segment_3}" author_only="yes"}
+		<p>{label:pp_tester_single}</p>
+		<p>Media ID from Instagram</p>
+		<p>{field:pp_tester_single}</p>
+		<p><input type="submit" value="Submit"></p>
+		{/exp:channel:form}
+		
+	<p>Manage your Instagram access:</p>
+	<p>{exp:ig_picpuller:authorization_link fullhtml='yes'}</p>
 
 -----
 

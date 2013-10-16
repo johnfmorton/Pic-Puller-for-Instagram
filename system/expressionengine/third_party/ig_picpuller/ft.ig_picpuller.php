@@ -102,10 +102,28 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 				$search_button = '';
 			}
 
+			// Should the MEDIA ID field be displayed? Check the prefs?
+			// Check to see if this particular field has settings for this instance
+
+			if(isset($this->settings['display_ft_input_field'])) {
+				$display_ft_input_field = $this->settings['display_ft_input_field'];
+			} else {
+				// if no settings are found, try to use the global settings, if those are not present, default to "yes"
+				$display_ft_input_field = isset($data['display_ft_input_field']) ? $data['display_ft_input_field'] : 'yes';
+			}
+
+			if ($display_ft_input_field === 'yes') {
+				$class_for_media_id = '';
+			} else {
+				$class_for_media_id = ' hide';
+			}
+
+
+
 			$input = '<div class="ig_pp_fieldset">'.$instructions . '' .
 				form_input(array(
 				'name'  => $this->field_name,
-				'class' => 'ig_media_id_field',
+				'class' => 'ig_media_id_field'.$class_for_media_id,
 				'value' => $data
 			))."<a href='$pp_engine_url?method=media&access_token=$oauth&media_id=' class='ig_preview_bt hidden'>Preview</a><div class='thumbnail preview'><img src='".$pp_theme_views."images/loading.gif' class='ig_pp_loader_gr'>	<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAABlBMVEXd4uUAAAC4cpOLAAAARElEQVRoBe3QgQAAAADDoPlTX+EAhVBhwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMPAMDJ3QAAViTWAEAAAAASUVORK5CYII=' width=100 height=100 border=0 class='theImage'><div class='theHeadline'><em>looking up</em></div></div><br>$stream_button$search_button".'</div>';
 
@@ -204,9 +222,24 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 			} else {
 				$search_button = '';
 			}
-			//$html = $instructions.'<a href="#">SHOW</a><input value="'.$data.'" name="'.$this->cell_name.'" style="width: 90%; padding: 2px; margin: 5px 0;"><br>'.$stream_button.$search_button;
 
-			$html =$instructions . '<div class="ig_pp_fieldset"><input value="'.$data.'" name="'.$this->cell_name.'"  class="ig_media_id_field matrix_version">'."<a href='$pp_engine_url?method=media&access_token=$oauth&media_id=' class='ig_preview_bt hidden'>Preview</a><div class='thumbnail preview'><img src='".$pp_theme_views."images/loading.gif' class='ig_pp_loader_gr'><img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAABlBMVEXd4uUAAAC4cpOLAAAARElEQVRoBe3QgQAAAADDoPlTX+EAhVBhwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMPAMDJ3QAAViTWAEAAAAASUVORK5CYII=' width=100 height=100 border=0 class='theImage'><div class='theHeadline'><em>looking up</em></div></div><br>$stream_button$search_button".'</div>';
+			// Should the MEDIA ID field be displayed? Check the prefs?
+			// Check to see if this particular field has settings for this instance
+
+			if(isset($this->settings['display_ft_input_field'])) {
+				$display_ft_input_field = $this->settings['display_ft_input_field'];
+			} else {
+				// if no settings are found, try to use the global settings, if those are not present, default to "yes"
+				$display_ft_input_field = isset($data['display_ft_input_field']) ? $data['display_ft_input_field'] : 'yes';
+			}
+
+			if ($display_ft_input_field === 'yes') {
+				$class_for_media_id = '';
+			} else {
+				$class_for_media_id = ' hide';
+			}
+
+			$html =$instructions . '<div class="ig_pp_fieldset"><input value="'.$data.'" name="'.$this->cell_name.'"  class="ig_media_id_field matrix_version'.$class_for_media_id.'">'."<a href='$pp_engine_url?method=media&access_token=$oauth&media_id=' class='ig_preview_bt hidden'>Preview</a><div class='thumbnail preview'><img src='".$pp_theme_views."images/loading.gif' class='ig_pp_loader_gr'><img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAABlBMVEXd4uUAAAC4cpOLAAAARElEQVRoBe3QgQAAAADDoPlTX+EAhVBhwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMGDBgwIABAwYMPAMDJ3QAAViTWAEAAAAASUVORK5CYII=' width=100 height=100 border=0 class='theImage'><div class='theHeadline'><em>looking up</em></div></div><br>$stream_button$search_button".'</div>';
 
 			return $html;
 		}
@@ -300,6 +333,28 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 			'checked' => !$checked_search
 		);
 
+		// Get the display Media ID field prefs
+		// See if there are global setting set for this option, if not, default to "yes"
+		$display_ft_input_field = isset($val['display_ft_input_field']) ? $val['display_ft_input_field'] : 'yes';
+
+		$checked_media_id_display_field = TRUE;
+
+		if ($display_ft_input_field === 'no') {
+			$checked_media_id_display_field = FALSE;
+		}
+
+		$radio7 = array(
+			'name' => 'display_ft_input_field',
+			'value' => 'yes',
+			'checked' => $checked_media_id_display_field
+		);
+
+		$radio8 = array(
+			'name' => 'display_ft_input_field',
+			'value' => 'no',
+			'checked' => !$checked_media_id_display_field
+		);
+
 		$this->EE->table->set_template(array(
 			'table_open'    => '<table class="mainTable padTable" border="0" cellspacing="0" cellpadding="0">',
 			'row_start'     => '<tr class="even">',
@@ -321,6 +376,11 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 		$this->EE->table->add_row(
 			lang('display_search_option_text', 'display_search_option_text'),
 			 'Yes: '.form_radio($radio5).NBS.NBS.' No: '.form_radio($radio6)
+		);
+
+		$this->EE->table->add_row(
+			lang('display_ft_input_field_text', 'display_ft_input_field_text'),
+			 'Yes: '.form_radio($radio7).NBS.NBS.' No: '.form_radio($radio8)
 		);
 
 		return $this->EE->table->generate();
@@ -411,6 +471,8 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 		// Get the search browser prefs
 		// Check to see if particular field has settings for this particular instance
 
+
+
 		if(isset($data['display_pp_search'])) {
 			$display_pp_search = $data['display_pp_search'];
 		} else {
@@ -436,6 +498,35 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 			'checked' => !$checked_search
 		);
 
+		// Get the display Media ID field prefs
+		// Check to see if particular field has settings for this particular instance
+
+		if(isset($data['display_ft_input_field'])) {
+			$display_ft_input_field = $data['display_ft_input_field'];
+		} else {
+			// if no settings are found, try to use the global settings, if those are not present, default to "yes"
+			$display_ft_input_field = isset($this->settings['display_ft_input_field']) ? $this->settings['display_ft_input_field'] : 'yes';
+		}
+
+		$checked_media_id_display_field = TRUE;
+
+		if ($display_ft_input_field === 'no') {
+			$checked_media_id_display_field = FALSE;
+		}
+
+		$radio7 = array(
+			'name' => 'display_ft_input_field',
+			'value' => 'yes',
+			'checked' => $checked_media_id_display_field
+		);
+
+		$radio8 = array(
+			'name' => 'display_ft_input_field',
+			'value' => 'no',
+			'checked' => !$checked_media_id_display_field
+		);
+
+
 		$this->EE->table->add_row(
 			lang('display_instructions_option_text', 'display_instructions_option_text'),
 			'Yes: '.form_radio($radio1).NBS.NBS.' No: '.form_radio($radio2)
@@ -449,6 +540,11 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 		$this->EE->table->add_row(
 			lang('display_search_option_text', 'display_search_option_text'),
 			 'Yes: '.form_radio($radio5).NBS.NBS.' No: '.form_radio($radio6)
+		);
+
+		$this->EE->table->add_row(
+			lang('display_ft_input_field_text', 'display_ft_input_field_text'),
+			 'Yes: '.form_radio($radio7).NBS.NBS.' No: '.form_radio($radio8)
 		);
 	}
 
@@ -542,6 +638,33 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 			'checked' => !$checked_search
 		);
 
+		// Get the display Media ID field prefs
+		// Check to see if particular field has settings for this particular instance
+		if(isset($data['display_ft_input_field'])) {
+			$display_ft_input_field = $data['display_ft_input_field'];
+		} else {
+			// if no settings are found, try to use the global settings, if those are not present, default to "yes"
+			$display_ft_input_field = isset($this->settings['display_ft_input_field']) ? $this->settings['display_ft_input_field'] : 'yes';
+		}
+
+		$checked_media_id_display_field = TRUE;
+
+		if ($display_ft_input_field === 'no') {
+			$checked_media_id_display_field = FALSE;
+		}
+
+		$radio7 = array(
+			'name' => 'display_ft_input_field',
+			'value' => 'yes',
+			'checked' => $checked_media_id_display_field
+		);
+
+		$radio8 = array(
+			'name' => 'display_ft_input_field',
+			'value' => 'no',
+			'checked' => !$checked_media_id_display_field
+		);
+
 		return array(
 		array (
 			lang('display_instructions_option_text', 'display_instructions_option_text') ,
@@ -554,6 +677,10 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 		array (
 			lang('display_search_option_text', 'display_search_option_text'),
 			'Yes: '.form_radio($radio5).NBS.NBS.' No: '.form_radio($radio6)
+			),
+		array (
+			lang('display_ft_input_field_text', 'display_ft_input_field_text'),
+			'Yes: '.form_radio($radio7).NBS.NBS.' No: '.form_radio($radio8)
 			)
 		);
 
@@ -593,6 +720,7 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 			'display_pp_instructions'  => $this->EE->input->post('display_pp_instructions'),
 			'display_pp_stream'  => $this->EE->input->post('display_pp_stream'),
 			'display_pp_search'  => $this->EE->input->post('display_pp_search'),
+			'display_ft_input_field'  => $this->EE->input->post('display_ft_input_field'),
 			'the_function' => 'media_recent'
 		);
 	}

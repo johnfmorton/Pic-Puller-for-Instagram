@@ -86,7 +86,7 @@ class Ig_picpuller {
 	/**
 	 * userauthorized
 	 *
-	 * Testing function only, to see that module is working.
+	 * Is this user authorized?
 	 *
 	 * @access	public
 	 * @param	none
