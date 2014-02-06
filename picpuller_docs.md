@@ -1,6 +1,10 @@
 # Change log
 
-	1.5.2. - 2013OCT14
+1.5.3 - 2014FEB04
+- Added shortcut to Field Type. You can now find an Instagram Media ID by pasting the URL into a Pic Puller Fieldtype field and clicking the search button.
+- Fixed missing language definition for 'display_ft_input_field_text'
+
+1.5.2 - 2013OCT14
 - Pic Puller Image browser now works with Safe Cracker. Your Instagram Image browser can now be used on the front end of your site to allow site members to access Instagram.
 - New tag, exp:ig_picpuller:userauthorized, returns "1" when logged in user has authorized Pic Puller app with Instagram.
 - Pic Puller Image Browser field type option added to turn off the "media id" field. 

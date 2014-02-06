@@ -5,6 +5,33 @@
 		<link>http://static.supergeekery.com/nsm_addon_updater/changelog_ig_picpuller.xml</link>
 		<description>Build an Instagram app with built in image browsing into ExpressionEngine</description>
 		<item>
+			<title>Version 1.5.3</title>
+			<!-- Additional tag required for NSM Addon Updater -->
+			<ee_addon:version>1.5.2</ee_addon:version>
+			<link>http://devot-ee.com/add-ons/pic-puller-for-instagram</link>
+			<pubDate>Tues, 04 Feb 2014 17:00:00 +0500</pubDate>
+			<description><![CDATA[
+				<ul>
+					<li>Added shortcut to Field Type. You can now find an Instagram Media ID by pasting the URL into a Pic Puller Fieldtype field and clicking the search button.</li> 
+					<li>Fixed missing language definition for 'display_ft_input_field_text'</li>
+				</ul>
+			]]></description>
+		</item>
+		<item>
+			<title>Version 1.5.2</title>
+			<!-- Additional tag required for NSM Addon Updater -->
+			<ee_addon:version>1.5.2</ee_addon:version>
+			<link>http://devot-ee.com/add-ons/pic-puller-for-instagram</link>
+			<pubDate>Mon, 14 Oct 2013 12:00:00 +0500</pubDate>
+			<description><![CDATA[
+				<ul>
+					<li>Pic Puller Image browser now works with Safe Cracker. Your Instagram Image browser can now be used on the front end of your site to allow site members to access Instagram.</li>
+					<li>New tag, exp:ig_picpuller:userauthorized, returns "1" when logged in user has authorized Pic Puller app with Instagram.</li>
+					<li>Pic Puller Image Browser field type option added to turn off the "media id" field.</li>
+				</ul>
+			]]></description>
+		</item>
+		<item>
 			<title>Version 1.5.1</title>
 			<!-- Additional tag required for NSM Addon Updater -->
 			<ee_addon:version>1.5.1</ee_addon:version>
@@ -12,8 +39,7 @@
 			<pubDate>Wed, 30 July 2013 18:18:00 +0500</pubDate>
 			<description><![CDATA[
 				<ul>
-					<li>Pic Puller Image browser now works with Safe Cracker</li>
-					<li>New tag, exp:ig_picpuller:userauthorized, returns "1" when logged in user has authorized Pic Puller app with Instagram.</li>
+					<li>Unreleased private beta.</li>
 				</ul>
 			]]></description>
 		</item>

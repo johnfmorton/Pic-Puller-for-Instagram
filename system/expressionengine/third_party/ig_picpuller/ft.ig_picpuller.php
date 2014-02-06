@@ -32,12 +32,6 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 		           ? URL_THIRD_THEMES.'ig_picpuller/views/'
 		           : $this->EE->config->item('url_third_themes') .'ig_picpuller/views/');
 
-		// $this->EE->cp->load_package_css('colorbox');
-		// $this->EE->cp->load_package_css('style');
-		// $this->EE->cp->load_package_js('jquery.ppcolorbox-min');
-		// $this->EE->cp->load_package_js('jquery-ui-1.8.17.custom.min');
-		// $this->EE->cp->load_package_js('scripts');
-
 		$this->EE->cp->add_to_head('<link rel="stylesheet" type="text/css" href="'. $pp_themes_cp.'css/colorbox.css'.'">');
 		$this->EE->cp->add_to_head('<link rel="stylesheet" type="text/css" href="'. $pp_themes_cp.'css/style.css'.'">');
 		$this->EE->cp->add_to_head('<script type="text/javascript" src="'.$pp_themes_cp.'js/jquery.ppcolorbox-min.js'.'"></script>');
@@ -47,8 +41,6 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 		$this->EE->lang->loadfile('ig_picpuller');
 
 		$this->EE->cp->add_to_head('<style>#ppcboxLoadingGraphic{background:url('.$pp_theme_views.'images/loading.gif) no-repeat center center;};</style>');
-		//$this->EE->cp->add_to_head('<style>#ppcboxLoadingGraphic{background:url('.$pp_theme_views.'images/loading.gif) no-repeat center center;};</style>');
-
 
 		////////////////
 		// Get oAuth  //
@@ -58,9 +50,6 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 		$oauth = $this->getAuthCredsForUser($user_id);
 
 		$pp_engine_url = $pp_theme_views.'pp_engine.php';
-
-		//return "I'm at line 52";
-
 
 		if ($oauth != '') {
 			$pp_select = $pp_theme_views.'pp_select.php?access_token='.$oauth;
@@ -155,12 +144,6 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 		$pp_theme_views = ((defined('URL_THIRD_THEMES'))
 		           ? URL_THIRD_THEMES.'ig_picpuller/views/'
 		           : $this->EE->config->item('url_third_themes') .'ig_picpuller/views/');
-
-		// $this->EE->cp->load_package_css('colorbox');
-		// $this->EE->cp->load_package_js('jquery.ppcolorbox-min');
-		// $this->EE->cp->load_package_js('jquery-ui-1.8.17.custom.min');
-		// $this->EE->cp->load_package_css('style');
-		// $this->EE->cp->load_package_js('scripts');
 
 		$this->EE->cp->add_to_head('<link rel="stylesheet" type="text/css" href="'. $pp_themes_cp.'css/colorbox.css'.'">');
 		$this->EE->cp->add_to_head('<link rel="stylesheet" type="text/css" href="'. $pp_themes_cp.'css/style.css'.'">');

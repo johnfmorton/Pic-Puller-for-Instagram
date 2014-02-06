@@ -1,4 +1,10 @@
 var PicPullerIG;
+// prevent IE errors when using console
+if (typeof console === "undefined") {
+		window.console = {
+			log: function () {}
+		};
+} 
 
 $(function() {
 	// Handler for .ready() called.
@@ -65,19 +71,67 @@ $(function() {
 			//
 			function addClickEventToPPPreview() {
 				$('.ig_preview_bt').on('click', function(e) {
-					var myPreviewFrame = $(this).parent().find($('.thumbnail'));
-					myPreviewFrame.slideDown();
+					e.preventDefault();
 					var media_id = $(this).parent().find($('.ig_media_id_field')).val();
-					var theURL = $(this).attr('href')+media_id;
-					var theImage = $(this).parent().find($('.theImage'));
-					var theHeadline = $(this).parent().find($('.theHeadline'));
-					var ig_pp_loader_gr = $(this).parent().find($('.ig_pp_loader_gr'));
-					ig_pp_loader_gr.removeClass('hidden');
-					$.ajax({
+					// Searching for something like the following...
+					// http://instagram.com/p/abC123jfm9/
+					// http://instagr.am/p/abC123jfm9/
+					if ( media_id.indexOf('instagr') === 7 ) {
+						translateURLtoMediaID(trim11(media_id), $(this));
+					} else {
+						// we were proved a MediaID, or at least not an Instagram 
+						// link, so let's try to find that image
+						generatePreviewFromMediaID(media_id, $(this));
+					}
+				});
+			}
+
+			addClickEventToPPPreview();
+
+			function translateURLtoMediaID (url, targetField) {
+				var media_id = null;
+				$.ajax({
+					url: "http://api.instagram.com/oembed?url="+url,
+					contentType: 'text/plain',
+					xhrFields: {
+					// The 'xhrFields' property sets additional fields on the XMLHttpRequest.
+					// This can be used to set the 'withCredentials' property.
+					// Set the value to 'true' if you'd like to pass cookies to the server.
+					// If this is enabled, your server must respond with the header
+					// 'Access-Control-Allow-Credentials: true'.
+					withCredentials: false
+					},
+					dataType: 'jsonp',
+					success: function(data) {
+						console.log('Data received from Instagram oembed.');
+						console.log(data);
+						console.log(data.media_id);
+						if (data.media_id){
+							media_id = data.media_id;
+							targetField.parent().find($('.ig_media_id_field')).val(media_id);
+							generatePreviewFromMediaID(media_id, targetField);
+						} else {
+							return null;
+						}
+					}
+				});
+			}
+
+			function generatePreviewFromMediaID (media_id, targetField) {
+				var myPreviewFrame = targetField.parent().find($('.thumbnail'));
+				myPreviewFrame.slideDown();
+				var theURL = targetField.attr('href')+media_id;
+				var theImage = targetField.parent().find($('.theImage'));
+				var theHeadline = targetField.parent().find($('.theHeadline'));
+				var ig_pp_loader_gr = targetField.parent().find($('.ig_pp_loader_gr'));
+				ig_pp_loader_gr.removeClass('hidden');
+
+				$.ajax({
 						url: theURL,
 						dataType: 'json',
 						success: function(data) {
-							//console.log('Data received from Instagram.');
+							console.log('Data received from Instagram.');
+							console.log(data);
 							ig_pp_loader_gr.addClass('hidden');
 							if (data.code === 200 ){
 								theImage.removeClass('hidden');
@@ -91,7 +145,11 @@ $(function() {
 								PicPullerIG.callback('afterThumbnailGeneration', myPreviewFrame);
 							} else {
 								theImage.addClass('hidden');
-								theHeadline.html("<strong>"+data.error_type+": </strong>" + data.error_message);
+								if( data.error_type )
+									{theHeadline.html("<strong>"+data.error_type+": </strong>" + data.error_message);}
+								else {
+									{theHeadline.html("<strong>Unknown error: </strong> Instagram returned no information.");}
+								}	
 							}
 						},
 						error: function(data) {
@@ -99,28 +157,43 @@ $(function() {
 							console.log(data);
 						}
 						});
-					e.preventDefault();
-				});
 			}
 
-			addClickEventToPPPreview();
-
-			// preview button is hidden until there is something to look up
-			// first check all PP fields to see if they contain something...
-			$('.ig_media_id_field').each(function(e){
-				//console.log('checking to see if I need to turn on that magnifying glass');
-				if (checkForValueinPPfield($(this)) ){
-					console.log('There was a value in the checked PP field, so trigger an automated lookup.');
-					var myLookupBt = $(this).parent().find($('.ig_preview_bt'));
-					myLookupBt.trigger('click');
-				} else {
-					console.log('No need for an automated look up.');
+			// helper trim function
+			function trim11 (str) {
+				str = str.replace(/^\s+/, '');
+				for (var i = str.length - 1; i >= 0; i--) {
+					if (/\S/.test(str.charAt(i))) {
+						str = str.substring(0, i + 1);
+					break;
+					}
 				}
-			});
-			// and watch for someone entering a media ID manually
-			$('.ig_media_id_field').keyup(function(e){
-				checkForValueinPPfield($(this));
-			});
+				return str;
+			}
+
+			if (typeof Matrix !== 'function'){
+				// preview button is hidden until there is something to look up
+				// first check all PP fields to see if they contain something...
+				$('.ig_media_id_field').each(function(e){
+					//console.log('checking to see if I need to turn on that magnifying glass');
+					if (checkForValueinPPfield($(this)) ){
+						console.log('There was a value in the checked PP field, so trigger an automated lookup.');
+						var myLookupBt = $(this).parent().find($('.ig_preview_bt'));
+						myLookupBt.trigger('click');
+					} else {
+						console.log('No need for an automated look up.');
+					}
+				});
+				// and watch for someone entering a media ID manually
+				// $('.ig_media_id_field').keyup(function(e){
+				// 	checkForValueinPPfield($(this));
+				// });
+
+				$('.ig_pp_fieldset').delegate('.ig_media_id_field', "keyup", function( e ) {
+					checkForValueinPPfield($(this));
+				} );
+			}
+
 
 			function checkForValueinPPfield(theTarget) {
 				var myValue= theTarget.val();
@@ -133,6 +206,8 @@ $(function() {
 					return false;
 				}
 			}
+
+
 
 			if (typeof Matrix == 'function'){
 				console.log("PP detected a Matrix field.");
@@ -196,9 +271,15 @@ $(function() {
 							}
 						});
 
+					$('.ig_pp_fieldset').delegate('.ig_media_id_field', "keyup", function( e ) {
+						checkForValueinPPfield($(this));
+					} );
+
+
+
 				// for compatibility with Better Workflow
 				// check for the presence of Bwf, and if present
-				// readd the click event to the PP preview button
+				// re-add the click event to the PP preview button
 				// since it disappears after closing a preview window
 				// when Matix fields are used.
 				if (typeof Bwf == 'object') {
