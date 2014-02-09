@@ -1,5 +1,9 @@
 # Change log
 
+1.5.4 - 2014FEB09
+- Updated Fieldtype to recognize when the Instagram app had been deauthorized from only the Instagram interface and not the ExpressionEngine interface
+- Fixed PHP error and and incorrect error message for when a user's photo or video was public when initially added to Pic Puller but was later turn to a private image.
+
 1.5.3 - 2014FEB04
 - Added shortcut to Field Type. You can now find an Instagram Media ID by pasting the URL into a Pic Puller Fieldtype field and clicking the search button.
 - Fixed missing language definition for 'display_ft_input_field_text'
