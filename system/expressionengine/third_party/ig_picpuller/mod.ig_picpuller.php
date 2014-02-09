@@ -1547,15 +1547,20 @@ class Ig_picpuller {
 					}
 					else
 					{
-
+						// no stale data to return
 						$error_array = array(
 							'status' => FALSE,
 							'error_message' => (isset($meta['error_message']) ? $meta['error_message'] : 'No error message provided by Instagram. No cached data available.' ),
 							'error_type' =>  (isset($meta['error_type']) ? $meta['error_type'] : 'NoCodeReturned')
-						);
-
-						return $error_array;
+						);						
 					}
+				} else {
+					// didn't WANT stale data, so cache was not checked, so just return the IG error
+					$error_array = array(
+							'status' => FALSE,
+							'error_message' => (isset($meta['error_message']) ? $meta['error_message'] : 'No error message provided by Instagram. Cached data not checked.' ),
+							'error_type' =>  (isset($meta['error_type']) ? $meta['error_type'] : 'NoCodeReturned')
+						);
 				}
 			}
 
