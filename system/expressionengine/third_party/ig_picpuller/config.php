@@ -14,8 +14,9 @@ if ( ! defined('PP_IG_NAME')) {
 	define('PP_IG_PACKAGE', 'ig_picpuller');
 	define('PP_IG_VERSION', '1.5.4');
 	define('PP_IG_DOCS', 'http://picpuller.com');
+	define('PP_DEBUG', TRUE);
 }
 
 $config['name'] = PP_IG_NAME;
 $config['version']= PP_IG_VERSION;
-$config['nsm_addon_updater']['versions_xml']='http://static.supergeekery.com/nsm_addon_updater/changelog_ig_picpuller.xml';
+$config['debug'] = PP_DEBUG;
