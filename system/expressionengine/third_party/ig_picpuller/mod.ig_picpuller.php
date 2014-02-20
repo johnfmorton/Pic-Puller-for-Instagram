@@ -3,6 +3,24 @@
 // include config file
 include (PATH_THIRD.'ig_picpuller/config.php');
 
+require_once(PATH_THIRD.'ig_picpuller/lib/FirePHPCore/fb.php');
+//FB:: *
+ 
+/*
+
+Digging around? Enable FirePHP debugging: FB::setEnabled(true);
+You'll need to use FirePHP for Firefox or FirePHP4Chrome and look at your console in your web browser
+
+*/
+
+FB::setEnabled(false);
+
+// Examples:
+// FB::log('Log message', 'Label');
+// FB::info('Info message', 'Label');
+// FB::warn('Warn message', 'Label');
+// FB::error('Error message', 'Label');
+
 /**
  * ExpressionEngine - by EllisLab
  *
@@ -238,6 +256,8 @@ class Ig_picpuller {
 
 		$data = $this->_fetch_data($query_string);
 
+		FB::info($data, "popular func");
+
 		if ($data['status'] === FALSE ) { // && $this->use_stale != 'yes') {
 			$variables[] = array(
 				$this->_ig_picpuller_prefix.'error_type' => $data['error_type'],
@@ -339,6 +359,8 @@ class Ig_picpuller {
 
 		$data = $this->_fetch_data($query_string);
 
+		FB::info($data, "user func");
+
 		if ($data['status'] === FALSE ) { // && $this->use_stale != 'yes') {
 			$variables[] = array(
 				$this->_ig_picpuller_prefix.'error_type' => $data['error_type'],
@@ -429,6 +451,7 @@ class Ig_picpuller {
 
 		$data = $this->_fetch_data($query_string);
 
+		FB::info($data, "media func");
 
 		if ($data['status'] === FALSE) {
 			$variables[] = array(
@@ -552,6 +575,8 @@ class Ig_picpuller {
 		$query_string = "https://api.instagram.com/v1/users/{$ig_user_id}/media/recent/?access_token={$oauth}". $limit.$max_id.$min_id;
 
 		$data = $this->_fetch_data($query_string);
+
+		FB::info($data, "media_recent func");
 
 		if ($data['status'] === FALSE ) { // && $this->use_stale != 'yes') {
 			$variables[] = array(
@@ -681,6 +706,8 @@ class Ig_picpuller {
 
 		$data = $this->_fetch_data($query_string);
 
+		FB::info($data, "user_feed func");
+
 		if ($data['status'] === FALSE ) { // && $this->use_stale != 'yes') {
 			$variables[] = array(
 				$this->_ig_picpuller_prefix.'error_type' => $data['error_type'],
@@ -801,6 +828,8 @@ class Ig_picpuller {
 		$query_string = "https://api.instagram.com/v1/users/self/media/liked?access_token={$oauth}". $limit.$max_id.$min_id;
 
 		$data = $this->_fetch_data($query_string);
+
+		FB::info($data, "user_liked func");
 
 		if ($data['status'] === FALSE ) { // && $this->use_stale != 'yes') {
 			$variables[] = array(
@@ -927,6 +956,8 @@ class Ig_picpuller {
 
 		$data = $this->_fetch_data($query_string);
 
+		FB::info($data, "tagged_media func");
+
 		if ($data['status'] === FALSE ) { // && $this->use_stale != 'yes') {
 			$variables[] = array(
 				$this->_ig_picpuller_prefix.'error_type' => $data['error_type'],
@@ -948,6 +979,8 @@ class Ig_picpuller {
 		var_dump($data['pagination']);
 		echo '</pre>';
 		*/
+	
+
 		$cacheddata = (isset($data['cacheddata'])) ? 'yes' : 'no';
 		foreach($data['data'] as $node)
 		{
@@ -1092,6 +1125,7 @@ class Ig_picpuller {
 
 		$json = json_decode($returndata);
 
+		FB::info($json, "getOAuthFromCode func");
 
 		return $json;
 	}
@@ -1354,6 +1388,9 @@ class Ig_picpuller {
 
 		$data = json_decode(curl_exec($ch), true);
 		curl_close($ch);
+	
+		FB::info($data, 'IG Data:');
+	
 		$valid_data = $this->_validate_data($data, $url);
 
 		return $valid_data;
@@ -1373,7 +1410,9 @@ class Ig_picpuller {
 
 	private function _validate_data($data, $url){
 
+		// to FAKE a non-responsive error from Instagram, change the initial conditional meta code statement below to return FALSE
 
+		//if (FALSE)
 		if ($data != '' && isset($data['meta']))
 		{
 			$error_array;
@@ -1443,18 +1482,31 @@ class Ig_picpuller {
 
 			if ($this->use_stale == 'yes')
 			{
+				FB::info('Yes, use stale data.');
 				$data = $this->_check_cache($url, $this->use_stale);
+				FB::info($data, 'What data did we get?');
 			}
 			if ($data) {
+				FB::info('Yes, in data loop.');
 				$data['cacheddata'] = TRUE;
 				$error_array = array(
 					'status' => TRUE,
 					'error_message' => (isset($meta['error_message']) ? $meta['error_message'] : 'No data returned from Instagram API. Check http://api-status.com/6404/174981/Instagram-API. Using cached data.' ), //. ' Using stale data as back up if available.',
 					'error_type' =>  (isset($meta['error_type']) ? $meta['error_type'] : 'NoCodeReturned')
 				);
+			} else {
+				$data =[];
+				$error_array = array(
+					'status' => FALSE,
+					'error_message' => (isset($meta['error_message']) ? $meta['error_message'] : 'No data returned from Instagram API. Check http://api-status.com/6404/174981/Instagram-API. No cached data available.' ), //. ' Using stale data as back up if available.',
+					'error_type' =>  (isset($meta['error_type']) ? $meta['error_type'] : 'NoCodeReturned')
+				);
 			}
 
 		}
+
+		FB::warn(array_merge($data, $error_array), 'validate');
+
 		return array_merge($data, $error_array);
 		// merge the original data or cached data (if stale allowed) with the error array
 	}
@@ -1551,8 +1603,12 @@ class Ig_picpuller {
 	 */
 	private function _check_cache($url, $use_stale = FALSE)
 	{
+		
+		//FB::info($data, "user_liked func");
+
 		// Check for cache directory
 		$this->EE->TMPL->log_item("Checking Cache");
+
 		$dir = APPPATH.'cache/'.$this->cache_name.'/';
 
 		$this->EE->TMPL->log_item('CHECK CASHE: dir, '. $dir);
@@ -1612,6 +1668,20 @@ class Ig_picpuller {
 	 */
 	private function _write_cache($data, $url)
 	{
+		//$data = json_encode($data);
+		$dir = md5($url);
+		ee()->cache->save('/ig_picpuller_eedev/'.$dir, json_encode($data), 1000);
+
+
+
+
+
+
+
+
+
+
+
 
 		// Check for cache directory
 
