@@ -429,11 +429,6 @@ class Ig_picpuller {
 
 		$data = $this->_fetch_data($query_string);
 
-		// echo '404 :
-		// <pre>';
-		// var_dump($data);
-		// echo '</pre>';
-
 
 		if ($data['status'] === FALSE) {
 			$variables[] = array(
@@ -697,7 +692,6 @@ class Ig_picpuller {
 		}
 
 		$node = $data['data'];
-		//$next_url = isset($data['pagination']['next_url']) ? $data['pagination']['next_url'] : 'no';
 
 		$next_max_id = '';
 		if (isset($data['pagination']['next_max_id'])){
@@ -997,10 +991,6 @@ class Ig_picpuller {
 
 		if (isset($user_data->{'access_token'})){
 
-			//echo "<pre>";
-			//var_dump($this->_memberID);
-			//echo "</pre>";
-
 			$this->remove_auth_logged_in_user();
 			$this->EE->db->set('oauth', $user_data->{'access_token'});
 			// originally, I saved the member id from Instagram, but I switched that to saving
@@ -1089,12 +1079,6 @@ class Ig_picpuller {
 
 		$returndata = curl_exec($ch);
 
-		// echo "<pre>";
-		// print_r(json_decode($returndata));
-		// echo "</pre>";
-
-		//die();
-
 		if ($returndata === FALSE) {
 
 			//echo "cURL Error: " . curl_error($ch);
@@ -1108,12 +1092,6 @@ class Ig_picpuller {
 
 		$json = json_decode($returndata);
 
-
-		// echo "<pre>";
-		// print_r($json);
-		// echo "</pre>";
-
-		// die();
 
 		return $json;
 	}
@@ -1376,16 +1354,6 @@ class Ig_picpuller {
 
 		$data = json_decode(curl_exec($ch), true);
 		curl_close($ch);
-
-		/*
-
-		Digging around? Uncomment this out to see all the goodies returned by Instagram.
-
-		echo '<pre>';
-		var_dump($data);
-		echo '</pre>';
-		*/
-
 		$valid_data = $this->_validate_data($data, $url);
 
 		return $valid_data;
@@ -1405,7 +1373,6 @@ class Ig_picpuller {
 
 	private function _validate_data($data, $url){
 
-		// to FAKE a non-responsive error from Instagram, change the initial conditional meta code statement below
 
 		if ($data != '' && isset($data['meta']))
 		{
