@@ -1,5 +1,9 @@
 # Change log
 
+1.6.0 - 2014FEB21
+- New caching system for EE 2.8.0 and above
+- Control panel now updated for compatiblity with EE 2.8.0
+
 1.5.4 - 2014FEB09
 - Updated Fieldtype to recognize when the Instagram app had been deauthorized from only the Instagram interface and not the ExpressionEngine interface
 - Fixed PHP error and and incorrect error message for when a user's photo or video was public when initially added to Pic Puller but was later turn to a private image.

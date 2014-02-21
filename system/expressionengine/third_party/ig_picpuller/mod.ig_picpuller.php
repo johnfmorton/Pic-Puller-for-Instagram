@@ -13,7 +13,7 @@ You'll need to use FirePHP for Firefox or FirePHP4Chrome and look at your consol
 
 */
 
-FB::setEnabled(false);
+FB::setEnabled(true);
 
 // Examples:
 // FB::log('Log message', 'Label');
@@ -69,6 +69,8 @@ class Ig_picpuller {
 		$this->_appID = $this->getAppID();
 		$this->_memberID = $this->get_logged_in_user_id();
 		$this->_ig_picpuller_prefix = $this->get_ig_picpuller_prefix();
+
+
 	}
 
 	// ----------------------------------------------------------------
@@ -98,6 +100,13 @@ class Ig_picpuller {
 		};
 
 		$this->EE->TMPL->log_item('Pic Puller for Instagram: is installed an returning data. Beep.');
+
+		if (version_compare(APP_VER, '2.8.0') >= 0) {
+			FB::info("The cache property does exist on the EE object.");
+		} else {
+			FB::warn('No cache property so we need to use the old caching.');
+		}
+
 		return "Beep. Beep beep beep beep. Beep beep.";
 	 }
 
@@ -1609,50 +1618,70 @@ class Ig_picpuller {
 		// Check for cache directory
 		$this->EE->TMPL->log_item("Checking Cache");
 
-		$dir = APPPATH.'cache/'.$this->cache_name.'/';
 
-		$this->EE->TMPL->log_item('CHECK CASHE: dir, '. $dir);
+		//if (property_exists(ee(), 'cache')) {
+		if (version_compare(APP_VER, '2.8.0') >= 0) {
+			FB::info("The cache property does exist on the EE object.");
+			$dir = md5($url);
+			$cache = ee()->cache->get('/ig_picpuller_eedev/'.$dir);
+			FB::info($cache);
 
-		if ( ! @is_dir($dir))
-		{
-			$this->EE->TMPL->log_item('CHECK CASHE: directory wasn\'t there');
-			return FALSE;
+			if($cache) {
+				$cache = json_decode($cache, true);
+				return $cache;
+			} else {
+				return false;				
+			}
+
+		} else {
+			FB::info('No cache property so we need to use the old caching.');
+		
+			$dir = APPPATH.'cache/'.$this->cache_name.'/';
+
+			$this->EE->TMPL->log_item('CHECK CASHE: dir, '. $dir);
+
+			if ( ! @is_dir($dir))
+			{
+				$this->EE->TMPL->log_item('CHECK CASHE: directory wasn\'t there');
+				return FALSE;
+			}
+
+			// Check for cache file
+
+			$file = $dir.md5($url);
+
+			if ( ! file_exists($file) OR ! ($fp = @fopen($file, 'rb')))
+			{
+				return FALSE;
+			}
+
+			flock($fp, LOCK_SH);
+
+			$cache = @fread($fp, filesize($file));
+
+			flock($fp, LOCK_UN);
+
+			fclose($fp);
+
+			// Grab the timestamp from the first line
+
+			$eol = strpos($cache, "\n");
+
+			$timestamp = substr($cache, 0, $eol);
+			$cache = trim((substr($cache, $eol)));
+
+			if ($use_stale == FALSE && time() > ($timestamp + ($this->refresh * 60)))
+			{
+				return FALSE;
+			}
+
+			$this->EE->TMPL->log_item("Instagram data retrieved from cache");
+
+			$cache = json_decode($cache, true);
+
+			return $cache;
+
 		}
-
-		// Check for cache file
-
-		$file = $dir.md5($url);
-
-		if ( ! file_exists($file) OR ! ($fp = @fopen($file, 'rb')))
-		{
-			return FALSE;
-		}
-
-		flock($fp, LOCK_SH);
-
-		$cache = @fread($fp, filesize($file));
-
-		flock($fp, LOCK_UN);
-
-		fclose($fp);
-
-		// Grab the timestamp from the first line
-
-		$eol = strpos($cache, "\n");
-
-		$timestamp = substr($cache, 0, $eol);
-		$cache = trim((substr($cache, $eol)));
-
-		if ($use_stale == FALSE && time() > ($timestamp + ($this->refresh * 60)))
-		{
-			return FALSE;
-		}
-
-		$this->EE->TMPL->log_item("Instagram data retrieved from cache");
-
-		$cache = json_decode($cache, true);
-
-		return $cache;
 	}
 
 	// --------------------------------------------------------------------
@@ -1668,60 +1697,61 @@ class Ig_picpuller {
 	 */
 	private function _write_cache($data, $url)
 	{
-		//$data = json_encode($data);
-		$dir = md5($url);
-		ee()->cache->save('/ig_picpuller_eedev/'.$dir, json_encode($data), 1000);
+		
+		//if (property_exists(ee(), 'cache')) {
+		if (version_compare(APP_VER, '2.8.0') >= 0) {
+			FB::info("Will use NEW cache system.");
+			//$data = json_encode($data);
+			$dir = md5($url);
+			ee()->cache->save('/ig_picpuller_eedev/'.$dir, json_encode($data), 1000);
 
 
+		
+		} else {
+			FB::info('Must use OLD cache system.');
 
+			
 
+			// Check for cache directory
 
+			$this->EE->TMPL->log_item('Pic Puller: _write_cache $data '. gettype($data));
 
+			$data = json_encode($data);
 
+			$dir = APPPATH.'cache/'.$this->cache_name.'/';
 
+			if ( ! @is_dir($dir))
+			{
+				if ( ! @mkdir($dir, 0777))
+				{
+					return FALSE;
+				}
 
+				@chmod($dir, 0777);
+			}
 
+			// add a timestamp to the top of the file
+			$data = time()."\n".$data;
 
+			// Write the cached data
 
-		// Check for cache directory
+			$file = $dir.md5($url);
 
-		$this->EE->TMPL->log_item('Pic Puller: _write_cache $data '. gettype($data));
-
-		$data = json_encode($data);
-
-		$dir = APPPATH.'cache/'.$this->cache_name.'/';
-
-		if ( ! @is_dir($dir))
-		{
-			if ( ! @mkdir($dir, 0777))
+			if ( ! $fp = @fopen($file, 'wb'))
 			{
 				return FALSE;
 			}
 
-			@chmod($dir, 0777);
+			flock($fp, LOCK_EX);
+			fwrite($fp, $data);
+			flock($fp, LOCK_UN);
+			fclose($fp);
+
+			@chmod($file, 0777);
+
+			// now clean up the cache
+			$this->_clear_cache();
 		}
-
-		// add a timestamp to the top of the file
-		$data = time()."\n".$data;
-
-		// Write the cached data
-
-		$file = $dir.md5($url);
-
-		if ( ! $fp = @fopen($file, 'wb'))
-		{
-			return FALSE;
-		}
-
-		flock($fp, LOCK_EX);
-		fwrite($fp, $data);
-		flock($fp, LOCK_UN);
-		fclose($fp);
-
-		@chmod($file, 0777);
-
-		// now clean up the cache
-		$this->_clear_cache();
 	}
 
 	private function _clear_cache()
