@@ -1504,7 +1504,7 @@ class Ig_picpuller {
 					'error_type' =>  (isset($meta['error_type']) ? $meta['error_type'] : 'NoCodeReturned')
 				);
 			} else {
-				$data =[];
+				$data['cacheddata'] = FALSE;
 				$error_array = array(
 					'status' => FALSE,
 					'error_message' => (isset($meta['error_message']) ? $meta['error_message'] : 'No data returned from Instagram API. Check http://api-status.com/6404/174981/Instagram-API. No cached data available.' ), //. ' Using stale data as back up if available.',
