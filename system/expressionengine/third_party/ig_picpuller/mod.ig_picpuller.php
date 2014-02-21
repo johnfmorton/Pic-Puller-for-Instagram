@@ -13,7 +13,7 @@ You'll need to use FirePHP for Firefox or FirePHP4Chrome and look at your consol
 
 */
 
-FB::setEnabled(true);
+FB::setEnabled(false);
 
 // Examples:
 // FB::log('Log message', 'Label');
