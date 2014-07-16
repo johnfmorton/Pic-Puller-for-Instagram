@@ -34,9 +34,9 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 
 		$this->EE->cp->add_to_head('<link rel="stylesheet" type="text/css" href="'. $pp_themes_cp.'css/colorbox.css'.'">');
 		$this->EE->cp->add_to_head('<link rel="stylesheet" type="text/css" href="'. $pp_themes_cp.'css/style.css'.'">');
-		$this->EE->cp->add_to_head('<script type="text/javascript" src="'.$pp_themes_cp.'js/jquery.ppcolorbox-min.js'.'"></script>');
-		$this->EE->cp->add_to_head('<script type="text/javascript" src="'.$pp_themes_cp.'js/jquery-ui-1.8.17.custom.min.js'.'"></script>');
-		$this->EE->cp->add_to_head('<script type="text/javascript" src="'.$pp_themes_cp.'js/scripts.js'.'"></script>');
+		$this->EE-> cp->add_to_foot('<script type="text/javascript" src="'.$pp_themes_cp.'js/jquery.ppcolorbox-min.js'.'"></script>');
+		$this->EE-> cp->add_to_foot('<script type="text/javascript" src="'.$pp_themes_cp.'js/jquery-ui-1.8.17.custom.min.js'.'"></script>');
+		$this->EE-> cp->add_to_foot('<script type="text/javascript" src="'.$pp_themes_cp.'js/scripts.js'.'"></script>');
 
 		$this->EE->lang->loadfile('ig_picpuller');
 
@@ -147,9 +147,9 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 
 		$this->EE->cp->add_to_head('<link rel="stylesheet" type="text/css" href="'. $pp_themes_cp.'css/colorbox.css'.'">');
 		$this->EE->cp->add_to_head('<link rel="stylesheet" type="text/css" href="'. $pp_themes_cp.'css/style.css'.'">');
-		$this->EE->cp->add_to_head('<script type="text/javascript" src="'.$pp_themes_cp.'js/jquery.ppcolorbox-min.js'.'"></script>');
-		$this->EE->cp->add_to_head('<script type="text/javascript" src="'.$pp_themes_cp.'js/jquery-ui-1.8.17.custom.min.js'.'"></script>');
-		$this->EE->cp->add_to_head('<script type="text/javascript" src="'.$pp_themes_cp.'js/scripts.js'.'"></script>');
+		$this->EE-> cp->add_to_foot('<script type="text/javascript" src="'.$pp_themes_cp.'js/jquery.ppcolorbox-min.js'.'"></script>');
+		$this->EE-> cp->add_to_foot('<script type="text/javascript" src="'.$pp_themes_cp.'js/jquery-ui-1.8.17.custom.min.js'.'"></script>');
+		$this->EE-> cp->add_to_foot('<script type="text/javascript" src="'.$pp_themes_cp.'js/scripts.js'.'"></script>');
 
 
 		$this->EE->lang->loadfile('ig_picpuller');
