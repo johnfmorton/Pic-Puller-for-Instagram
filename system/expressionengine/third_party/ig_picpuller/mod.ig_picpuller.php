@@ -5,7 +5,7 @@ include (PATH_THIRD.'ig_picpuller/config.php');
 
 require_once(PATH_THIRD.'ig_picpuller/lib/FirePHPCore/fb.php');
 //FB:: *
- 
+
 /*
 
 Digging around? Enable FirePHP debugging: FB::setEnabled(true);
@@ -988,7 +988,7 @@ class Ig_picpuller {
 		var_dump($data['pagination']);
 		echo '</pre>';
 		*/
-	
+
 
 		$cacheddata = (isset($data['cacheddata'])) ? 'yes' : 'no';
 		foreach($data['data'] as $node)
@@ -1397,9 +1397,9 @@ class Ig_picpuller {
 
 		$data = json_decode(curl_exec($ch), true);
 		curl_close($ch);
-	
+
 		FB::info($data, 'IG Data:');
-	
+
 		$valid_data = $this->_validate_data($data, $url);
 
 		return $valid_data;
@@ -1456,9 +1456,9 @@ class Ig_picpuller {
 				// a cache version of itself if available
 				if ($this->use_stale == 'yes')
 				{
-					$data = $this->_check_cache($url, $this->use_stale);
-
-					if ($data) {
+					$staleData = $this->_check_cache($url, $this->use_stale);
+					if ($staleData) {
+						$data = $staleData;
 						$data['cacheddata'] = TRUE;
 						$error_array = array(
 							'status' => TRUE,
@@ -1473,7 +1473,7 @@ class Ig_picpuller {
 							'status' => FALSE,
 							'error_message' => (isset($meta['error_message']) ? $meta['error_message'] : 'No error message provided by Instagram. No cached data available.' ),
 							'error_type' =>  (isset($meta['error_type']) ? $meta['error_type'] : 'NoCodeReturned')
-						);						
+						);
 					}
 				} else {
 					// didn't WANT stale data, so cache was not checked, so just return the IG error
@@ -1612,7 +1612,7 @@ class Ig_picpuller {
 	 */
 	private function _check_cache($url, $use_stale = FALSE)
 	{
-		
+
 		//FB::info($data, "user_liked func");
 
 		// Check for cache directory
@@ -1630,12 +1630,12 @@ class Ig_picpuller {
 				$cache = json_decode($cache, true);
 				return $cache;
 			} else {
-				return false;				
+				return false;
 			}
 
 		} else {
 			FB::info('No cache property so we need to use the old caching.');
-		
+
 			$dir = APPPATH.'cache/'.$this->cache_name.'/';
 
 			$this->EE->TMPL->log_item('CHECK CASHE: dir, '. $dir);
@@ -1697,7 +1697,7 @@ class Ig_picpuller {
 	 */
 	private function _write_cache($data, $url)
 	{
-		
+
 		//if (property_exists(ee(), 'cache')) {
 		if (version_compare(APP_VER, '2.8.0') >= 0) {
 			FB::info("Will use NEW cache system.");
@@ -1706,11 +1706,11 @@ class Ig_picpuller {
 			ee()->cache->save('/ig_picpuller_eedev/'.$dir, json_encode($data), 1000);
 
 
-		
+
 		} else {
 			FB::info('Must use OLD cache system.');
 
-			
+
 
 			// Check for cache directory
 
