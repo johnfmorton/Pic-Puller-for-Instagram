@@ -31,13 +31,23 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 		$pp_theme_views = ((defined('URL_THIRD_THEMES'))
 		           ? URL_THIRD_THEMES.'ig_picpuller/views/'
 		           : $this->EE->config->item('url_third_themes') .'ig_picpuller/views/');
-
-		$this->EE->cp->add_to_head('<link rel="stylesheet" type="text/css" href="'. $pp_themes_cp.'css/colorbox.css'.'">');
-		$this->EE->cp->add_to_head('<link rel="stylesheet" type="text/css" href="'. $pp_themes_cp.'css/style.css'.'">');
-		$this->EE-> cp->add_to_foot('<script type="text/javascript" src="'.$pp_themes_cp.'js/jquery.ppcolorbox-min.js'.'"></script>');
-		$this->EE-> cp->add_to_foot('<script type="text/javascript" src="'.$pp_themes_cp.'js/jquery-ui-1.8.17.custom.min.js'.'"></script>');
-		$this->EE-> cp->add_to_foot('<script type="text/javascript" src="'.$pp_themes_cp.'js/scripts.js'.'"></script>');
-
+		if ( APP_VER >= 2.8 ) {
+			// for EE greater than 2.8
+			$this->EE->cp->add_to_foot('<link rel="stylesheet" type="text/css" href="'. $pp_themes_cp.'css/colorbox.css'.'">');
+			$this->EE->cp->add_to_foot('<link rel="stylesheet" type="text/css" href="'. $pp_themes_cp.'css/style.css'.'">');
+			$this->EE->cp->add_to_foot('<script type="text/javascript" src="'.$pp_themes_cp.'js/jquery.ppcolorbox-min.js'.'"></script>');
+			$this->EE->cp->add_to_foot('<script type="text/javascript" src="'.$pp_themes_cp.'js/jquery-ui-1.8.17.custom.min.js'.'"></script>');
+			$this->EE->cp->add_to_foot('<script type="text/javascript" src="'.$pp_themes_cp.'js/scripts.js'.'"></script>');
+		}
+		else
+		{
+			// for EE pre-2.8
+			$this->EE->cp->add_to_head('<link rel="stylesheet" type="text/css" href="'. $pp_themes_cp.'css/colorbox.css'.'">');
+			$this->EE->cp->add_to_head('<link rel="stylesheet" type="text/css" href="'. $pp_themes_cp.'css/style.css'.'">');
+			$this->EE->cp->add_to_head('<script type="text/javascript" src="'.$pp_themes_cp.'js/jquery.ppcolorbox-min.js'.'"></script>');
+			$this->EE->cp->add_to_head('<script type="text/javascript" src="'.$pp_themes_cp.'js/jquery-ui-1.8.17.custom.min.js'.'"></script>');
+			$this->EE->cp->add_to_head('<script type="text/javascript" src="'.$pp_themes_cp.'js/scripts.js'.'"></script>');
+		}
 		$this->EE->lang->loadfile('ig_picpuller');
 
 		$this->EE->cp->add_to_head('<style>#ppcboxLoadingGraphic{background:url('.$pp_theme_views.'images/loading.gif) no-repeat center center;};</style>');
@@ -145,18 +155,29 @@ class Ig_picpuller_ft extends EE_Fieldtype {
 		           ? URL_THIRD_THEMES.'ig_picpuller/views/'
 		           : $this->EE->config->item('url_third_themes') .'ig_picpuller/views/');
 
-		$this->EE->cp->add_to_head('<link rel="stylesheet" type="text/css" href="'. $pp_themes_cp.'css/colorbox.css'.'">');
-		$this->EE->cp->add_to_head('<link rel="stylesheet" type="text/css" href="'. $pp_themes_cp.'css/style.css'.'">');
-		$this->EE-> cp->add_to_foot('<script type="text/javascript" src="'.$pp_themes_cp.'js/jquery.ppcolorbox-min.js'.'"></script>');
-		$this->EE-> cp->add_to_foot('<script type="text/javascript" src="'.$pp_themes_cp.'js/jquery-ui-1.8.17.custom.min.js'.'"></script>');
-		$this->EE-> cp->add_to_foot('<script type="text/javascript" src="'.$pp_themes_cp.'js/scripts.js'.'"></script>');
-
-
 		$this->EE->lang->loadfile('ig_picpuller');
 
 		$pp_engine_url = $pp_theme_views.'pp_engine.php';
 
-		$this->EE->cp->add_to_head('<style>#cboxLoadingGraphic{background:url('.$pp_theme_views.'images/loading.gif) no-repeat center center;};</style>');
+		if ( APP_VER >= 2.8 ) {
+			// for EE greater than 2.8
+			$this->EE->cp->add_to_foot('<link rel="stylesheet" type="text/css" href="'. $pp_themes_cp.'css/colorbox.css'.'">');
+			$this->EE->cp->add_to_foot('<link rel="stylesheet" type="text/css" href="'. $pp_themes_cp.'css/style.css'.'">');
+			$this->EE->cp->add_to_foot('<script type="text/javascript" src="'.$pp_themes_cp.'js/jquery.ppcolorbox-min.js'.'"></script>');
+			$this->EE->cp->add_to_foot('<script type="text/javascript" src="'.$pp_themes_cp.'js/jquery-ui-1.8.17.custom.min.js'.'"></script>');
+			$this->EE->cp->add_to_foot('<script type="text/javascript" src="'.$pp_themes_cp.'js/scripts.js'.'"></script>');
+			$this->EE->cp->add_to_foot('<style>#cboxLoadingGraphic{background:url('.$pp_theme_views.'images/loading.gif) no-repeat center center;};</style>');
+		}
+		else
+		{
+			// for EE pre-2.8
+			$this->EE->cp->add_to_head('<link rel="stylesheet" type="text/css" href="'. $pp_themes_cp.'css/colorbox.css'.'">');
+			$this->EE->cp->add_to_head('<link rel="stylesheet" type="text/css" href="'. $pp_themes_cp.'css/style.css'.'">');
+			$this->EE->cp->add_to_head('<script type="text/javascript" src="'.$pp_themes_cp.'js/jquery.ppcolorbox-min.js'.'"></script>');
+			$this->EE->cp->add_to_head('<script type="text/javascript" src="'.$pp_themes_cp.'js/jquery-ui-1.8.17.custom.min.js'.'"></script>');
+			$this->EE->cp->add_to_head('<script type="text/javascript" src="'.$pp_themes_cp.'js/scripts.js'.'"></script>');
+			$this->EE->cp->add_to_head('<style>#cboxLoadingGraphic{background:url('.$pp_theme_views.'images/loading.gif) no-repeat center center;};</style>');
+		}
 
 		////////////////
 		// Get oAuth  //

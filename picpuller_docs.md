@@ -1,5 +1,8 @@
 # Change log
 
+1.6.1 - 2014SEP22
+- Update to fieldtype to add it's Javascript in the footer instead of the header for EE versions 2.8.0 and up
+
 1.6.0 - 2014FEB21
 - New caching system for EE 2.8.0 and above
 - Control panel now updated for compatibility with EE 2.8.0
