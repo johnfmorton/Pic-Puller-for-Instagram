@@ -1,5 +1,8 @@
 # Change log
 
+1.6.2 - 2014JAN16
+- Fixed error where image that had previously been on Instagram was used in Pic Puller was deleted and then attempted to be retrieved from cache
+
 1.6.1 - 2014SEP22
 - Update to fieldtype to add it's Javascript in the footer instead of the header for EE versions 2.8.0 and up
 
