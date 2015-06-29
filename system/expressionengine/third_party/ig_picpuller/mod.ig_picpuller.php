@@ -410,7 +410,7 @@ class Ig_picpuller {
 	 * @param	tag param: 'user_id', the EE member ID of a user that has authorized the Instagram application
 	 * @param 	tag param: 'media_id', the Instagram media ID of the image to be returned
 	 * @param 	use_stale_cache:
-	 * @return	tag data: status, username, user_id, full_name, profile_picture, website, created_time, link, caption, low_resolution, thumbnail, standard_resolution, latitude, longitude, likes
+	 * @return	tag data: status, username, user_id, full_name, profile_picture, created_time, link, caption, low_resolution, thumbnail, standard_resolution, latitude, longitude, likes
 	 */
 	 public function media()
 	 {
@@ -484,7 +484,6 @@ class Ig_picpuller {
 			$this->_ig_picpuller_prefix.'user_id' => $node['user']['id'],
 			$this->_ig_picpuller_prefix.'full_name' => $node['user']['full_name'],
 			$this->_ig_picpuller_prefix.'profile_picture' => $node['user']['profile_picture'],
-			$this->_ig_picpuller_prefix.'website' => $node['user']['website'],
 			$this->_ig_picpuller_prefix.'created_time' => $node['created_time'],
 			$this->_ig_picpuller_prefix.'link' => $node['link'],
 			$this->_ig_picpuller_prefix.'caption' => $node['caption']['text'],
@@ -645,7 +644,7 @@ class Ig_picpuller {
 	 * @param	tag param: 'user_id', the EE member ID of a user that has authorized the Instagram application
 	 * @param 	tag param: 'limit', an integer that determines how many images to return
 	 * @param 	use_stale_cache:
-	 * @return	tag data: caption, media_id, next_max_id, low_resolution, thumbnail, standard_resolution, latitude, longitude, link, created_time, profile_picture, username, website, full_name, user_id
+	 * @return	tag data: caption, media_id, next_max_id, low_resolution, thumbnail, standard_resolution, latitude, longitude, link, created_time, profile_picture, username, full_name, user_id
 	 */
 
 	public function user_feed()
@@ -758,7 +757,6 @@ class Ig_picpuller {
 				$this->_ig_picpuller_prefix.'next_max_id' => $next_max_id,
 				$this->_ig_picpuller_prefix.'profile_picture' => $node['user']['profile_picture'],
 				$this->_ig_picpuller_prefix.'username' => $node['user']['username'],
-				$this->_ig_picpuller_prefix.'website' => $node['user']['website'],
 				$this->_ig_picpuller_prefix.'full_name' => $node['user']['full_name'],
 				$this->_ig_picpuller_prefix.'user_id' => $node['user']['id'],
 				$this->_ig_picpuller_prefix.'comment_count' => $node['comments']['count'],
@@ -780,7 +778,7 @@ class Ig_picpuller {
 	 * @param	tag param: 'user_id', the EE member ID of a user that has authorized the Instagram application
 	 * @param 	tag param: 'limit', an integer that determines how many images to return
 	 * @param 	use_stale_cache:
-	 * @return	tag data: caption, media_id, next_max_id, low_resolution, thumbnail, standard_resolution, latitude, longitude, link, created_time, profile_picture, username, website, full_name, user_id
+	 * @return	tag data: caption, media_id, next_max_id, low_resolution, thumbnail, standard_resolution, latitude, longitude, link, created_time, profile_picture, username, full_name, user_id
 	 */
 
 	public function user_liked()
@@ -880,7 +878,6 @@ class Ig_picpuller {
 				$this->_ig_picpuller_prefix.'next_max_id' => $next_max_id,
 				$this->_ig_picpuller_prefix.'profile_picture' => $node['user']['profile_picture'],
 				$this->_ig_picpuller_prefix.'username' => $node['user']['username'],
-				$this->_ig_picpuller_prefix.'website' => $node['user']['website'],
 				$this->_ig_picpuller_prefix.'full_name' => $node['user']['full_name'],
 				$this->_ig_picpuller_prefix.'user_id' => $node['user']['id'],
 				$this->_ig_picpuller_prefix.'comment_count' => $node['comments']['count'],
@@ -902,7 +899,7 @@ class Ig_picpuller {
 	 * @param	tag param: 'user_id', the EE member ID of a user that has authorized the Instagram application
 	 * @param 	tag param: 'limit', an integer that determines how many images to return
 	 * @param 	use_stale_cache:
-	 * @return	tag data: caption, media_id, next_max_id, low_resolution, thumbnail, standard_resolution, latitude, longitude, link, created_time, profile_picture, username, website, full_name, user_id
+	 * @return	tag data: caption, media_id, next_max_id, low_resolution, thumbnail, standard_resolution, latitude, longitude, link, created_time, profile_picture, username, full_name, user_id
 	 */
 
 	public function tagged_media()
@@ -1013,7 +1010,6 @@ class Ig_picpuller {
 				$this->_ig_picpuller_prefix.'next_max_id' => $next_max_id,
 				$this->_ig_picpuller_prefix.'profile_picture' => $node['user']['profile_picture'],
 				$this->_ig_picpuller_prefix.'username' => $node['user']['username'],
-				$this->_ig_picpuller_prefix.'website' => $node['user']['website'],
 				$this->_ig_picpuller_prefix.'full_name' => $node['user']['full_name'],
 				$this->_ig_picpuller_prefix.'user_id' => $node['user']['id'],
 				$this->_ig_picpuller_prefix.'comment_count' => $node['comments']['count'],

@@ -1,8 +1,11 @@
 # Change log
 
-1.6.3 - 2015JUN29
+1.6.4 - 2015JUN29
 - Updated use of "oAuth" in PP set up screen to "redirect URI" to better reflect language now used on Instagram's site
 - Added functionality for using the Instagram ID of a user instead of using the EE user's authorized Instagram account to "media_recent" and "user" functions. Handy for devs who don't have or want Instagram passwords from clients.
+
+1.6.3 - 2015MAR12
+- A change in the Instagram API removed "website" as a value. It has now been removed from PP as well.
 
 1.6.2 - 2015JAN16
 - Fixed error where image that had previously been on Instagram was used in Pic Puller was deleted and then attempted to be retrieved from cache
