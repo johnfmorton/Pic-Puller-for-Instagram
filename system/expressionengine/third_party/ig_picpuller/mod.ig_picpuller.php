@@ -364,7 +364,9 @@ class Ig_picpuller {
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
 		}
 
-		$query_string = "https://api.instagram.com/v1/users/self?access_token={$oauth}";
+		$ig_user_id = $this->EE->TMPL->fetch_param('ig_user_id') ? $this->EE->TMPL->fetch_param('ig_user_id') : $this->getInstagramId($user_id);
+
+		$query_string = "https://api.instagram.com/v1/users/$ig_user_id??access_token={$oauth}";
 
 		$data = $this->_fetch_data($query_string);
 
@@ -553,6 +555,8 @@ class Ig_picpuller {
 			$max_id = "&max_id=$max_id";
 		}
 
+		$ig_user_id = $this->EE->TMPL->fetch_param('ig_user_id') ? $this->EE->TMPL->fetch_param('ig_user_id') : $this->getInstagramId($user_id);
+
 		// Report error to user since user_id is required
 
 		if($user_id == '')
@@ -567,7 +571,7 @@ class Ig_picpuller {
 			return $this->EE->TMPL->parse_variables($tagdata, $variables);
 		}
 
-		$ig_user_id = $this->getInstagramId($user_id);
+		//$ig_user_id = $this->getInstagramId($user_id);
 		$oauth = $this->getAuthCredsForUser($user_id);
 
 		if(!$ig_user_id)
