@@ -366,7 +366,7 @@ class Ig_picpuller {
 
 		$ig_user_id = $this->EE->TMPL->fetch_param('ig_user_id') ? $this->EE->TMPL->fetch_param('ig_user_id') : $this->getInstagramId($user_id);
 
-		$query_string = "https://api.instagram.com/v1/users/$ig_user_id??access_token={$oauth}";
+		$query_string = "https://api.instagram.com/v1/users/$ig_user_id?access_token={$oauth}";
 
 		$data = $this->_fetch_data($query_string);
 
