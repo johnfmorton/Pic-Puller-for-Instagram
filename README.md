@@ -1,6 +1,12 @@
+# Pic Puller for Instagram
+
+Pic Puller was written for ExpressionEngine 2. It is not currently compatibile with ExpressionEngine 3 and I don't have a project that would prompt me to do that update but Pic Puller is not disappearing entirely. It is currently maintained for Craft CMS. 
+
+This code base for the EE 2 version is here primarialy for anyone who is on EE2 and would like to use it but can't because it is no long for sale on the Devotee store. 
+
 # Installation instructions
 
-To install Pic Puller you will need to place 2 folders containing Pic Puller files into your ExpressionEngine installation. 
+To install Pic Puller you will need to place 2 folders containing Pic Puller files into your ExpressionEngine 2 installation. 
 
 Alongside this README file, you will find 2 directories: "system" and "themes".
 
@@ -51,13 +57,5 @@ Your existing templates should continue to work with no update needed to their c
 # Notes on MSM compatibility:
 
 The major update to version 1.1.0 is compatibility with ExpressionEngine Multiple Site Manager. This allows Pic Puller to install multiple Instagram applications within an EE site with MSM installed. Each site you manage will be able to have its own Instagram application. Read the details in the accompanying documentation file for details.
-
---
-
-If you have any questions, please drop me a line at john@johnfmorton.com.
-
-Favoriting and feedback at http://devot-ee.com/add-ons/pic-puller-for-instagram is greatly appreciated. 
-
-I hope you enjoy Pic Puller.
 
 -John
